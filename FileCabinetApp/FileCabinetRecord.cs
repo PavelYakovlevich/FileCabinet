@@ -1,4 +1,6 @@
-﻿namespace FileCabinetApp
+﻿using System;
+
+namespace FileCabinetApp
 {
     public class FileCabinetRecord
     {
