@@ -1,4 +1,6 @@
-﻿namespace FileCabinetApp
+﻿using System;
+
+namespace FileCabinetApp
 {
     public static class Program
     {
@@ -8,18 +10,26 @@
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
+        private static FileCabinetService fileCabinetService = new FileCabinetService();
+
         private static bool isRunning = true;
 
         private static Tuple<string, Action<string>>[] commands = new Tuple<string, Action<string>>[]
         {
             new Tuple<string, Action<string>>("help", PrintHelp),
             new Tuple<string, Action<string>>("exit", Exit),
+            new Tuple<string, Action<string>>("stat", Stat),
+            new Tuple<string, Action<string>>("create", Create),
+            new Tuple<string, Action<string>>("list", List),
         };
 
         private static string[][] helpMessages = new string[][]
         {
             new string[] { "help", "prints the help screen", "The 'help' command prints the help screen." },
             new string[] { "exit", "exits the application", "The 'exit' command exits the application." },
+            new string[] { "stat", "prints count of registered users", "The 'stat' command prints count of registered users." },
+            new string[] { "create", "creates a new user", "The 'create' command creates a new user." },
+            new string[] { "list", "prints the list of all created users", "The 'list' command prints the list of all created users." },
         };
 
         public static void Main(string[] args)
@@ -31,7 +41,7 @@
             do
             {
                 Console.Write("> ");
-                var inputs = Console.ReadLine().Split(' ', 2);
+                var inputs = Console.ReadLine() !.Split(' ', 2);
                 const int commandIndex = 0;
                 var command = inputs[commandIndex];
 
@@ -93,6 +103,61 @@
         {
             Console.WriteLine("Exiting an application...");
             isRunning = false;
+        }
+
+        private static void Stat(string parameters)
+        {
+            var recordsCount = Program.fileCabinetService.GetStat();
+            Console.WriteLine($"{recordsCount} record(s).");
+        }
+
+        private static void Create(string parameters)
+        {
+            Console.Write("First name: ");
+            var firstName = Console.ReadLine();
+
+            Console.Write("Last name: ");
+            var lastName = Console.ReadLine();
+
+            Console.Write("Date of birth: ");
+            DateTime birthDate;
+            if (!DateTime.TryParse(Console.ReadLine(), out birthDate))
+            {
+                Console.WriteLine("Invalid format of specified date!");
+                return;
+            }
+
+            Console.Write("Stature: ");
+            short stature;
+            if (!short.TryParse(Console.ReadLine(), out stature))
+            {
+                Console.WriteLine("Invalid format of stature!");
+                return;
+            }
+
+            Console.Write("Weight: ");
+            decimal weight;
+            if (!decimal.TryParse(Console.ReadLine(), out weight))
+            {
+                Console.WriteLine("Invalid format of weight!");
+                return;
+            }
+
+            Console.Write("Gender: ");
+            var gender = Console.ReadKey().KeyChar;
+
+            var createdRecIndex = fileCabinetService.CreateRecord(firstName!, lastName!, birthDate, gender, weight, stature);
+            Console.WriteLine($"Record #{createdRecIndex} is created.");
+        }
+
+        private static void List(string parameters)
+        {
+            var records = fileCabinetService.GetRecords();
+
+            foreach (var record in records)
+            {
+                Console.WriteLine($"#{record}");
+            }
         }
     }
 }
