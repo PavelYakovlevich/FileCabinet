@@ -120,16 +120,33 @@ namespace FileCabinetApp
             var lastName = Console.ReadLine();
 
             Console.Write("Date of birth: ");
-            var dateStr = Console.ReadLine();
-
             DateTime birthDate;
-            if (!DateTime.TryParse(dateStr, out birthDate))
+            if (!DateTime.TryParse(Console.ReadLine(), out birthDate))
             {
                 Console.WriteLine("Invalid format of specified date!");
                 return;
             }
 
-            var createdRecIndex = fileCabinetService.CreateRecord(firstName!, lastName!, birthDate);
+            Console.Write("Stature: ");
+            short stature;
+            if (!short.TryParse(Console.ReadLine(), out stature))
+            {
+                Console.WriteLine("Invalid format of stature!");
+                return;
+            }
+
+            Console.Write("Weight: ");
+            decimal weight;
+            if (!decimal.TryParse(Console.ReadLine(), out weight))
+            {
+                Console.WriteLine("Invalid format of weight!");
+                return;
+            }
+
+            Console.Write("Gender: ");
+            var gender = Console.ReadKey().KeyChar;
+
+            var createdRecIndex = fileCabinetService.CreateRecord(firstName!, lastName!, birthDate, gender, weight, stature);
             Console.WriteLine($"Record #{createdRecIndex} is created.");
         }
 

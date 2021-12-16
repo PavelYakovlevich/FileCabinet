@@ -12,9 +12,15 @@ namespace FileCabinetApp
 
         public DateTime DateOfBirth { get; set; }
 
+        public short Stature { get; set; }
+
+        public char Gender { get; set; }
+
+        public decimal Weight { get; set; }
+
         public override string ToString()
         {
-            return $"{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth.ToString("yyyy-MMM-dd")}";
+            return $"{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth.ToString("yyyy-MMM-dd")}, {this.Gender}, {this.Stature}, {this.Weight}";
         }
     }
 }
