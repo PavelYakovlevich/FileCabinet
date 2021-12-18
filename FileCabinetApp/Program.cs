@@ -113,40 +113,74 @@ namespace FileCabinetApp
 
         private static void Create(string parameters)
         {
-            Console.Write("First name: ");
-            var firstName = Console.ReadLine();
+            var validationChain = new ParameterValidationChain<string>()
+                .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
+                .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            Console.Write("Last name: ");
-            var lastName = Console.ReadLine();
+            var firstName = GuidedParameterReader.ReadValue(
+                () => Console.ReadLine() !,
+                validationChain,
+                "First name: ");
 
-            Console.Write("Date of birth: ");
-            DateTime birthDate;
-            if (!DateTime.TryParse(Console.ReadLine(), out birthDate))
-            {
-                Console.WriteLine("Invalid format of specified date!");
-                return;
-            }
+            validationChain = new ParameterValidationChain<string>()
+                .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
+                .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            Console.Write("Stature: ");
-            short stature;
-            if (!short.TryParse(Console.ReadLine(), out stature))
-            {
-                Console.WriteLine("Invalid format of stature!");
-                return;
-            }
+            var lastName = GuidedParameterReader.ReadValue(
+                () => Console.ReadLine() !,
+                validationChain,
+                "Last name: ");
 
-            Console.Write("Weight: ");
-            decimal weight;
-            if (!decimal.TryParse(Console.ReadLine(), out weight))
-            {
-                Console.WriteLine("Invalid format of weight!");
-                return;
-            }
+            var birthDayValidationChain = new ParameterValidationChain<DateTime>()
+                .AddCondition((dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0);
 
-            Console.Write("Gender: ");
-            var gender = Console.ReadKey().KeyChar;
+            var birthDate = GuidedParameterReader.ReadValue(
+                () =>
+                {
+                    DateTime birthDate;
+                    DateTime.TryParse(Console.ReadLine(), out birthDate);
+                    return birthDate;
+                },
+                birthDayValidationChain,
+                "Date of birth: ");
 
-            var createdRecIndex = fileCabinetService.CreateRecord(firstName!, lastName!, birthDate, gender, weight, stature);
+            var statureValidationChain = new ParameterValidationChain<short>()
+                .AddCondition((stature) => stature > 0);
+
+            var stature = GuidedParameterReader.ReadValue(
+                () =>
+                {
+                    short stature;
+                    short.TryParse(Console.ReadLine(), out stature);
+                    return stature;
+                },
+                statureValidationChain,
+                "Stature: ");
+
+            var weightValidationChain = new ParameterValidationChain<decimal>()
+                .AddCondition((weight) => weight > 0);
+
+            var weight = GuidedParameterReader.ReadValue(
+                () =>
+                {
+                    decimal weight;
+                    decimal.TryParse(Console.ReadLine(), out weight);
+                    return weight;
+                },
+                weightValidationChain,
+                "Weight: ");
+
+            var genderValidationChain = new ParameterValidationChain<char>()
+                .AddCondition((gender) => (gender == 'M' || gender == 'F'));
+
+            var gender = GuidedParameterReader.ReadValue(
+                () => Console.ReadKey().KeyChar,
+                genderValidationChain,
+                "Gender: ");
+
+            Console.WriteLine();
+
+            var createdRecIndex = fileCabinetService.CreateRecord(firstName, lastName, birthDate, gender, weight, stature);
             Console.WriteLine($"Record #{createdRecIndex} is created.");
         }
 
