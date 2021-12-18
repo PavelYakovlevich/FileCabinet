@@ -56,7 +56,7 @@ namespace FileCabinetApp
 
             foreach (var validValue in validValues)
             {
-                if (value.Equals(validValues))
+                if (value.Equals(validValue))
                 {
                     return this;
                 }
