@@ -108,11 +108,16 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
+            return this.FindByCondition(rec => rec?.FirstName?.Equals(firstName) ?? false);
+        }
+
+        private FileCabinetRecord[] FindByCondition(Predicate<FileCabinetRecord> condition)
+        {
             var result = new List<FileCabinetRecord>();
 
             foreach (var record in this.list)
             {
-                if (record.FirstName is not null && record.FirstName.Equals(firstName))
+                if (condition(record))
                 {
                     result.Add(record);
                 }
