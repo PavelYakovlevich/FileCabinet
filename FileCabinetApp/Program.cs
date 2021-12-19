@@ -305,6 +305,10 @@ namespace FileCabinetApp
             {
                 records = fileCabinetService.FindByFirstName(paramValue);
             }
+            else if (paramName.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
+            {
+                records = fileCabinetService.FindByLastName(paramValue);
+            }
             else
             {
                 Console.WriteLine("Search criteria by specified parameter is not defined!");

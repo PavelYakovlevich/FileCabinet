@@ -111,6 +111,11 @@ namespace FileCabinetApp
             return this.FindByCondition(rec => rec?.FirstName?.Equals(firstName) ?? false);
         }
 
+        public FileCabinetRecord[] FindByLastName(string lastName)
+        {
+            return this.FindByCondition(rec => rec?.LastName?.Equals(lastName) ?? false);
+        }
+
         private FileCabinetRecord[] FindByCondition(Predicate<FileCabinetRecord> condition)
         {
             var result = new List<FileCabinetRecord>();
