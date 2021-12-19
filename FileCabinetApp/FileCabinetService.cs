@@ -7,6 +7,7 @@ namespace FileCabinetApp
     {
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Guard guard = new Guard();
+        private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
 
         public FileCabinetService()
         {
@@ -44,6 +45,21 @@ namespace FileCabinetApp
                 Weight = 100.54m,
                 Gender = 'M',
             });
+
+            this.list.Add(new FileCabinetRecord
+            {
+                Id = 4,
+                FirstName = "Petr",
+                LastName = "Yakovlevich",
+                DateOfBirth = new DateTime(1968, 12, 10),
+                Stature = 160,
+                Weight = 100.54m,
+                Gender = 'M',
+            });
+
+            this.firstNameDictionary.Add("Petr", new List<FileCabinetRecord>(new[] { this.list[1], this.list[3] }));
+            this.firstNameDictionary.Add("Vasil", new List<FileCabinetRecord>(new[] { this.list[2] }));
+            this.firstNameDictionary.Add("Pavel", new List<FileCabinetRecord>(new[] { this.list[0] }));
 #endif
         }
 
@@ -63,6 +79,8 @@ namespace FileCabinetApp
             };
 
             this.list.Add(record);
+
+            this.AddSearchEntry(firstName, this.firstNameDictionary, record);
 
             return record.Id;
         }
@@ -86,6 +104,8 @@ namespace FileCabinetApp
             targetRecord!.Gender = gender;
             targetRecord!.Weight = weight;
             targetRecord!.Stature = stature;
+
+            this.UpdateSearchEntry(firstName, this.firstNameDictionary, targetRecord);
         }
 
         public FileCabinetRecord? GetRecord(int id)
@@ -108,7 +128,12 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByFirstName(string firstName)
         {
-            return this.FindByCondition(rec => rec?.FirstName?.Equals(firstName) ?? false);
+            if (!this.firstNameDictionary.ContainsKey(firstName))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return this.firstNameDictionary[firstName].ToArray();
         }
 
         public FileCabinetRecord[] FindByLastName(string lastName)
@@ -119,6 +144,34 @@ namespace FileCabinetApp
         public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
         {
             return this.FindByCondition(rec => rec?.DateOfBirth.Equals(dateOfBirth) ?? false);
+        }
+
+        private void AddSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
+            where T : notnull
+        {
+            if (!searchDictionary.ContainsKey(key))
+            {
+                searchDictionary.Add(key, new List<FileCabinetRecord>());
+            }
+
+            var referenceList = searchDictionary[key];
+            referenceList.Add(record);
+        }
+
+        private void UpdateSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
+            where T : notnull
+        {
+            foreach (var searchEntry in searchDictionary)
+            {
+                var referenceList = searchEntry.Value;
+
+                if (referenceList.Contains(record))
+                {
+                    referenceList.Remove(record);
+                }
+            }
+
+            this.AddSearchEntry(key, searchDictionary, record);
         }
 
         private FileCabinetRecord[] FindByCondition(Predicate<FileCabinetRecord> condition)
