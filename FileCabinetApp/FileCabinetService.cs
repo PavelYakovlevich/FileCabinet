@@ -8,6 +8,45 @@ namespace FileCabinetApp
         private readonly List<FileCabinetRecord> list = new List<FileCabinetRecord>();
         private readonly Guard guard = new Guard();
 
+        public FileCabinetService()
+        {
+#if DEBUG
+
+            this.list.Add(new FileCabinetRecord
+            {
+                Id = 1,
+                FirstName = "Pavel",
+                LastName = "Yakovlevich",
+                DateOfBirth = new DateTime(2000, 7, 14),
+                Stature = 180,
+                Weight = 82.01m,
+                Gender = 'M',
+            });
+
+            this.list.Add(new FileCabinetRecord
+            {
+                Id = 2,
+                FirstName = "Petr",
+                LastName = "Semenov",
+                DateOfBirth = new DateTime(1994, 12, 10),
+                Stature = 160,
+                Weight = 100.54m,
+                Gender = 'M',
+            });
+
+            this.list.Add(new FileCabinetRecord
+            {
+                Id = 3,
+                FirstName = "Vasil",
+                LastName = "Semenov",
+                DateOfBirth = new DateTime(1999, 02, 15),
+                Stature = 160,
+                Weight = 100.54m,
+                Gender = 'M',
+            });
+#endif
+        }
+
         public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char gender, decimal weight, short stature)
         {
             this.CheckRequirements(firstName, lastName, dateOfBirth, gender, weight, stature);
@@ -26,11 +65,6 @@ namespace FileCabinetApp
             this.list.Add(record);
 
             return record.Id;
-        }
-
-        public FileCabinetRecord[] GetRecords()
-        {
-            return this.list.ToArray();
         }
 
         public int GetStat()
@@ -56,14 +90,35 @@ namespace FileCabinetApp
 
         public FileCabinetRecord? GetRecord(int id)
         {
-            --id;
-
-            if (id >= 0 && id < this.list.Count)
+            foreach (var record in this.list)
             {
-                return this.list[id];
+                if (record.Id == id)
+                {
+                    return record;
+                }
             }
 
             return null;
+        }
+
+        public FileCabinetRecord[] GetRecords()
+        {
+            return this.list.ToArray();
+        }
+
+        public FileCabinetRecord[] FindByFirstName(string firstName)
+        {
+            var result = new List<FileCabinetRecord>();
+
+            foreach (var record in this.list)
+            {
+                if (record.FirstName is not null && record.FirstName.Equals(firstName))
+                {
+                    result.Add(record);
+                }
+            }
+
+            return result.ToArray();
         }
 
         private void CheckRequirements(string firstName, string lastName, DateTime dateOfBirth, char gender, decimal weight, short stature)

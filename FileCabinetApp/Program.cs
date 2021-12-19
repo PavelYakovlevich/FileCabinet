@@ -22,6 +22,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("create", Create),
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
+            new Tuple<string, Action<string>>("find", Find),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -32,6 +33,7 @@ namespace FileCabinetApp
             new string[] { "create", "creates a new user", "The 'create' command creates a new user." },
             new string[] { "list", "prints the list of all created users", "The 'list' command prints the list of all created users." },
             new string[] { "edit", "edits existing record", "The 'edit' command edits existing record." },
+            new string[] { "find", "finds all records with specified criterias", "The 'find' command finds all records with specified criterias." },
         };
 
         public static void Main(string[] args)
@@ -283,6 +285,36 @@ namespace FileCabinetApp
 
             fileCabinetService.EditRecord(id, firstName, lastName, birthDate, gender, weight, stature);
             Console.WriteLine($"Record #{id} is updated.");
+        }
+
+        private static void Find(string parameters)
+        {
+            var values = parameters.Split(' ', 2);
+
+            if (values.Length < 2)
+            {
+                Console.WriteLine("Parameter value is missing!");
+                return;
+            }
+
+            var paramName = values[0];
+            var paramValue = values[1].Substring(1, values[1].Length - 2);
+
+            FileCabinetRecord[] records;
+            if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
+            {
+                records = fileCabinetService.FindByFirstName(paramValue);
+            }
+            else
+            {
+                Console.WriteLine("Search criteria by specified parameter is not defined!");
+                return;
+            }
+
+            foreach (var record in records)
+            {
+                Console.WriteLine($"#{record}");
+            }
         }
     }
 }
