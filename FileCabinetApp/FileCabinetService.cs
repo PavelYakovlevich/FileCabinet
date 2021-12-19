@@ -9,6 +9,7 @@ namespace FileCabinetApp
         private readonly Guard guard = new Guard();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameDictionary = new Dictionary<string, List<FileCabinetRecord>>();
+        private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         public FileCabinetService()
         {
@@ -64,6 +65,11 @@ namespace FileCabinetApp
 
             this.lastNameDictionary.Add("Yakovlevich", new List<FileCabinetRecord>(new[] { this.list[0], this.list[3] }));
             this.lastNameDictionary.Add("Semenov", new List<FileCabinetRecord>(new[] { this.list[1], this.list[3] }));
+
+            this.dateOfBirthDictionary.Add(new DateTime(1968, 12, 10), new List<FileCabinetRecord>(new[] { this.list[3] }));
+            this.dateOfBirthDictionary.Add(new DateTime(1999, 02, 15), new List<FileCabinetRecord>(new[] { this.list[2] }));
+            this.dateOfBirthDictionary.Add(new DateTime(1994, 12, 10), new List<FileCabinetRecord>(new[] { this.list[1] }));
+            this.dateOfBirthDictionary.Add(new DateTime(2000, 7, 4), new List<FileCabinetRecord>(new[] { this.list[0] }));
 #endif
         }
 
@@ -86,6 +92,7 @@ namespace FileCabinetApp
 
             this.AddSearchEntry(firstName, this.firstNameDictionary, record);
             this.AddSearchEntry(lastName, this.lastNameDictionary, record);
+            this.AddSearchEntry(dateOfBirth, this.dateOfBirthDictionary, record);
 
             return record.Id;
         }
@@ -112,6 +119,7 @@ namespace FileCabinetApp
 
             this.UpdateSearchEntry(firstName, this.firstNameDictionary, targetRecord);
             this.UpdateSearchEntry(lastName, this.lastNameDictionary, targetRecord);
+            this.UpdateSearchEntry(dateOfBirth, this.dateOfBirthDictionary, targetRecord);
         }
 
         public FileCabinetRecord? GetRecord(int id)
@@ -154,7 +162,12 @@ namespace FileCabinetApp
 
         public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
         {
-            return this.FindByCondition(rec => rec?.DateOfBirth.Equals(dateOfBirth) ?? false);
+            if (!this.dateOfBirthDictionary.ContainsKey(dateOfBirth))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return this.dateOfBirthDictionary[dateOfBirth].ToArray();
         }
 
         private void AddSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
