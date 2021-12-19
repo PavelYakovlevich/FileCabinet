@@ -309,6 +309,17 @@ namespace FileCabinetApp
             {
                 records = fileCabinetService.FindByLastName(paramValue);
             }
+            else if (paramName.Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
+            {
+                DateTime dateOfBirth;
+                if (!DateTime.TryParse(paramValue, out dateOfBirth))
+                {
+                    Console.WriteLine("Invalid format of date!");
+                    return;
+                }
+
+                records = fileCabinetService.FindByDateOfBirth(dateOfBirth);
+            }
             else
             {
                 Console.WriteLine("Search criteria by specified parameter is not defined!");

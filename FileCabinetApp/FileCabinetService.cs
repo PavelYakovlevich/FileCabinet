@@ -116,6 +116,11 @@ namespace FileCabinetApp
             return this.FindByCondition(rec => rec?.LastName?.Equals(lastName) ?? false);
         }
 
+        public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
+        {
+            return this.FindByCondition(rec => rec?.DateOfBirth.Equals(dateOfBirth) ?? false);
+        }
+
         private FileCabinetRecord[] FindByCondition(Predicate<FileCabinetRecord> condition)
         {
             var result = new List<FileCabinetRecord>();
