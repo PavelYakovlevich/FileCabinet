@@ -121,70 +121,54 @@ namespace FileCabinetApp
                 .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
                 .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            var firstName = GuidedParameterReader.ReadValue(
-                () => Console.ReadLine() !,
-                validationChain,
-                "First name: ");
+            Console.Write("First name: ");
+            var firstName = ConsoleParameterReader.ReadValue(
+                InputUtils.StringConverter,
+                validationChain);
 
             validationChain = new ParameterValidationChain<string>()
                 .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
                 .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            var lastName = GuidedParameterReader.ReadValue(
-                () => Console.ReadLine() !,
-                validationChain,
-                "Last name: ");
+            Console.Write("Last name: ");
+            var lastName = ConsoleParameterReader.ReadValue(
+                InputUtils.StringConverter,
+                validationChain);
 
             var birthDayValidationChain = new ParameterValidationChain<DateTime>()
                 .AddCondition((dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0);
 
-            var birthDate = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    DateTime birthDate;
-                    DateTime.TryParse(Console.ReadLine(), out birthDate);
-                    return birthDate;
-                },
-                birthDayValidationChain,
-                "Date of birth: ");
+            Console.Write("Date of birth: ");
+            var birthDate = ConsoleParameterReader.ReadValue(
+                InputUtils.DateTimeConverter,
+                birthDayValidationChain);
 
             var statureValidationChain = new ParameterValidationChain<short>()
                 .AddCondition((stature) => stature > 0);
 
-            var stature = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    short stature;
-                    short.TryParse(Console.ReadLine(), out stature);
-                    return stature;
-                },
-                statureValidationChain,
-                "Stature: ");
+            Console.Write("Stature: ");
+            var stature = ConsoleParameterReader.ReadValue(
+                InputUtils.ShortConverter,
+                statureValidationChain);
 
             var weightValidationChain = new ParameterValidationChain<decimal>()
                 .AddCondition((weight) => weight > 0);
 
-            var weight = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    decimal weight;
-                    decimal.TryParse(Console.ReadLine(), out weight);
-                    return weight;
-                },
-                weightValidationChain,
-                "Weight: ");
+            Console.Write("Weight: ");
+            var weight = ConsoleParameterReader.ReadValue(
+                InputUtils.DecimalConverter,
+                weightValidationChain);
 
             var genderValidationChain = new ParameterValidationChain<char>()
                 .AddCondition((gender) => (gender == 'M' || gender == 'F'));
 
-            var gender = GuidedParameterReader.ReadValue(
-                () => Console.ReadKey().KeyChar,
-                genderValidationChain,
-                "Gender: ");
-
-            Console.WriteLine();
+            Console.Write("Gender: ");
+            var gender = ConsoleParameterReader.ReadValue(
+                InputUtils.CharConverter,
+                genderValidationChain);
 
             var createdRecIndex = fileCabinetService.CreateRecord(firstName, lastName, birthDate, gender, weight, stature);
+
             Console.WriteLine($"Record #{createdRecIndex} is created.");
         }
 
@@ -207,7 +191,7 @@ namespace FileCabinetApp
                 return;
             }
 
-            if (fileCabinetService.GetRecord(id) is null)
+            if (!fileCabinetService.RecordExists(id))
             {
                 Console.WriteLine($"#{id} record is not found.");
                 return;
@@ -217,71 +201,43 @@ namespace FileCabinetApp
                 .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
                 .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            var firstName = GuidedParameterReader.ReadValue(
-                () => Console.ReadLine() !,
-                validationChain,
-                "First name: ");
+            Console.Write("First name: ");
+            var firstName = ConsoleParameterReader.ReadValue(
+                InputUtils.StringConverter,
+                validationChain);
 
             validationChain = new ParameterValidationChain<string>()
                 .AddCondition((value) => !(string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value)))
                 .AddCondition((value) => value.Length >= 2 && value.Length <= 60);
 
-            var lastName = GuidedParameterReader.ReadValue(
-                () => Console.ReadLine() !,
-                validationChain,
-                "Last name: ");
+            Console.Write("Last name: ");
+            var lastName = ConsoleParameterReader.ReadValue(
+                InputUtils.StringConverter,
+                validationChain);
 
             var birthDayValidationChain = new ParameterValidationChain<DateTime>()
                 .AddCondition((dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0);
 
-            var birthDate = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    DateTime birthDate;
-                    DateTime.TryParse(Console.ReadLine(), out birthDate);
-                    return birthDate;
-                },
-                birthDayValidationChain,
-                "Date of birth: ");
+            Console.Write("Date of birth: ");
+            var birthDate = ConsoleParameterReader.ReadValue(InputUtils.DateTimeConverter, birthDayValidationChain);
 
             var statureValidationChain = new ParameterValidationChain<short>()
                 .AddCondition((stature) => stature > 0);
 
-            var stature = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    short stature;
-                    short.TryParse(Console.ReadLine(), out stature);
-                    return stature;
-                },
-                statureValidationChain,
-                "Stature: ");
+            Console.Write("Stature: ");
+            var stature = ConsoleParameterReader.ReadValue(InputUtils.ShortConverter, statureValidationChain);
 
             var weightValidationChain = new ParameterValidationChain<decimal>()
                 .AddCondition((weight) => weight > 0);
 
-            var weight = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    decimal weight;
-                    decimal.TryParse(Console.ReadLine(), out weight);
-                    return weight;
-                },
-                weightValidationChain,
-                "Weight: ");
+            Console.Write("Weight: ");
+            var weight = ConsoleParameterReader.ReadValue(InputUtils.DecimalConverter, weightValidationChain);
 
             var genderValidationChain = new ParameterValidationChain<char>()
-                .AddCondition((gender) => (gender == 'M' || gender == 'F'));
+                .AddCondition((gender) => gender == 'M' || gender == 'F');
 
-            var gender = GuidedParameterReader.ReadValue(
-                () =>
-                {
-                    var result = Console.ReadKey().KeyChar;
-                    Console.WriteLine();
-                    return result;
-                },
-                genderValidationChain,
-                "Gender: ");
+            Console.Write("Gender: ");
+            var gender = ConsoleParameterReader.ReadValue(InputUtils.CharConverter, genderValidationChain);
 
             fileCabinetService.EditRecord(id, firstName, lastName, birthDate, gender, weight, stature);
             Console.WriteLine($"Record #{id} is updated.");
@@ -293,12 +249,20 @@ namespace FileCabinetApp
 
             if (values.Length < 2)
             {
-                Console.WriteLine("Parameter value is missing!");
+                Console.WriteLine("Parameter value or parameter value is missing!");
                 return;
             }
 
             var paramName = values[0];
-            var paramValue = values[1].Substring(1, values[1].Length - 2);
+            var paramValue = values[1].Trim();
+
+            if (paramValue.Length < 3)
+            {
+                Console.WriteLine("Parameter value must be have a value!");
+                return;
+            }
+
+            paramValue = values[1].Substring(1, values[1].Length - 2);
 
             FileCabinetRecord[] records;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))

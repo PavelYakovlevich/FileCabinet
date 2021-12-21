@@ -2,77 +2,69 @@
 
 namespace FileCabinetApp
 {
-    public class Guard
+    public static class Guard
     {
-        public Guard IsNotNull<T>(T value, string nameOfValue)
+        public static void ArgumentIsNotNull<T>(T argument, string nameOfArgument)
             where T : class
         {
-            if (value is null)
+            if (argument is null)
             {
-                throw new ArgumentNullException(nameOfValue, $"{nameOfValue} is null!");
+                throw new ArgumentNullException(nameOfArgument, $"{nameOfArgument} is null!");
             }
-
-            return this;
         }
 
-        public Guard IsNotEmptyOrWhiteSpace(string value, string nameOfValue)
+        public static void ArgumentIsNotEmptyOrWhiteSpace(string argument, string nameOfArgument)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(argument))
             {
-                throw new ArgumentNullException(nameOfValue, $"{nameOfValue} is empty or whitespace.");
+                throw new ArgumentNullException(nameOfArgument, $"{nameOfArgument} is empty or whitespace.");
             }
-
-            return this;
         }
 
-        public Guard GreaterThan<T>(T value1, T value2)
+        public static void ArgumentGreaterThan<T>(T argument, T secondValue)
            where T : IComparable<T>
         {
-            return this.GreaterThan(value1, value2, $"{nameof(value1)} is lower than ${value2}");
+            ArgumentGreaterThan(argument, secondValue, $"{nameof(argument)} is lower than ${secondValue}.");
         }
 
-        public Guard GreaterThan<T>(T value1, T value2, string message)
+        public static void ArgumentGreaterThan<T>(T argument, T secondValue, string exceptionMessage)
            where T : IComparable<T>
         {
-            if (value1.CompareTo(value2) <= 0)
+            if (argument.CompareTo(secondValue) <= 0)
             {
-                throw new ArgumentException(message);
+                throw new ArgumentException(exceptionMessage);
             }
-
-            return this;
         }
 
-        public Guard IsInRange<T>(T value, T[] validValues)
+        public static void ArgumentIsInRange<T>(T argument, T[] validValues)
         {
-            return this.IsInRange(value, validValues, $"{value} is not in the specified range.");
+            ArgumentIsInRange(argument, validValues, $"{argument} is not in the specified range.");
         }
 
-        public Guard IsInRange<T>(T value, T[] validValues, string message)
+        public static void ArgumentIsInRange<T>(T argument, T[] validValues, string exceptionMessage)
         {
-            if (value is null)
+            if (argument is null)
             {
-                throw new ArgumentNullException(nameof(value), $"{nameof(value)} can't be null.");
+                throw new ArgumentNullException(nameof(argument), $"{nameof(argument)} can't be null.");
             }
 
             foreach (var validValue in validValues)
             {
-                if (value.Equals(validValue))
+                if (argument.Equals(validValue))
                 {
-                    return this;
+                    return;
                 }
             }
 
-            throw new ArgumentOutOfRangeException(message);
+            throw new ArgumentOutOfRangeException(exceptionMessage);
         }
 
-        public Guard Requires(Func<bool> condition, string message)
+        public static void ArgumentSatisfies<T>(T argument, Predicate<T> condition, string exceptionMessage)
         {
-            if (!condition())
+            if (!condition(argument))
             {
-                throw new ArgumentException(message);
+                throw new ArgumentException(exceptionMessage);
             }
-
-            return this;
         }
     }
 }

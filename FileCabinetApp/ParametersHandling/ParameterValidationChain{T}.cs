@@ -6,29 +6,27 @@ namespace FileCabinetApp
     public class ParameterValidationChain<T>
     {
         private List<Predicate<T>> validationList;
-        private Guard guard;
 
         public ParameterValidationChain()
         {
             this.validationList = new List<Predicate<T>>();
-            this.guard = new Guard();
         }
 
         public bool Validate(T value)
         {
-            bool result = true;
+            bool valueIsValid = true;
 
             foreach (var validationFunc in this.validationList)
             {
-                result = result && validationFunc(value);
+                valueIsValid = valueIsValid && validationFunc(value);
             }
 
-            return result;
+            return valueIsValid;
         }
 
         public ParameterValidationChain<T> AddCondition(Predicate<T> condition)
         {
-            this.guard.IsNotNull(condition, nameof(condition));
+            Guard.ArgumentIsNotNull(condition, nameof(condition));
 
             this.validationList.Add(condition);
 
