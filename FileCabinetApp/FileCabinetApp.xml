@@ -57,53 +57,82 @@
             </summary>
             <returns>String representation of the object<see cref="T:System.String"/>.</returns>
         </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordParameterObject">
+            <summary>
+                Class for the creation and editing input parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Char,System.Decimal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> class.
+            </summary>
+            <param name="firstName">User's first name property value.</param>
+            <param name="lastName">User's last name property value.</param>
+            <param name="dateOfBirth">User's date of birth property value.</param>
+            <param name="gender">User's gender property value.</param>
+            <param name="weight">User's weight property value.</param>
+            <param name="stature">User's stature property value.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor(System.Int32,System.String,System.String,System.DateTime,System.Int16,System.Char,System.Decimal)">
+            <inheritdoc cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/>
+            <param name="id">Id of the file cabinet record.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Id">
+            <summary>
+                Gets id value of the user.
+            </summary>
+            <value>Id of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.FirstName">
+            <summary>
+                Gets first name value of the user.
+            </summary>
+            <value>First name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.LastName">
+            <summary>
+                Gets last name value of the user.
+            </summary>
+            <value>Last name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.DateOfBirth">
+            <summary>
+                Gets date of birth value of the user.
+            </summary>
+            <value>Date of birth of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Stature">
+            <summary>
+                Gets stature value of the user.
+            </summary>
+            <value>Stature of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Gender">
+            <summary>
+                Gets gender value of the user.
+            </summary>
+            <value>Gender of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Weight">
+            <summary>
+                Gets weight value of the user.
+            </summary>
+            <value>Weight of the user.</value>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetService">
             <summary>
                 Class for the file cabinet's services.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Char,System.Decimal,System.Int16)">
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
             <summary>
                 Creates a file cabinet record with the specified property's values.
             </summary>
-            <param name="firstName">User's first name of type <see cref="T:System.String"/>.</param>
-            <param name="lastName">User's last name of type <see cref="T:System.String"/>.</param>
-            <param name="dateOfBirth">User's birthday of type <see cref="T:System.DateTime"/>.</param>
-            <param name="gender">User's gender of type <see cref="T:System.Char"/>.</param>
-            <param name="weight">User's weight of type <see cref="T:System.Decimal"/>.</param>
-            <param name="stature">User's stature of type <see cref="T:System.Int16"/>.</param>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the creation of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
             <returns>Id of new file cabinet record.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when firstName of lastName is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
             <exception cref="T:System.ArgumentException">
-                Throw when:
-                    - firstName of lastName is empty or whitespace;
-                    - firstName's or lastName's length is lower less than 2 or greater than 60;
-                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
-                    - weight is lower than 0;
-                    - stature is lower than 0.
-            </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
-            <summary>
-                Gets count of all existing file cabinet records.
-            </summary>
-            <returns>Count of all existing file cabinet records.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,System.String,System.String,System.DateTime,System.Char,System.Decimal,System.Int16)">
-            <summary>
-                Edits a file cabinet record with the specified property's values.
-            </summary>
-            <param name="id">Id of the existing file cabinet record<see cref="T:System.Int32"/>.</param>
-            <param name="firstName">New user's first name of type <see cref="T:System.String"/>.</param>
-            <param name="lastName">New User's last name of type <see cref="T:System.String"/>.</param>
-            <param name="dateOfBirth">New User's birthday of type <see cref="T:System.DateTime"/>.</param>
-            <param name="gender">New User's gender of type <see cref="T:System.Char"/>.</param>
-            <param name="weight">New User's weight of type <see cref="T:System.Decimal"/>.</param>
-            <param name="stature">New User's stature of type <see cref="T:System.Int16"/>.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when firstName of lastName is null.</exception>
-            <exception cref="T:System.ArgumentException">
-                Throw when:
+                Throw when <paramref name="parameterObject"/> inner properties are not valid:
                     - firstName of lastName is empty or whitespace;
                     - firstName's or lastName's length is lower less than 2 or greater than 60;
                     - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
@@ -111,7 +140,30 @@
                     - stature is lower than 0;
                     - file cabinet record with specified id not exists.
             </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+                Gets count of all existing file cabinet records.
+            </summary>
+            <returns>Count of all existing file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Edits a file cabinet record with the specified property's values.
+            </summary>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the editting of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
+            <exception cref="T:System.ArgumentException">
+                Throw when <paramref name="parameterObject"/> inner properties are not valid:
+                    - firstName of lastName is empty or whitespace;
+                    - firstName's or lastName's length is lower less than 2 or greater than 60;
+                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
+                    - weight is lower than 0;
+                    - stature is lower than 0;
+                    - file cabinet record with specified id not exists.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         </member>
         <member name="M:FileCabinetApp.FileCabinetService.RecordExists(System.Int32)">
             <summary>

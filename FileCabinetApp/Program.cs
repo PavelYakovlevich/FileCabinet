@@ -174,7 +174,8 @@ namespace FileCabinetApp
                 InputUtils.CharConverter,
                 genderValidationChain);
 
-            var createdRecIndex = fileCabinetService.CreateRecord(firstName, lastName, birthDate, gender, weight, stature);
+            var parameterObject = new FileCabinetRecordParameterObject(firstName, lastName, birthDate, stature, gender, weight);
+            var createdRecIndex = fileCabinetService.CreateRecord(parameterObject);
 
             Console.WriteLine($"Record #{createdRecIndex} is created.");
         }
@@ -246,7 +247,9 @@ namespace FileCabinetApp
             Console.Write("Gender: ");
             var gender = ConsoleParameterReader.ReadValue(InputUtils.CharConverter, genderValidationChain);
 
-            fileCabinetService.EditRecord(id, firstName, lastName, birthDate, gender, weight, stature);
+            var parameterObject = new FileCabinetRecordParameterObject(id, firstName, lastName, birthDate, stature, gender, weight);
+            fileCabinetService.EditRecord(parameterObject);
+
             Console.WriteLine($"Record #{id} is updated.");
         }
 

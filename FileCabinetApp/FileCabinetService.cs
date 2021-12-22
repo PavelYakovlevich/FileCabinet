@@ -16,43 +16,39 @@ namespace FileCabinetApp
         /// <summary>
         ///     Creates a file cabinet record with the specified property's values.
         /// </summary>
-        /// <param name="firstName">User's first name of type <see cref="string"/>.</param>
-        /// <param name="lastName">User's last name of type <see cref="string"/>.</param>
-        /// <param name="dateOfBirth">User's birthday of type <see cref="DateTime"/>.</param>
-        /// <param name="gender">User's gender of type <see cref="char"/>.</param>
-        /// <param name="weight">User's weight of type <see cref="decimal"/>.</param>
-        /// <param name="stature">User's stature of type <see cref="short"/>.</param>
+        /// <param name="parameterObject.">Parameter object, which holds all necessary data for the creation of <see cref="FileCabinetRecord"/> object.</param>
         /// <returns>Id of new file cabinet record.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when firstName of lastName is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
         /// <exception cref="ArgumentException">
-        ///     Throw when:
+        ///     Throw when <paramref name="parameterObject"/> inner properties are not valid:
         ///         - firstName of lastName is empty or whitespace;
         ///         - firstName's or lastName's length is lower less than 2 or greater than 60;
         ///         - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
         ///         - weight is lower than 0;
-        ///         - stature is lower than 0.
+        ///         - stature is lower than 0;
+        ///         - file cabinet record with specified id not exists.
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
-        public int CreateRecord(string firstName, string lastName, DateTime dateOfBirth, char gender, decimal weight, short stature)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
+        public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CheckInputParameters(firstName, lastName, dateOfBirth, gender, weight, stature);
+            this.CheckInputParameters(parameterObject);
 
             var newRecord = new FileCabinetRecord
             {
                 Id = this.existingRecords.Count + 1,
-                FirstName = firstName,
-                LastName = lastName,
-                DateOfBirth = dateOfBirth,
-                Gender = gender,
-                Weight = weight,
-                Stature = stature,
+                FirstName = parameterObject.FirstName,
+                LastName = parameterObject.LastName,
+                DateOfBirth = parameterObject.DateOfBirth,
+                Gender = parameterObject.Gender,
+                Weight = parameterObject.Weight,
+                Stature = parameterObject.Stature,
             };
 
             this.existingRecords.Add(newRecord);
 
-            this.AddSearchEntry(firstName, this.firstNameSearchDictionary, newRecord);
-            this.AddSearchEntry(lastName, this.lastNameSearchDictionary, newRecord);
-            this.AddSearchEntry(dateOfBirth, this.dateOfBirthSearchDictionary, newRecord);
+            this.AddSearchEntry(parameterObject.FirstName, this.firstNameSearchDictionary, newRecord);
+            this.AddSearchEntry(parameterObject.LastName, this.lastNameSearchDictionary, newRecord);
+            this.AddSearchEntry(parameterObject.DateOfBirth, this.dateOfBirthSearchDictionary, newRecord);
 
             return newRecord.Id;
         }
@@ -69,16 +65,10 @@ namespace FileCabinetApp
         /// <summary>
         ///     Edits a file cabinet record with the specified property's values.
         /// </summary>
-        /// <param name="id">Id of the existing file cabinet record<see cref="int"/>.</param>
-        /// <param name="firstName">New user's first name of type <see cref="string"/>.</param>
-        /// <param name="lastName">New User's last name of type <see cref="string"/>.</param>
-        /// <param name="dateOfBirth">New User's birthday of type <see cref="DateTime"/>.</param>
-        /// <param name="gender">New User's gender of type <see cref="char"/>.</param>
-        /// <param name="weight">New User's weight of type <see cref="decimal"/>.</param>
-        /// <param name="stature">New User's stature of type <see cref="short"/>.</param>
-        /// <exception cref="ArgumentNullException">Thrown when firstName of lastName is null.</exception>
+        /// <param name="parameterObject.">Parameter object, which holds all necessary data for the editting of <see cref="FileCabinetRecord"/> object.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
         /// <exception cref="ArgumentException">
-        ///     Throw when:
+        ///     Throw when <paramref name="parameterObject"/> inner properties are not valid:
         ///         - firstName of lastName is empty or whitespace;
         ///         - firstName's or lastName's length is lower less than 2 or greater than 60;
         ///         - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
@@ -86,25 +76,25 @@ namespace FileCabinetApp
         ///         - stature is lower than 0;
         ///         - file cabinet record with specified id not exists.
         /// </exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
-        public void EditRecord(int id, string firstName, string lastName, DateTime dateOfBirth, char gender, decimal weight, short stature)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
+        public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CheckInputParameters(firstName, lastName, dateOfBirth, gender, weight, stature);
+            this.CheckInputParameters(parameterObject);
 
-            var editableRecord = this.GetRecordById(id);
+            var editableRecord = this.GetRecordById(parameterObject.Id);
 
-            Guard.ArgumentSatisfies(editableRecord, (editableRecord) => editableRecord is not null, $"User with {id} does not exist!");
+            Guard.ArgumentSatisfies(editableRecord, (editableRecord) => editableRecord is not null, $"User with {parameterObject.Id} does not exist!");
 
-            editableRecord!.FirstName = firstName;
-            editableRecord!.LastName = lastName;
-            editableRecord!.DateOfBirth = dateOfBirth;
-            editableRecord!.Gender = gender;
-            editableRecord!.Weight = weight;
-            editableRecord!.Stature = stature;
+            editableRecord!.FirstName = parameterObject.FirstName;
+            editableRecord!.LastName = parameterObject.LastName;
+            editableRecord!.DateOfBirth = parameterObject.DateOfBirth;
+            editableRecord!.Gender = parameterObject.Gender;
+            editableRecord!.Weight = parameterObject.Weight;
+            editableRecord!.Stature = parameterObject.Stature;
 
-            this.UpdateSearchEntry(firstName, this.firstNameSearchDictionary, editableRecord);
-            this.UpdateSearchEntry(lastName, this.lastNameSearchDictionary, editableRecord);
-            this.UpdateSearchEntry(dateOfBirth, this.dateOfBirthSearchDictionary, editableRecord);
+            this.UpdateSearchEntry(parameterObject.FirstName, this.firstNameSearchDictionary, editableRecord);
+            this.UpdateSearchEntry(parameterObject.LastName, this.lastNameSearchDictionary, editableRecord);
+            this.UpdateSearchEntry(parameterObject.DateOfBirth, this.dateOfBirthSearchDictionary, editableRecord);
         }
 
         /// <summary>
@@ -220,32 +210,34 @@ namespace FileCabinetApp
             this.AddSearchEntry(key, searchDictionary, record);
         }
 
-        private void CheckInputParameters(string firstName, string lastName, DateTime dateOfBirth, char gender, decimal weight, short stature)
+        private void CheckInputParameters(FileCabinetRecordParameterObject parameterObject)
         {
-            Guard.ArgumentIsNotNull(firstName, nameof(firstName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(firstName, nameof(firstName));
+            Guard.ArgumentIsNotNull(parameterObject, nameof(parameterObject));
+
+            Guard.ArgumentIsNotNull(parameterObject.FirstName, nameof(parameterObject.FirstName));
+            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.FirstName, nameof(parameterObject.FirstName));
             Guard.ArgumentSatisfies(
-                firstName,
+                parameterObject.FirstName,
                 (firstName) => firstName.Length >= 2 && firstName.Length <= 60,
-                $"{nameof(firstName)} lenght must be greater than 1 and less than 61.");
+                $"{nameof(parameterObject.FirstName)} lenght must be greater than 1 and less than 61.");
 
-            Guard.ArgumentIsNotNull(lastName, nameof(lastName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(lastName, nameof(lastName));
+            Guard.ArgumentIsNotNull(parameterObject.LastName, nameof(parameterObject.LastName));
+            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.LastName, nameof(parameterObject.LastName));
             Guard.ArgumentSatisfies(
-                lastName,
+                parameterObject.LastName,
                 (lastName) => lastName.Length >= 2 && lastName.Length <= 60,
-                $"{nameof(lastName)} lenght must be greater than 1 and less than 61.");
+                $"{nameof(parameterObject.LastName)} lenght must be greater than 1 and less than 61.");
 
             Guard.ArgumentSatisfies(
-                dateOfBirth,
+                parameterObject.DateOfBirth,
                 (dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0,
-                $"{nameof(dateOfBirth)} must be greater than 01-Jan-1950 and less or equal to current date.");
+                $"{nameof(parameterObject.DateOfBirth)} must be greater than 01-Jan-1950 and less or equal to current date.");
 
-            Guard.ArgumentIsInRange(gender, new[] { 'M', 'F' });
+            Guard.ArgumentIsInRange(parameterObject.Gender, new[] { 'M', 'F' });
 
-            Guard.ArgumentGreaterThan(weight, 0);
+            Guard.ArgumentGreaterThan(parameterObject.Weight, 0);
 
-            Guard.ArgumentGreaterThan(stature, 0);
+            Guard.ArgumentGreaterThan(parameterObject.Stature, 0);
         }
     }
 }
