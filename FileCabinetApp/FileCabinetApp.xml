@@ -4,5 +4,347 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+                Class for a user information.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+                Gets or sets id value of the user.
+            </summary>
+            <value>Id of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+                Gets or sets first name value of the user.
+            </summary>
+            <value>First name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+                Gets or sets last name value of the user.
+            </summary>
+            <value>Last name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+                Gets or sets date of birth value of the user.
+            </summary>
+            <value>Date of birth of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Stature">
+            <summary>
+                Gets or sets stature value of the user.
+            </summary>
+            <value>Stature of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Gender">
+            <summary>
+                Gets or sets gender value of the user.
+            </summary>
+            <value>Gender of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
+            <summary>
+                Gets or sets weight value of the user.
+            </summary>
+            <value>Weight of the user.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+                Transform object into the string representation.
+            </summary>
+            <returns>String representation of the object<see cref="T:System.String"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetService">
+            <summary>
+                Class for the file cabinet's services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.CreateRecord(System.String,System.String,System.DateTime,System.Char,System.Decimal,System.Int16)">
+            <summary>
+                Creates a file cabinet record with the specified property's values.
+            </summary>
+            <param name="firstName">User's first name of type <see cref="T:System.String"/>.</param>
+            <param name="lastName">User's last name of type <see cref="T:System.String"/>.</param>
+            <param name="dateOfBirth">User's birthday of type <see cref="T:System.DateTime"/>.</param>
+            <param name="gender">User's gender of type <see cref="T:System.Char"/>.</param>
+            <param name="weight">User's weight of type <see cref="T:System.Decimal"/>.</param>
+            <param name="stature">User's stature of type <see cref="T:System.Int16"/>.</param>
+            <returns>Id of new file cabinet record.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when firstName of lastName is null.</exception>
+            <exception cref="T:System.ArgumentException">
+                Throw when:
+                    - firstName of lastName is empty or whitespace;
+                    - firstName's or lastName's length is lower less than 2 or greater than 60;
+                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
+                    - weight is lower than 0;
+                    - stature is lower than 0.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetStat">
+            <summary>
+                Gets count of all existing file cabinet records.
+            </summary>
+            <returns>Count of all existing file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.EditRecord(System.Int32,System.String,System.String,System.DateTime,System.Char,System.Decimal,System.Int16)">
+            <summary>
+                Edits a file cabinet record with the specified property's values.
+            </summary>
+            <param name="id">Id of the existing file cabinet record<see cref="T:System.Int32"/>.</param>
+            <param name="firstName">New user's first name of type <see cref="T:System.String"/>.</param>
+            <param name="lastName">New User's last name of type <see cref="T:System.String"/>.</param>
+            <param name="dateOfBirth">New User's birthday of type <see cref="T:System.DateTime"/>.</param>
+            <param name="gender">New User's gender of type <see cref="T:System.Char"/>.</param>
+            <param name="weight">New User's weight of type <see cref="T:System.Decimal"/>.</param>
+            <param name="stature">New User's stature of type <see cref="T:System.Int16"/>.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when firstName of lastName is null.</exception>
+            <exception cref="T:System.ArgumentException">
+                Throw when:
+                    - firstName of lastName is empty or whitespace;
+                    - firstName's or lastName's length is lower less than 2 or greater than 60;
+                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
+                    - weight is lower than 0;
+                    - stature is lower than 0;
+                    - file cabinet record with specified id not exists.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when gender is not equal to M or F.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.RecordExists(System.Int32)">
+            <summary>
+                Checks if file cabinet record with specified <paramref name="id"/> exists.
+            </summary>
+            <param name="id">Id of the file cabinet record.</param>
+            <returns>True if file cabinet record with specified id exists, overwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.GetRecords">
+            <summary>
+                Gets array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.
+            </summary>
+            <returns>Array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByFirstName(System.String)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
+            </summary>
+            <param name="firstName">First name search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByLastName(System.String)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have last name's value equal to the specified <paramref name="lastName"/>.
+            </summary>
+            <param name="lastName">Last name search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when lastName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have date of birth's value equal to the specified <paramref name="dateOfBirth"/>.
+            </summary>
+            <param name="dateOfBirth">Date of birth search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Guard">
+            <summary>
+                Class for the checking of the input parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotNull``1(``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is not null.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when argument is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotEmptyOrWhiteSpace(System.String,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> is not empty or whitespace.
+            </summary>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentException">if string is null or empty or whitespace.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[])">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[],System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentSatisfies``1(``0,System.Predicate{``0},System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> satisfies specified <paramref name="condition"/>'.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="condition">Function of type <see cref="T:System.Predicate`1"/> which checks <paramref name="argument"/> for satysfing specified condition.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
+        </member>
+        <member name="T:FileCabinetApp.InputUtils">
+            <summary>
+                Class for the ant input util functions.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.StringConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.String"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.String"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DateTimeConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.DateTime"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.ShortConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Int16"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.CharConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Char"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Char"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DecimalConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Decimal"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.ConsoleParameterReader">
+            <summary>
+                Class for the reading of input parameter's values.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.ConsoleParameterReader.FailedInputAttemptMessage">
+            <summary>
+                Gets or sets the value of failed input attempt message.
+            </summary>
+            <value>This message is printed after a failed value input attempt.</value>
+        </member>
+        <member name="M:FileCabinetApp.ConsoleParameterReader.ReadValue``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},FileCabinetApp.ParameterValidationChain{``0},System.String)">
+            <summary>
+                Reads values from the console with values validation.
+            </summary>
+            <typeparam name="T">Type of the returned value.</typeparam>
+            <param name="converter">
+                Contains function, which converts input string to value with type <typeparamref name="T"/>.
+            </param>
+            <param name="validationChain">
+                Contains chain with the value validation functions.
+            </param>
+            <param name="hintMessage">
+                Contains hint message with the additional information.
+                If specified, then printed after a failed input attempt.
+            </param>
+            <returns>Read from console value of type <typeparamref name="T"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when converter or validationChain is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.ParameterValidationChain`1">
+            <summary>
+                Class for the list of validation functions.
+            </summary>
+            <typeparam name="T">
+                Type of the value, which must be validated.
+            </typeparam>
+        </member>
+        <member name="M:FileCabinetApp.ParameterValidationChain`1.Validate(`0)">
+            <summary>
+                Validates the specified value.
+            </summary>
+            <param name="value">
+                Contains function, which converts input string to value with type <typeparamref name="T"/>.
+            </param>
+            <returns>Converted value of type <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ParameterValidationChain`1.AddCondition(System.Predicate{`0})">
+            <summary>
+                Adds new validation function to the validation function list.
+            </summary>
+            <param name="condition">
+                <see cref="T:System.Predicate`1"/> function, which will be added to the validation function list.
+            </param>
+            <returns>Converted value of type <typeparamref name="T"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="condition"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+                Main class of the program.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+                Entry point of the program.
+            </summary>
+            <param name="args">Arguments, which were passed to the program through the console.</param>
+        </member>
     </members>
 </doc>
