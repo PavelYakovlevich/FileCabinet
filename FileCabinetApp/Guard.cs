@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace FileCabinetApp
 {
@@ -33,7 +34,41 @@ namespace FileCabinetApp
         {
             if (string.IsNullOrWhiteSpace(argument) || string.IsNullOrEmpty(argument))
             {
-                throw new ArgumentException($"{nameOfArgument} is empty or whitespace.", nameOfArgument);
+                throw new ArgumentException($"{nameOfArgument} is empty or whitespace.", argument);
+            }
+        }
+
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> of type <see cref="string"/> matchs regular expression <paramref name="regexString"/>.
+        /// </summary>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="nameOfArgument">Argument's name.</param>
+        /// <param name="regexString">Regular expression, which must be applied to the <paramref name="argument"/>.</param>
+        /// <exception cref="ArgumentException">if <paramref name="regexString"/> is not a valid regex or <paramref name="argument"/> doesn't match the regular expression.</exception>
+        /// <exception cref="ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
+        public static void ArgumentMatchRegex(string argument, string nameOfArgument, string regexString)
+        {
+            var regex = new Regex(regexString);
+
+            if (!regex.IsMatch(argument))
+            {
+                throw new ArgumentException($"{nameOfArgument} does not match the \'{regexString}\' regular expression.", argument);
+            }
+        }
+
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        public static void ArgumentLessThan<T>(T argument, T secondValue)
+           where T : IComparable<T>
+        {
+            if (argument.CompareTo(secondValue) >= 0)
+            {
+                throw new ArgumentException($"{nameof(argument)} is greater than ${secondValue}.");
             }
         }
 
