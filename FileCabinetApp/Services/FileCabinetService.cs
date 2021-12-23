@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileCabinetApp
+namespace FileCabinetApp.Services
 {
     /// <summary>
     ///     Class for the file cabinet's services.
     /// </summary>
-    public class FileCabinetService
+    public abstract class FileCabinetService
     {
         private readonly List<FileCabinetRecord> existingRecords = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameSearchDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -31,7 +31,7 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CheckInputParameters(parameterObject);
+            this.ValidateParameters(parameterObject);
 
             var newRecord = new FileCabinetRecord
             {
@@ -79,7 +79,7 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CheckInputParameters(parameterObject);
+            this.ValidateParameters(parameterObject);
 
             var editableRecord = this.GetRecordById(parameterObject.Id);
 
@@ -167,6 +167,12 @@ namespace FileCabinetApp
             return this.dateOfBirthSearchDictionary[dateOfBirth].ToArray();
         }
 
+        /// <summary>
+        ///     Validates input <paramref name="parameterObject"/>'s properties.
+        /// </summary>
+        /// <param name="parameterObject">Object, which must be validated.</param>
+        protected abstract void ValidateParameters(FileCabinetRecordParameterObject parameterObject);
+
         private FileCabinetRecord? GetRecordById(int id)
         {
             Guard.ArgumentGreaterThan(id, 0);
@@ -208,36 +214,6 @@ namespace FileCabinetApp
             }
 
             this.AddSearchEntry(key, searchDictionary, record);
-        }
-
-        private void CheckInputParameters(FileCabinetRecordParameterObject parameterObject)
-        {
-            Guard.ArgumentIsNotNull(parameterObject, nameof(parameterObject));
-
-            Guard.ArgumentIsNotNull(parameterObject.FirstName, nameof(parameterObject.FirstName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.FirstName, nameof(parameterObject.FirstName));
-            Guard.ArgumentSatisfies(
-                parameterObject.FirstName,
-                (firstName) => firstName.Length >= 2 && firstName.Length <= 60,
-                $"{nameof(parameterObject.FirstName)} lenght must be greater than 1 and less than 61.");
-
-            Guard.ArgumentIsNotNull(parameterObject.LastName, nameof(parameterObject.LastName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.LastName, nameof(parameterObject.LastName));
-            Guard.ArgumentSatisfies(
-                parameterObject.LastName,
-                (lastName) => lastName.Length >= 2 && lastName.Length <= 60,
-                $"{nameof(parameterObject.LastName)} lenght must be greater than 1 and less than 61.");
-
-            Guard.ArgumentSatisfies(
-                parameterObject.DateOfBirth,
-                (dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0,
-                $"{nameof(parameterObject.DateOfBirth)} must be greater than 01-Jan-1950 and less or equal to current date.");
-
-            Guard.ArgumentIsInRange(parameterObject.Gender, new[] { 'M', 'F' });
-
-            Guard.ArgumentGreaterThan(parameterObject.Weight, 0);
-
-            Guard.ArgumentGreaterThan(parameterObject.Stature, 0);
         }
     }
 }

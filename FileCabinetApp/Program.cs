@@ -1,4 +1,5 @@
 ﻿using System;
+using FileCabinetApp.Services;
 
 namespace FileCabinetApp
 {
@@ -13,7 +14,7 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        private static FileCabinetService fileCabinetService = new FileCabinetService();
+        private static FileCabinetService fileCabinetService = new FileCabinetCustomService();
 
         private static bool isRunning = true;
 
