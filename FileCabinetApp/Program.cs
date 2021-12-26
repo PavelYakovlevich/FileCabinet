@@ -74,7 +74,7 @@ namespace FileCabinetApp
             do
             {
                 Console.Write("> ");
-                var inputs = Console.ReadLine()!.Split(' ', 2);
+                var inputs = Console.ReadLine() !.Split(' ', 2);
                 const int commandIndex = 0;
                 var command = inputs[commandIndex];
 

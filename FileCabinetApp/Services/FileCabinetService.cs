@@ -6,12 +6,23 @@ namespace FileCabinetApp.Services
     /// <summary>
     ///     Class for the file cabinet's services.
     /// </summary>
-    public abstract class FileCabinetService
+    public class FileCabinetService
     {
         private readonly List<FileCabinetRecord> existingRecords = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameSearchDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<string, List<FileCabinetRecord>> lastNameSearchDictionary = new Dictionary<string, List<FileCabinetRecord>>();
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthSearchDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
+
+        private readonly IRecordValidator recordValidator;
+
+        /// <summary>
+            /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+        /// </summary>
+        /// <param name="recordValidator">Validator for the <see cref="FileCabinetRecordParameterObject"/>.</param>
+        public FileCabinetService(IRecordValidator recordValidator)
+        {
+            this.recordValidator = recordValidator;
+        }
 
         /// <summary>
         ///     Creates a file cabinet record with the specified property's values.
@@ -31,7 +42,7 @@ namespace FileCabinetApp.Services
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CreateValidator().ValidateParameters(parameterObject);
+            this.recordValidator.ValidateParameters(parameterObject);
 
             var newRecord = new FileCabinetRecord
             {
@@ -79,7 +90,7 @@ namespace FileCabinetApp.Services
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.CreateValidator().ValidateParameters(parameterObject);
+            this.recordValidator.ValidateParameters(parameterObject);
 
             var editableRecord = this.GetRecordById(parameterObject.Id);
 
@@ -166,8 +177,6 @@ namespace FileCabinetApp.Services
 
             return this.dateOfBirthSearchDictionary[dateOfBirth].ToArray();
         }
-
-        protected abstract IRecordValidator CreateValidator();
 
         private FileCabinetRecord? GetRecordById(int id)
         {
