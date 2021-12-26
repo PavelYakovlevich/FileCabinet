@@ -25,7 +25,7 @@ namespace FileCabinetApp
             new ProgramInputArgument(ValidationRulesAttributeName, "v", new[] { "default", "custom" }),
         };
 
-        private static FileCabinetService fileCabinetService = new FileCabinetService(new DefaultFileRecordValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultFileRecordValidator());
 
         private static bool isRunning = true;
 

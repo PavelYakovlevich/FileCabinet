@@ -7,7 +7,7 @@ namespace FileCabinetApp.Services
     /// <summary>
     ///     Class for the file cabinet's services.
     /// </summary>
-    public class FileCabinetService
+    public class FileCabinetService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> existingRecords = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameSearchDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -25,11 +25,7 @@ namespace FileCabinetApp.Services
             this.recordValidator = recordValidator;
         }
 
-        /// <summary>
-        ///     Creates a file cabinet record with the specified property's values.
-        /// </summary>
-        /// <param name="parameterObject.">Parameter object, which holds all necessary data for the creation of <see cref="FileCabinetRecord"/> object.</param>
-        /// <returns>Id of new file cabinet record.</returns>
+        /// <inheritdoc cref="IFileCabinetService.CreateRecord(FileCabinetRecordParameterObject)"/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
         /// <exception cref="ArgumentException">
         ///     Throw when <paramref name="parameterObject"/> inner properties are not valid:
@@ -65,19 +61,13 @@ namespace FileCabinetApp.Services
             return newRecord.Id;
         }
 
-        /// <summary>
-        ///     Gets count of all existing file cabinet records.
-        /// </summary>
-        /// <returns>Count of all existing file cabinet records.</returns>
+        /// <inheritdoc cref="IFileCabinetService.GetStat"/>
         public int GetStat()
         {
             return this.existingRecords.Count;
         }
 
-        /// <summary>
-        ///     Edits a file cabinet record with the specified property's values.
-        /// </summary>
-        /// <param name="parameterObject.">Parameter object, which holds all necessary data for the editting of <see cref="FileCabinetRecord"/> object.</param>
+        /// <inheritdoc cref="IFileCabinetService.EditRecord(FileCabinetRecordParameterObject)"/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
         /// <exception cref="ArgumentException">
         ///     Throw when <paramref name="parameterObject"/> inner properties are not valid:
@@ -109,30 +99,19 @@ namespace FileCabinetApp.Services
             this.UpdateSearchEntry(parameterObject.DateOfBirth, this.dateOfBirthSearchDictionary, editableRecord);
         }
 
-        /// <summary>
-        ///     Checks if file cabinet record with specified <paramref name="id"/> exists.
-        /// </summary>
-        /// <param name="id">Id of the file cabinet record.</param>
-        /// <returns>True if file cabinet record with specified id exists, overwise false.</returns>
+        /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
         public bool RecordExists(int id)
         {
             return this.GetRecordById(id) is not null;
         }
 
-        /// <summary>
-        ///     Gets array of all existing <see cref="FileCabinetRecord"/>.
-        /// </summary>
-        /// <returns>Array of all existing <see cref="FileCabinetRecord"/>.</returns>
+        /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             return new ReadOnlyCollection<FileCabinetRecord>(this.existingRecords);
         }
 
-        /// <summary>
-        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
-        /// </summary>
-        /// <param name="firstName">First name search value.</param>
-        /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
+        /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
@@ -146,11 +125,7 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameSearchDictionary[firstName]);
         }
 
-        /// <summary>
-        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have last name's value equal to the specified <paramref name="lastName"/>.
-        /// </summary>
-        /// <param name="lastName">Last name search value.</param>
-        /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
+        /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
         /// <exception cref="ArgumentNullException">Thrown when lastName is null.</exception>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
@@ -164,11 +139,7 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameSearchDictionary[lastName]);
         }
 
-        /// <summary>
-        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have date of birth's value equal to the specified <paramref name="dateOfBirth"/>.
-        /// </summary>
-        /// <param name="dateOfBirth">Date of birth search value.</param>
-        /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))

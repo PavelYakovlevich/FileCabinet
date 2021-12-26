@@ -393,11 +393,7 @@
             <param name="recordValidator">Validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/>.</param>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
-            <summary>
-                Creates a file cabinet record with the specified property's values.
-            </summary>
-            <param name="parameterObject..">Parameter object, which holds all necessary data for the creation of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
-            <returns>Id of new file cabinet record.</returns>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
             <exception cref="T:System.ArgumentException">
                 Throw when <paramref name="parameterObject"/> inner properties are not valid:
@@ -411,16 +407,10 @@
             <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetService.GetStat">
-            <summary>
-                Gets count of all existing file cabinet records.
-            </summary>
-            <returns>Count of all existing file cabinet records.</returns>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
-            <summary>
-                Edits a file cabinet record with the specified property's values.
-            </summary>
-            <param name="parameterObject..">Parameter object, which holds all necessary data for the editting of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
             <exception cref="T:System.ArgumentException">
                 Throw when <paramref name="parameterObject"/> inner properties are not valid:
@@ -434,35 +424,74 @@
             <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetService.RecordExists(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.GetRecords">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when lastName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="T:FileCabinetApp.Services.IFileCabinetService">
+            <summary>
+                Interface for the file cabinet services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Creates a file cabinet record with the specified property's values.
+            </summary>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the creation of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+            <returns>Id of new file cabinet record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Edits a file cabinet record with the specified property's values.
+            </summary>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the editting of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetStat">
+            <summary>
+                Gets count of all existing file cabinet records.
+            </summary>
+            <returns>Count of all existing file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)">
             <summary>
                 Checks if file cabinet record with specified <paramref name="id"/> exists.
             </summary>
             <param name="id">Id of the file cabinet record.</param>
             <returns>True if file cabinet record with specified id exists, overwise false.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.GetRecords">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecords">
             <summary>
                 Gets array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.
             </summary>
             <returns>Array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByFirstName(System.String)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
                 Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
             </summary>
             <param name="firstName">First name search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
             <summary>
                 Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have last name's value equal to the specified <paramref name="lastName"/>.
             </summary>
             <param name="lastName">Last name search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when lastName is null.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)">
             <summary>
                 Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have date of birth's value equal to the specified <paramref name="dateOfBirth"/>.
             </summary>
