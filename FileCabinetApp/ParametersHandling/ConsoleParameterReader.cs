@@ -8,35 +8,22 @@ namespace FileCabinetApp
     public static class ConsoleParameterReader
     {
         /// <summary>
-        ///     Gets or sets the value of failed input attempt message.
+        ///     Reads input from the console, convert it to the <typeparamref name="T"/> and validates it.
         /// </summary>
-        /// <value>This message is printed after a failed value input attempt.</value>
-        public static string FailedInputAttemptMessage { get; set; } = "Value is not valid. Please, try again.";
-
-        /// <summary>
-        ///     Reads values from the console with values validation.
-        /// </summary>
-        /// <typeparam name="T">Type of the returned value.</typeparam>
-        /// <param name="converter">
-        ///     Contains function, which converts input string to value with type <typeparamref name="T"/>.
-        /// </param>
-        /// <param name="validationChain">
-        ///     Contains chain with the value validation functions.
-        /// </param>
-        /// <param name="hintMessage">
-        ///     Contains hint message with the additional information.
-        ///     If specified, then printed after a failed input attempt.
-        /// </param>
-        /// <returns>Read from console value of type <typeparamref name="T"/>.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when converter or validationChain is null.</exception>
-        public static T ReadValue<T>(Func<string, Tuple<bool, string, T>> converter, ParameterValidationChain<T> validationChain, string? hintMessage = null)
+        /// <typeparam name="T">Type of value, that must be read from the console.</typeparam>
+        /// <param name="converter">Converter function.</param>
+        /// <param name="validator">Validation function.</param>
+        /// <returns>Value, that was read from the console and converted to the proper type <typeparamref name="T"/>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="converter"/> or <paramref name="validator"/> is null.</exception>
+        public static T ReadInput<T>(Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator)
         {
             Guard.ArgumentIsNotNull(converter, nameof(converter));
-            Guard.ArgumentIsNotNull(validationChain, nameof(validationChain));
+            Guard.ArgumentIsNotNull(validator, nameof(validator));
 
-            bool hintMessageIsDefined = !(string.IsNullOrEmpty(hintMessage) || string.IsNullOrWhiteSpace(hintMessage));
             do
             {
+                T value;
+
                 var input = Console.ReadLine();
                 var conversionResult = converter(input!);
 
@@ -46,18 +33,12 @@ namespace FileCabinetApp
                     continue;
                 }
 
-                var value = conversionResult.Item3;
+                value = conversionResult.Item3;
 
-                var valueIsValid = validationChain.Validate(value);
-                if (!valueIsValid)
+                var validationResult = validator(value);
+                if (!validationResult.Item1)
                 {
-                    Console.WriteLine(FailedInputAttemptMessage);
-
-                    if (hintMessageIsDefined)
-                    {
-                        Console.WriteLine($"Hint: ${hintMessage}");
-                    }
-
+                    Console.WriteLine($"Validation failed: {validationResult.Item2}. Please, correct your input.");
                     continue;
                 }
 

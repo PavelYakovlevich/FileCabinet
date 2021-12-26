@@ -100,8 +100,11 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
+        /// <exception cref="ArgumentException">Thrown when id is less than 1.</exception>
         public bool RecordExists(int id)
         {
+            Guard.ArgumentGreaterThan(id, 0);
+
             return this.GetRecordById(id) is not null;
         }
 
@@ -152,8 +155,6 @@ namespace FileCabinetApp.Services
 
         private FileCabinetRecord? GetRecordById(int id)
         {
-            Guard.ArgumentGreaterThan(id, 0);
-
             foreach (var record in this.existingRecords)
             {
                 if (record.Id == id)
