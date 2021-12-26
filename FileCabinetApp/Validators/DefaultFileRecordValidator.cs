@@ -34,10 +34,8 @@ namespace FileCabinetApp.Validators
             Guard.ArgumentIsInRange(parameterObject.Gender, new[] { 'M', 'F' });
 
             Guard.ArgumentGreaterThan(parameterObject.Weight, 0);
-            Guard.ArgumentLessThan(parameterObject.Weight, 1000.0m);
 
             Guard.ArgumentGreaterThan(parameterObject.Stature, 0);
-            Guard.ArgumentLessThan(parameterObject.Stature, 300);
         }
     }
 }
