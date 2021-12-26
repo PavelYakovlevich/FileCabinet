@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using FileCabinetApp.Services;
+using FileCabinetApp.Validators;
 
 namespace FileCabinetApp
 {
@@ -23,7 +25,7 @@ namespace FileCabinetApp
             new ProgramInputArgument(ValidationRulesAttributeName, "v", new[] { "default", "custom" }),
         };
 
-        private static FileCabinetService fileCabinetService = new FileCabinetDefaultService();
+        private static FileCabinetService fileCabinetService = new FileCabinetService(new DefaultFileRecordValidator());
 
         private static bool isRunning = true;
 
@@ -103,12 +105,20 @@ namespace FileCabinetApp
         {
             if (inputArguments.ContainsKey(ValidationRulesAttributeName))
             {
+                IRecordValidator recordValidator;
+
                 var argumentValue = inputArguments[ValidationRulesAttributeName].ToLower();
 
                 if (argumentValue.Equals("custom"))
                 {
-                    fileCabinetService = new FileCabinetCustomService();
+                    recordValidator = new CustomFileRecordValidator();
                 }
+                else
+                {
+                    recordValidator = new DefaultFileRecordValidator();
+                }
+
+                fileCabinetService = new FileCabinetService(recordValidator);
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
@@ -312,7 +322,7 @@ namespace FileCabinetApp
 
             if (values.Length < 2)
             {
-                Console.WriteLine("Parameter value or parameter value is missing!");
+                Console.WriteLine("Parameter name or parameter value is missing!");
                 return;
             }
 
@@ -321,13 +331,13 @@ namespace FileCabinetApp
 
             if (paramValue.Length < 3)
             {
-                Console.WriteLine("Parameter value must be have a value!");
+                Console.WriteLine("Parameter value is missing!");
                 return;
             }
 
             paramValue = values[1].Substring(1, values[1].Length - 2);
 
-            FileCabinetRecord[] records;
+            ReadOnlyCollection<FileCabinetRecord> records;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
             {
                 records = fileCabinetService.FindByFirstName(paramValue);

@@ -381,26 +381,6 @@
             </summary>
             <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
         </member>
-        <member name="T:FileCabinetApp.Services.FileCabinetCustomService">
-            <summary>
-                Class for the custom implementaion of <see cref="T:FileCabinetApp.Services.FileCabinetService"/>.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetCustomService.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetCustomService"/> class.
-            </summary>
-        </member>
-        <member name="T:FileCabinetApp.Services.FileCabinetDefaultService">
-            <summary>
-                Class for the default implementation of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/>.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetDefaultService.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetDefaultService"/> class.
-            </summary>
-        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetService">
             <summary>
                 Class for the file cabinet's services.

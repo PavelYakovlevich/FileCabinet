@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace FileCabinetApp.Services
 {
@@ -122,9 +123,9 @@ namespace FileCabinetApp.Services
         ///     Gets array of all existing <see cref="FileCabinetRecord"/>.
         /// </summary>
         /// <returns>Array of all existing <see cref="FileCabinetRecord"/>.</returns>
-        public FileCabinetRecord[] GetRecords()
+        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            return this.existingRecords.ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.existingRecords);
         }
 
         /// <summary>
@@ -133,16 +134,16 @@ namespace FileCabinetApp.Services
         /// <param name="firstName">First name search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
-        public FileCabinetRecord[] FindByFirstName(string firstName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             Guard.ArgumentIsNotNull(firstName, nameof(firstName));
 
             if (!this.firstNameSearchDictionary.ContainsKey(firstName))
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
             }
 
-            return this.firstNameSearchDictionary[firstName].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameSearchDictionary[firstName]);
         }
 
         /// <summary>
@@ -151,16 +152,16 @@ namespace FileCabinetApp.Services
         /// <param name="lastName">Last name search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when lastName is null.</exception>
-        public FileCabinetRecord[] FindByLastName(string lastName)
+        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             Guard.ArgumentIsNotNull(lastName, nameof(lastName));
 
-            if (!this.firstNameSearchDictionary.ContainsKey(lastName))
+            if (!this.lastNameSearchDictionary.ContainsKey(lastName))
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
             }
 
-            return this.firstNameSearchDictionary[lastName].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameSearchDictionary[lastName]);
         }
 
         /// <summary>
@@ -168,14 +169,14 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="dateOfBirth">Date of birth search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
-        public FileCabinetRecord[] FindByDateOfBirth(DateTime dateOfBirth)
+        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
             {
-                return Array.Empty<FileCabinetRecord>();
+                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
             }
 
-            return this.dateOfBirthSearchDictionary[dateOfBirth].ToArray();
+            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
         private FileCabinetRecord? GetRecordById(int id)
