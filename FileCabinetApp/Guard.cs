@@ -1,78 +1,159 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace FileCabinetApp
 {
-    public class Guard
+    /// <summary>
+    ///     Class for the checking of the input parameters.
+    /// </summary>
+    public static class Guard
     {
-        public Guard IsNotNull<T>(T value, string nameOfValue)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is not null.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="nameOfArgument">Argument's name.</param>
+        /// <exception cref="ArgumentNullException">Thrown when argument is null.</exception>
+        public static void ArgumentIsNotNull<T>(T argument, string nameOfArgument)
             where T : class
         {
-            if (value is null)
+            if (argument is null)
             {
-                throw new ArgumentNullException(nameOfValue, $"{nameOfValue} is null!");
+                throw new ArgumentNullException(nameOfArgument, $"{nameOfArgument} is null!");
             }
-
-            return this;
         }
 
-        public Guard IsNotEmptyOrWhiteSpace(string value, string nameOfValue)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> of type <see cref="string"/> is not empty or whitespace.
+        /// </summary>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="nameOfArgument">Argument's name.</param>
+        /// <exception cref="ArgumentException">if string is null or empty or whitespace.</exception>
+        public static void ArgumentIsNotEmptyOrWhiteSpace(string argument, string nameOfArgument)
         {
-            if (string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(argument) || string.IsNullOrEmpty(argument))
             {
-                throw new ArgumentNullException(nameOfValue, $"{nameOfValue} is empty or whitespace.");
+                throw new ArgumentException($"{nameOfArgument} is empty or whitespace.", argument);
             }
-
-            return this;
         }
 
-        public Guard GreaterThan<T>(T value1, T value2)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> of type <see cref="string"/> matchs regular expression <paramref name="regexString"/>.
+        /// </summary>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="nameOfArgument">Argument's name.</param>
+        /// <param name="regexString">Regular expression, which must be applied to the <paramref name="argument"/>.</param>
+        /// <exception cref="ArgumentException">if <paramref name="regexString"/> is not a valid regex or <paramref name="argument"/> doesn't match the regular expression.</exception>
+        /// <exception cref="ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
+        public static void ArgumentMatchRegex(string argument, string nameOfArgument, string regexString)
+        {
+            var regex = new Regex(regexString);
+
+            if (!regex.IsMatch(argument))
+            {
+                throw new ArgumentException($"{nameOfArgument} does not match the \'{regexString}\' regular expression.", argument);
+            }
+        }
+
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        public static void ArgumentLessThan<T>(T argument, T secondValue)
            where T : IComparable<T>
         {
-            return this.GreaterThan(value1, value2, $"{nameof(value1)} is lower than ${value2}");
+            if (argument.CompareTo(secondValue) >= 0)
+            {
+                throw new ArgumentException($"{nameof(argument)} is greater than ${secondValue}.");
+            }
         }
 
-        public Guard GreaterThan<T>(T value1, T value2, string message)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        public static void ArgumentGreaterThan<T>(T argument, T secondValue)
            where T : IComparable<T>
         {
-            if (value1.CompareTo(value2) <= 0)
+            ArgumentGreaterThan(argument, secondValue, $"{nameof(argument)} is lower than ${secondValue}.");
+        }
+
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+        /// <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        public static void ArgumentGreaterThan<T>(T argument, T secondValue, string exceptionMessage)
+           where T : IComparable<T>
+        {
+            if (argument.CompareTo(secondValue) <= 0)
             {
-                throw new ArgumentException(message);
+                throw new ArgumentException(exceptionMessage);
             }
-
-            return this;
         }
 
-        public Guard IsInRange<T>(T value, T[] validValues)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="validValues"><see cref="Array"/> of valid values.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        public static void ArgumentIsInRange<T>(T argument, T[] validValues)
         {
-            return this.IsInRange(value, validValues, $"{value} is not in the specified range.");
+            ArgumentIsInRange(argument, validValues, $"{argument} is not in the specified range.");
         }
 
-        public Guard IsInRange<T>(T value, T[] validValues, string message)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="validValues"><see cref="Array"/> of valid values.</param>
+        /// <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        public static void ArgumentIsInRange<T>(T argument, T[] validValues, string exceptionMessage)
         {
-            if (value is null)
+            if (argument is null)
             {
-                throw new ArgumentNullException(nameof(value), $"{nameof(value)} can't be null.");
+                throw new ArgumentNullException(nameof(argument), $"{nameof(argument)} can't be null.");
             }
 
             foreach (var validValue in validValues)
             {
-                if (value.Equals(validValue))
+                if (argument.Equals(validValue))
                 {
-                    return this;
+                    return;
                 }
             }
 
-            throw new ArgumentOutOfRangeException(message);
+            throw new ArgumentOutOfRangeException(exceptionMessage);
         }
 
-        public Guard Requires(Func<bool> condition, string message)
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> satisfies specified <paramref name="condition"/>'.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="condition">Function of type <see cref="Predicate{T}"/> which checks <paramref name="argument"/> for satysfing specified condition.</param>
+        /// <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
+        public static void ArgumentSatisfies<T>(T argument, Predicate<T> condition, string exceptionMessage)
         {
-            if (!condition())
+            if (!condition(argument))
             {
-                throw new ArgumentException(message);
+                throw new ArgumentException(exceptionMessage);
             }
-
-            return this;
         }
     }
 }

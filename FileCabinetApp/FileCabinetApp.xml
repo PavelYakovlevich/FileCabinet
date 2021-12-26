@@ -4,5 +4,579 @@
         <name>FileCabinetApp</name>
     </assembly>
     <members>
+        <member name="T:FileCabinetApp.FileCabinetRecord">
+            <summary>
+                Class for a user information.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Id">
+            <summary>
+                Gets or sets id value of the user.
+            </summary>
+            <value>Id of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
+            <summary>
+                Gets or sets first name value of the user.
+            </summary>
+            <value>First name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.LastName">
+            <summary>
+                Gets or sets last name value of the user.
+            </summary>
+            <value>Last name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.DateOfBirth">
+            <summary>
+                Gets or sets date of birth value of the user.
+            </summary>
+            <value>Date of birth of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Stature">
+            <summary>
+                Gets or sets stature value of the user.
+            </summary>
+            <value>Stature of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Gender">
+            <summary>
+                Gets or sets gender value of the user.
+            </summary>
+            <value>Gender of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Weight">
+            <summary>
+                Gets or sets weight value of the user.
+            </summary>
+            <value>Weight of the user.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
+            <summary>
+                Transform object into the string representation.
+            </summary>
+            <returns>String representation of the object<see cref="T:System.String"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecordParameterObject">
+            <summary>
+                Class for the creation and editing input parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Char,System.Decimal)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> class.
+            </summary>
+            <param name="firstName">User's first name property value.</param>
+            <param name="lastName">User's last name property value.</param>
+            <param name="dateOfBirth">User's date of birth property value.</param>
+            <param name="gender">User's gender property value.</param>
+            <param name="weight">User's weight property value.</param>
+            <param name="stature">User's stature property value.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor(System.Int32,System.String,System.String,System.DateTime,System.Int16,System.Char,System.Decimal)">
+            <inheritdoc cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/>
+            <param name="id">Id of the file cabinet record.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Id">
+            <summary>
+                Gets id value of the user.
+            </summary>
+            <value>Id of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.FirstName">
+            <summary>
+                Gets first name value of the user.
+            </summary>
+            <value>First name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.LastName">
+            <summary>
+                Gets last name value of the user.
+            </summary>
+            <value>Last name of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.DateOfBirth">
+            <summary>
+                Gets date of birth value of the user.
+            </summary>
+            <value>Date of birth of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Stature">
+            <summary>
+                Gets stature value of the user.
+            </summary>
+            <value>Stature of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Gender">
+            <summary>
+                Gets gender value of the user.
+            </summary>
+            <value>Gender of the user.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Weight">
+            <summary>
+                Gets weight value of the user.
+            </summary>
+            <value>Weight of the user.</value>
+        </member>
+        <member name="T:FileCabinetApp.Guard">
+            <summary>
+                Class for the checking of the input parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotNull``1(``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is not null.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when argument is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotEmptyOrWhiteSpace(System.String,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> is not empty or whitespace.
+            </summary>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentException">if string is null or empty or whitespace.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentMatchRegex(System.String,System.String,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> matchs regular expression <paramref name="regexString"/>.
+            </summary>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <param name="regexString">Regular expression, which must be applied to the <paramref name="argument"/>.</param>
+            <exception cref="T:System.ArgumentException">if <paramref name="regexString"/> is not a valid regex or <paramref name="argument"/> doesn't match the regular expression.</exception>
+            <exception cref="T:System.ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentLessThan``1(``0,``0)">
+            <summary>
+                Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[])">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[],System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentSatisfies``1(``0,System.Predicate{``0},System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> satisfies specified <paramref name="condition"/>'.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="condition">Function of type <see cref="T:System.Predicate`1"/> which checks <paramref name="argument"/> for satysfing specified condition.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
+        </member>
+        <member name="T:FileCabinetApp.InputUtils">
+            <summary>
+                Class for the ant input util functions.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.StringConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.String"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.String"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DateTimeConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.DateTime"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.ShortConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Int16"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.CharConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Char"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Char"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DecimalConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Decimal"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.ConsoleParameterReader">
+            <summary>
+                Class for the reading of input parameter's values.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ConsoleParameterReader.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+                Reads input from the console, convert it to the <typeparamref name="T"/> and validates it.
+            </summary>
+            <typeparam name="T">Type of value, that must be read from the console.</typeparam>
+            <param name="converter">Converter function.</param>
+            <param name="validator">Validation function.</param>
+            <returns>Value, that was read from the console and converted to the proper type <typeparamref name="T"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="converter"/> or <paramref name="validator"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Program">
+            <summary>
+                Main class of the program.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Program.Main(System.String[])">
+            <summary>
+                Entry point of the program.
+            </summary>
+            <param name="args">Arguments, which were passed to the program through the console.</param>
+        </member>
+        <member name="T:FileCabinetApp.ProgramInputArgument">
+            <summary>
+                Class for the input arguments, which are passed from console.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.#ctor(System.String,System.String,System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ProgramInputArgument"/> class.
+            </summary>
+            <param name="name">Name of the parameter.</param>
+            <param name="abbreviation">Shortcut fo the parameter's name.</param>
+            <param name="values">Values, which can be specified.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="name"/> or <paramref name="abbreviation"/> or <paramref name="values"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="name"/> or <paramref name="abbreviation"/> is empty or whitespace or <paramref name="values"/> is empty.</exception>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.Name">
+            <summary>
+                Gets argument's name.
+            </summary>
+            <value>Argument's name.</value>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.Abbreviation">
+            <summary>
+                Gets argument's name abbreviation.
+            </summary>
+            <value>Argument's name abbreviation.</value>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.ValidValues">
+            <summary>
+                Gets valid values for the argument.
+            </summary>
+            <value>Argument's name abbreviation.</value>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.ValidateValue(System.String)">
+            <summary>
+                Checks if <paramref name="value"/> is valid for the argument.
+            </summary>
+            <param name="value">Checkable value.</param>
+            <returns>true if values is valid, overwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.GetValidValuesString">
+            <summary>
+                Builds <see cref="T:System.String"/>, which contains all valid values, separated by the comma.
+            </summary>
+            <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetService">
+            <summary>
+                Class for the file cabinet's services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/> class.
+            </summary>
+            <param name="recordValidator">Validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
+            <exception cref="T:System.ArgumentException">
+                Throw when <paramref name="parameterObject"/> inner properties are not valid:
+                    - firstName of lastName is empty or whitespace;
+                    - firstName's or lastName's length is lower less than 2 or greater than 60;
+                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
+                    - weight is lower than 0;
+                    - stature is lower than 0;
+                    - file cabinet record with specified id not exists.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.GetStat">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
+            <exception cref="T:System.ArgumentException">
+                Throw when <paramref name="parameterObject"/> inner properties are not valid:
+                    - firstName of lastName is empty or whitespace;
+                    - firstName's or lastName's length is lower less than 2 or greater than 60;
+                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
+                    - weight is lower than 0;
+                    - stature is lower than 0;
+                    - file cabinet record with specified id not exists.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.RecordExists(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+            <exception cref="T:System.ArgumentException">Thrown when id is less than 1.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.GetRecords">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when lastName is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="T:FileCabinetApp.Services.IFileCabinetService">
+            <summary>
+                Interface for the file cabinet services.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Creates a file cabinet record with the specified property's values.
+            </summary>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the creation of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+            <returns>Id of new file cabinet record.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Edits a file cabinet record with the specified property's values.
+            </summary>
+            <param name="parameterObject..">Parameter object, which holds all necessary data for the editting of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetStat">
+            <summary>
+                Gets count of all existing file cabinet records.
+            </summary>
+            <returns>Count of all existing file cabinet records.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)">
+            <summary>
+                Checks if file cabinet record with specified <paramref name="id"/> exists.
+            </summary>
+            <param name="id">Id of the file cabinet record.</param>
+            <returns>True if file cabinet record with specified id exists, overwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.GetRecords">
+            <summary>
+                Gets array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.
+            </summary>
+            <returns>Array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
+            </summary>
+            <param name="firstName">First name search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have last name's value equal to the specified <paramref name="lastName"/>.
+            </summary>
+            <param name="lastName">Last name search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have date of birth's value equal to the specified <paramref name="dateOfBirth"/>.
+            </summary>
+            <param name="dateOfBirth">Date of birth search value.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomConsoleInputValidator">
+            <summary>
+                Custom console input validator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateBirthDay(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateGender(System.Char)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateStature(System.Int16)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateWeight(System.Decimal)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)"/>
+        </member>
+        <member name="T:FileCabinetApp.Validators.CustomFileRecordValidator">
+            <summary>
+                Custom validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultConsoleInputValidator">
+            <summary>
+                Default console input validator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateBirthDay(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateGender(System.Char)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateStature(System.Int16)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateWeight(System.Decimal)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)"/>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultFileRecordValidator">
+            <summary>
+                Default validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="T:FileCabinetApp.Validators.IConsoleInputValidator">
+            <summary>
+                Interface for the console input validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)">
+            <summary>
+                Validates <paramref name="firstName"/>.
+            </summary>
+            <param name="firstName">Firstname.</param>
+            <returns>(true,"") if <paramref name="firstName"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)">
+            <summary>
+                Validates <paramref name="lastName"/>.
+            </summary>
+            <param name="lastName">Lastname.</param>
+            <returns>(true,"") if <paramref name="lastName"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)">
+            <summary>
+                Validates <paramref name="dateOfBirth"/>.
+            </summary>
+            <param name="dateOfBirth">Date of birth.</param>
+            <returns>(true,"") if <paramref name="dateOfBirth"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)">
+            <summary>
+                Validates <paramref name="stature"/>.
+            </summary>
+            <param name="stature">Stature.</param>
+            <returns>(true,"") if <paramref name="stature"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)">
+            <summary>
+                Validates <paramref name="gender"/>.
+            </summary>
+            <param name="gender">Gender.</param>
+            <returns>(true,"") if <paramref name="gender"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)">
+            <summary>
+                Validates <paramref name="weight"/>.
+            </summary>
+            <param name="weight">Weight.</param>
+            <returns>(true,"") if <paramref name="weight"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+                Interface for the input parameters validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Validates <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
+            </summary>
+            <param name="parameterObject">Parameter object.</param>
+        </member>
     </members>
 </doc>
