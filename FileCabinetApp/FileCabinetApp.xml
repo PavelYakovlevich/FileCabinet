@@ -335,48 +335,61 @@
             </summary>
             <param name="args">Arguments, which were passed to the program through the console.</param>
         </member>
+        <member name="T:FileCabinetApp.ProgramInputArgument">
+            <summary>
+                Class for the input arguments, which are passed from console.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.#ctor(System.String,System.String,System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.ProgramInputArgument"/> class.
+            </summary>
+            <param name="name">Name of the parameter.</param>
+            <param name="abbreviation">Shortcut fo the parameter's name.</param>
+            <param name="values">Values, which can be specified.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="name"/> or <paramref name="abbreviation"/> or <paramref name="values"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="name"/> or <paramref name="abbreviation"/> is empty or whitespace or <paramref name="values"/> is empty.</exception>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.Name">
+            <summary>
+                Gets argument's name.
+            </summary>
+            <value>Argument's name.</value>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.Abbreviation">
+            <summary>
+                Gets argument's name abbreviation.
+            </summary>
+            <value>Argument's name abbreviation.</value>
+        </member>
+        <member name="P:FileCabinetApp.ProgramInputArgument.ValidValues">
+            <summary>
+                Gets valid values for the argument.
+            </summary>
+            <value>Argument's name abbreviation.</value>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.ValidateValue(System.String)">
+            <summary>
+                Checks if <paramref name="value"/> is valid for the argument.
+            </summary>
+            <param name="value">Checkable value.</param>
+            <returns>true if values is valid, overwise false.</returns>
+        </member>
+        <member name="M:FileCabinetApp.ProgramInputArgument.GetValidValuesString">
+            <summary>
+                Builds <see cref="T:System.String"/>, which contains all valid values, separated by the comma.
+            </summary>
+            <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetCustomService">
             <summary>
                 Class for the custom implementaion of <see cref="T:FileCabinetApp.Services.FileCabinetService"/>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetCustomService.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
-            <inheritdoc cref="M:FileCabinetApp.Services.FileCabinetService.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when <paramref name="parameterObject"/> is null or <paramref name="parameterObject"/>'s firstName or lastName is null.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-                Throw when <paramref name="parameterObject"/> inner properties are not valid:
-                    - firstName of lastName is empty or whitespace;
-                    - firstName's or lastName's length is lower less than 2 or greater than 60 or contains at least one not letter character;
-                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
-                    - weight is lower than 0;
-                    - stature is lower than 0;
-                    - file cabinet record with specified id not exists.
-            </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
-        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetDefaultService">
             <summary>
-                Class for the defaukt implementation of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/>.
+                Class for the default implementation of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/>.
             </summary>
-        </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetDefaultService.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
-            <inheritdoc cref="M:FileCabinetApp.Services.FileCabinetService.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.
-            </exception>
-            <exception cref="T:System.ArgumentException">
-                Throw when <paramref name="parameterObject"/> inner properties are not valid:
-                    - firstName of lastName is empty or whitespace;
-                    - firstName's or lastName's length is lower less than 2 or greater than 60;
-                    - dateOfBirth is less than 1-Jan-1950 or greater than todays date;
-                    - weight is lower than 0 or greater than 1000.0;
-                    - stature is lower than 0 or greater than 300.
-            </exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">
-                Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.
-            </exception>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetService">
             <summary>
@@ -460,11 +473,32 @@
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+        <member name="T:FileCabinetApp.Validators.CustomFileRecordValidator">
             <summary>
-                Validates input <paramref name="parameterObject"/>'s properties.
+                Custom validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
             </summary>
-            <param name="parameterObject">Object, which must be validated.</param>
+        </member>
+        <member name="M:FileCabinetApp.Validators.CustomFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultFileRecordValidator">
+            <summary>
+                Default validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="T:FileCabinetApp.IRecordValidator">
+            <summary>
+                Interface for the input parameters validators.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Validates <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
+            </summary>
+            <param name="parameterObject">Parameter object.</param>
         </member>
     </members>
 </doc>

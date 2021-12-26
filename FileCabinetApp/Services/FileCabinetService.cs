@@ -31,7 +31,7 @@ namespace FileCabinetApp.Services
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.ValidateParameters(parameterObject);
+            this.CreateValidator().ValidateParameters(parameterObject);
 
             var newRecord = new FileCabinetRecord
             {
@@ -79,7 +79,7 @@ namespace FileCabinetApp.Services
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            this.ValidateParameters(parameterObject);
+            this.CreateValidator().ValidateParameters(parameterObject);
 
             var editableRecord = this.GetRecordById(parameterObject.Id);
 
@@ -167,11 +167,7 @@ namespace FileCabinetApp.Services
             return this.dateOfBirthSearchDictionary[dateOfBirth].ToArray();
         }
 
-        /// <summary>
-        ///     Validates input <paramref name="parameterObject"/>'s properties.
-        /// </summary>
-        /// <param name="parameterObject">Object, which must be validated.</param>
-        protected abstract void ValidateParameters(FileCabinetRecordParameterObject parameterObject);
+        protected abstract IRecordValidator CreateValidator();
 
         private FileCabinetRecord? GetRecordById(int id)
         {

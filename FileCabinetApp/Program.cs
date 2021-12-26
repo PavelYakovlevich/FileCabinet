@@ -105,7 +105,10 @@ namespace FileCabinetApp
             {
                 var argumentValue = inputArguments[ValidationRulesAttributeName].ToLower();
 
-                fileCabinetService = FileCabinetServiceFactory.Create(argumentValue);
+                if (argumentValue.Equals("custom"))
+                {
+                    fileCabinetService = new FileCabinetCustomService();
+                }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
