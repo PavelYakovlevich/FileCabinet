@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
@@ -39,6 +40,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("list", List),
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
+            new Tuple<string, Action<string>>("export", Export),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -50,6 +52,7 @@ namespace FileCabinetApp
             new string[] { "list", "prints the list of all created users", "The 'list' command prints the list of all created users." },
             new string[] { "edit", "edits existing record", "The 'edit' command edits existing record." },
             new string[] { "find", "finds all records with specified criterias", "The 'find' command finds all records with specified criterias." },
+            new string[] { "export", "expots all records to the file with specified format", "The 'export' command expots all records to the file with specified format." },
         };
 
         /// <summary>
@@ -312,6 +315,69 @@ namespace FileCabinetApp
             foreach (var record in records)
             {
                 Console.WriteLine($"#{record}");
+            }
+        }
+
+        private static void Export(string parameters)
+        {
+            var parametersValues = parameters.Split(' ');
+
+            if (parametersValues.Length < 2)
+            {
+                Console.WriteLine("Missing export method or file path.");
+                return;
+            }
+
+            var exportMethod = parametersValues[0];
+            if (!exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.WriteLine($"Unsupported export method: {exportMethod}");
+                return;
+            }
+
+            var snapshotFilePath = parametersValues[1];
+            if (File.Exists(snapshotFilePath))
+            {
+                Console.Write($"File is exist - rewrite {snapshotFilePath}? [Y/n] ");
+                var userAnswer = Console.ReadKey().KeyChar;
+                Console.WriteLine();
+
+                userAnswer = char.ToUpperInvariant(userAnswer);
+                if (userAnswer != 'Y')
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                using (var writer = new StreamWriter(snapshotFilePath))
+                {
+                    SaveSnapshot(writer, exportMethod);
+                    writer.Close();
+                }
+            }
+            catch (IOException exception)
+            {
+                Console.WriteLine($"Export failed: {exception.Message}");
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                Console.WriteLine($"Access error: {unauthorizedAccessException.Message}");
+            }
+        }
+
+        private static void SaveSnapshot(StreamWriter writer, string exportMethod)
+        {
+            var snapshot = fileCabinetService.MakeSnapshot();
+
+            if (exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+            {
+                snapshot.SaveToCsv(writer);
+            }
+            else if (exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                snapshot.SaveToXml(writer);
             }
         }
 

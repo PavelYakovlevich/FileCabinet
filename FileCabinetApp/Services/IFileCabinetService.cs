@@ -60,5 +60,11 @@ namespace FileCabinetApp.Services
         /// <param name="dateOfBirth">Date of birth search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+
+        /// <summary>
+        ///     Makes snapshot of a <see cref="IFileCabinetService"/>.
+        /// </summary>
+        /// <returns>Snapshot with saved state of <see cref="IFileCabinetService"/> object.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot();
     }
 }
