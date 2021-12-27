@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using FileCabinetApp.Factories;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
 
@@ -20,10 +21,12 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static readonly string ValidationRulesAttributeName = "validation-rules";
+        private static readonly string StorageAttributeName = "storage";
 
         private static readonly ProgramInputArgument[] ProgramDefinedArguments = new[]
         {
             new ProgramInputArgument(ValidationRulesAttributeName, "v", new[] { "default", "custom" }),
+            new ProgramInputArgument(StorageAttributeName, "s", new[] { "memory", "file" }),
         };
 
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
@@ -107,16 +110,15 @@ namespace FileCabinetApp
 
         private static void HandleArguments(Dictionary<string, string> inputArguments)
         {
+            IRecordValidator recordValidator = new DefaultFileRecordValidator();
             if (inputArguments.ContainsKey(ValidationRulesAttributeName))
             {
                 var argumentValue = inputArguments[ValidationRulesAttributeName].ToLower();
 
                 if (argumentValue.Equals("custom"))
                 {
-                    var recordValidator = new CustomFileRecordValidator();
+                    recordValidator = new CustomFileRecordValidator();
                     consoleInputValidator = new CustomConsoleInputValidator();
-
-                    fileCabinetService = new FileCabinetMemoryService(recordValidator);
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
@@ -125,6 +127,19 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Using default validation rules.");
             }
+
+            IFileCabinetServiceFactory fileCabinetServiceFactory = new FileCabinetMemoryServiceFactory();
+            if (inputArguments.ContainsKey(StorageAttributeName))
+            {
+                var argumentValue = inputArguments[StorageAttributeName].ToLower();
+
+                if (argumentValue.Equals("file"))
+                {
+                    fileCabinetServiceFactory = new FileCabinetFilesystemServiceFactory();
+                }
+            }
+
+            fileCabinetService = fileCabinetServiceFactory.Create(recordValidator);
         }
 
         private static void PrintReadArgumentsErrorMessage()
