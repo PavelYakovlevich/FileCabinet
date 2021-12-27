@@ -153,7 +153,10 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
-        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        /// <summary>
+        ///     Makes snapshot of a <see cref="IFileCabinetService"/>.
+        /// </summary>
+        /// <returns>Snapshot with saved state of <see cref="IFileCabinetService"/> object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());

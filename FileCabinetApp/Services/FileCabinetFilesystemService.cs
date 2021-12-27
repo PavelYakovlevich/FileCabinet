@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace FileCabinetApp.Services
     public class FileCabinetFilesystemService : IFileCabinetService
     {
         private IRecordValidator recordValidator;
+        private FileStream fileStream;
 
         public FileCabinetFilesystemService(IRecordValidator recordValidator)
         {
@@ -47,11 +49,6 @@ namespace FileCabinetApp.Services
         }
 
         public int GetStat()
-        {
-            throw new NotImplementedException();
-        }
-
-        public FileCabinetServiceSnapshot MakeSnapshot()
         {
             throw new NotImplementedException();
         }
