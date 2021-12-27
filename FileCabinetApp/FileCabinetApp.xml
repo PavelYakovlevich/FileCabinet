@@ -57,6 +57,13 @@
             </summary>
             <returns>String representation of the object<see cref="T:System.String"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecord.ToCsvString(System.String)">
+            <summary>
+                Transform object into the csv string.
+            </summary>
+            <param name="dateFormat">Format of date of birth.</param>
+            <returns>Csv string with all object's properties.</returns>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecordParameterObject">
             <summary>
                 Class for the creation and editing input parameters.
@@ -118,6 +125,23 @@
                 Gets weight value of the user.
             </summary>
             <value>Weight of the user.</value>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
+            <summary>
+                Class for the creating a <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+            <param name="fileCabinetRecords"><see cref="T:System.Array"/> of file cabinet records.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
+            <summary>
+                Saves snapshot data into the csv file.
+            </summary>
+            <param name="writer"><see cref="T:System.IO.StreamWriter"/> object to write to a stream.</param>
         </member>
         <member name="T:FileCabinetApp.Guard">
             <summary>
@@ -400,6 +424,9 @@
         <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirth(System.DateTime)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetService.MakeSnapshot">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
                 Interface for the file cabinet services.
@@ -457,6 +484,12 @@
             </summary>
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
+            <summary>
+                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.CustomConsoleInputValidator">
             <summary>
@@ -577,6 +610,31 @@
                 Validates <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
             </summary>
             <param name="parameterObject">Parameter object.</param>
+        </member>
+        <member name="T:FileCabinetApp.Writers.FileCabinetRecordCsvWriter">
+            <summary>
+                Class for savind a <see cref="T:FileCabinetApp.FileCabinetRecord"/> object in csv format to a <see cref="T:System.IO.TextWriter"/> stream.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetRecordCsvWriter.#ctor(System.IO.TextWriter)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Writers.FileCabinetRecordCsvWriter"/> class.
+            </summary>
+            <param name="writer"><see cref="T:System.IO.TextWriter"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <inheritdoc cref="M:FileCabinetApp.Writers.IFileCabinetRecordWriter.Write(FileCabinetApp.FileCabinetRecord)"/>
+        </member>
+        <member name="T:FileCabinetApp.Writers.IFileCabinetRecordWriter">
+            <summary>
+                Interface for file cabinet records writers.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Writers.IFileCabinetRecordWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+                Writes <see cref="T:FileCabinetApp.FileCabinetRecord"/> to a stream.
+            </summary>
+            <param name="record"><see cref="T:FileCabinetApp.FileCabinetRecord"/> object, which must be written to a stream.</param>
         </member>
     </members>
 </doc>

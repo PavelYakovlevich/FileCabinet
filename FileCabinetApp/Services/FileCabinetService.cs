@@ -153,6 +153,12 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
+        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        public FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());
+        }
+
         private FileCabinetRecord? GetRecordById(int id)
         {
             foreach (var record in this.existingRecords)
