@@ -9,6 +9,13 @@ namespace FileCabinetApp.Services
 {
     public class FileCabinetFilesystemService : IFileCabinetService
     {
+        private IRecordValidator recordValidator;
+
+        public FileCabinetFilesystemService(IRecordValidator recordValidator)
+        {
+            this.recordValidator = recordValidator;
+        }
+
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
             throw new NotImplementedException();
