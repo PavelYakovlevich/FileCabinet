@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using FileCabinetApp.Factories;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
 
@@ -19,6 +18,9 @@ namespace FileCabinetApp
         private const int CommandHelpIndex = 0;
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
+
+        private static readonly string DBFilePath = @"cabinet-records.db";
+        private static FileStream? databaseFileStream;
 
         private static readonly string ValidationRulesAttributeName = "validation-rules";
         private static readonly string StorageAttributeName = "storage";
@@ -110,7 +112,7 @@ namespace FileCabinetApp
 
         private static void HandleArguments(Dictionary<string, string> inputArguments)
         {
-            IRecordValidator recordValidator = new DefaultFileRecordValidator();
+            IRecordValidator recordValidator;
             if (inputArguments.ContainsKey(ValidationRulesAttributeName))
             {
                 var argumentValue = inputArguments[ValidationRulesAttributeName].ToLower();
@@ -120,26 +122,37 @@ namespace FileCabinetApp
                     recordValidator = new CustomFileRecordValidator();
                     consoleInputValidator = new CustomConsoleInputValidator();
                 }
+                else
+                {
+                    recordValidator = new DefaultFileRecordValidator();
+                }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
             else
             {
+                recordValidator = new DefaultFileRecordValidator();
                 Console.WriteLine($"Using default validation rules.");
             }
 
-            IFileCabinetServiceFactory fileCabinetServiceFactory = new FileCabinetMemoryServiceFactory();
             if (inputArguments.ContainsKey(StorageAttributeName))
             {
                 var argumentValue = inputArguments[StorageAttributeName].ToLower();
 
                 if (argumentValue.Equals("file"))
                 {
-                    fileCabinetServiceFactory = new FileCabinetFilesystemServiceFactory();
+                    databaseFileStream = new FileStream(DBFilePath, FileMode.OpenOrCreate);
+                    fileCabinetService = new FileCabinetFilesystemService(recordValidator, databaseFileStream);
+                }
+                else
+                {
+                    fileCabinetService = new FileCabinetMemoryService(recordValidator);
                 }
             }
-
-            fileCabinetService = fileCabinetServiceFactory.Create(recordValidator);
+            else
+            {
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
+            }
         }
 
         private static void PrintReadArgumentsErrorMessage()
@@ -190,6 +203,9 @@ namespace FileCabinetApp
         private static void Exit(string parameters)
         {
             Console.WriteLine("Exiting an application...");
+
+            databaseFileStream?.Close();
+
             isRunning = false;
         }
 
@@ -335,6 +351,12 @@ namespace FileCabinetApp
 
         private static void Export(string parameters)
         {
+            if (fileCabinetService is FileCabinetFilesystemService)
+            {
+                Console.WriteLine("This command is not allowed with --storage=file");
+                return;
+            }
+
             var parametersValues = parameters.Split(' ');
 
             if (parametersValues.Length < 2)
@@ -368,7 +390,17 @@ namespace FileCabinetApp
             {
                 using (var writer = new StreamWriter(snapshotFilePath))
                 {
-                    SaveSnapshot(writer, exportMethod);
+                    var snapshot = ((FileCabinetMemoryService)fileCabinetService).MakeSnapshot();
+
+                    if (exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        snapshot.SaveToCsv(writer);
+                    }
+                    else if (exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        snapshot.SaveToXml(writer);
+                    }
+
                     writer.Close();
                 }
             }
@@ -379,20 +411,6 @@ namespace FileCabinetApp
             catch (UnauthorizedAccessException unauthorizedAccessException)
             {
                 Console.WriteLine($"Access error: {unauthorizedAccessException.Message}");
-            }
-        }
-
-        private static void SaveSnapshot(StreamWriter writer, string exportMethod)
-        {
-            var snapshot = fileCabinetService.MakeSnapshot();
-
-            if (exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
-            {
-                snapshot.SaveToCsv(writer);
-            }
-            else if (exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
-            {
-                snapshot.SaveToXml(writer);
             }
         }
 

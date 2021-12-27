@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileCabinetApp.Services
 {
     public class FileCabinetFilesystemService : IFileCabinetService
     {
         private IRecordValidator recordValidator;
-        private FileStream fileStream;
+        private Stream fileStream;
 
-        public FileCabinetFilesystemService(IRecordValidator recordValidator)
+        public FileCabinetFilesystemService(IRecordValidator recordValidator, Stream stream)
         {
+            Guard.ArgumentIsNotNull(recordValidator, nameof(recordValidator));
+            Guard.ArgumentIsNotNull(stream, nameof(stream));
+
             this.recordValidator = recordValidator;
+            this.fileStream = stream;
         }
 
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)

@@ -431,7 +431,10 @@
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
-            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+            <summary>
+                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
@@ -490,12 +493,6 @@
             </summary>
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
-            <summary>
-                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
-            </summary>
-            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="T:FileCabinetApp.Validators.CustomConsoleInputValidator">
             <summary>
