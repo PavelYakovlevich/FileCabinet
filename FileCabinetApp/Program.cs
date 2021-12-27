@@ -375,6 +375,10 @@ namespace FileCabinetApp
             {
                 snapshot.SaveToCsv(writer);
             }
+            else if (exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                snapshot.SaveToXml(writer);
+            }
         }
 
         private static Tuple<Dictionary<string, string>?, string> ReadInputArguments(string[] args)

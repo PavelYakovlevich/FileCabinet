@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Xml;
 
 using FileCabinetApp.Writers;
 
@@ -33,6 +34,30 @@ namespace FileCabinetApp
             foreach (var record in this.records)
             {
                 csvWriter.Write(record);
+            }
+        }
+
+        /// <summary>
+        ///     Saves snapshot data into the xml file.
+        /// </summary>
+        /// <param name="writer"><see cref="StreamWriter"/> object to write to a stream.</param>
+        public void SaveToXml(StreamWriter writer)
+        {
+            using (var xmlTextWriter = new XmlTextWriter(writer))
+            {
+                xmlTextWriter.IndentChar = '\t';
+                xmlTextWriter.Formatting = Formatting.Indented;
+
+                xmlTextWriter.WriteStartDocument();
+                xmlTextWriter.WriteStartElement("records");
+
+                var xmlWriter = new FileCabinetRecordXmlWriter(xmlTextWriter);
+                foreach (var record in this.records)
+                {
+                    xmlWriter.Write(record);
+                }
+
+                xmlTextWriter.WriteEndElement();
             }
         }
     }

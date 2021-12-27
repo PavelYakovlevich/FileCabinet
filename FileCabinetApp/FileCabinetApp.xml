@@ -143,6 +143,12 @@
             </summary>
             <param name="writer"><see cref="T:System.IO.StreamWriter"/> object to write to a stream.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
+            <summary>
+                Saves snapshot data into the xml file.
+            </summary>
+            <param name="writer"><see cref="T:System.IO.StreamWriter"/> object to write to a stream.</param>
+        </member>
         <member name="T:FileCabinetApp.Guard">
             <summary>
                 Class for the checking of the input parameters.
@@ -623,6 +629,20 @@
             <param name="writer"><see cref="T:System.IO.TextWriter"/> object.</param>
         </member>
         <member name="M:FileCabinetApp.Writers.FileCabinetRecordCsvWriter.Write(FileCabinetApp.FileCabinetRecord)">
+            <inheritdoc cref="M:FileCabinetApp.Writers.IFileCabinetRecordWriter.Write(FileCabinetApp.FileCabinetRecord)"/>
+        </member>
+        <member name="T:FileCabinetApp.Writers.FileCabinetRecordXmlWriter">
+            <summary>
+                Class for the file cabinet record writting in xml format.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetRecordXmlWriter.#ctor(System.Xml.XmlWriter)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Writers.FileCabinetRecordXmlWriter"/> class.
+            </summary>
+            <param name="writer"><see cref="F:FileCabinetApp.Writers.FileCabinetRecordXmlWriter.xmlWriter"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Writers.FileCabinetRecordXmlWriter.Write(FileCabinetApp.FileCabinetRecord)">
             <inheritdoc cref="M:FileCabinetApp.Writers.IFileCabinetRecordWriter.Write(FileCabinetApp.FileCabinetRecord)"/>
         </member>
         <member name="T:FileCabinetApp.Writers.IFileCabinetRecordWriter">
