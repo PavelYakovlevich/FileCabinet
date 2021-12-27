@@ -26,7 +26,7 @@ namespace FileCabinetApp
             new ProgramInputArgument(ValidationRulesAttributeName, "v", new[] { "default", "custom" }),
         };
 
-        private static IFileCabinetService fileCabinetService = new FileCabinetService(new DefaultFileRecordValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
         private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
 
         private static bool isRunning = true;
@@ -116,7 +116,7 @@ namespace FileCabinetApp
                     var recordValidator = new CustomFileRecordValidator();
                     consoleInputValidator = new CustomConsoleInputValidator();
 
-                    fileCabinetService = new FileCabinetService(recordValidator);
+                    fileCabinetService = new FileCabinetMemoryService(recordValidator);
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
