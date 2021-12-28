@@ -5,6 +5,7 @@ namespace FileCabinetApp
     /// <summary>
     ///     Class for a user information.
     /// </summary>
+    [MemoryMapRecord]
     public class FileCabinetRecord
     {
         /// <summary>
@@ -17,13 +18,13 @@ namespace FileCabinetApp
         ///     Gets or sets first name value of the user.
         /// </summary>
         /// <value>First name of the user.</value>
-        public string? FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         ///     Gets or sets last name value of the user.
         /// </summary>
         /// <value>Last name of the user.</value>
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         ///     Gets or sets date of birth value of the user.
