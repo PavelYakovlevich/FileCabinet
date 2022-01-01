@@ -168,5 +168,21 @@ namespace FileCabinetApp.Services
 
             this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
         }
+
+        private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
+        {
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+            var result = new List<FileCabinetRecord>();
+            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream)!;
+                if (condition(currentRecord))
+                {
+                    result.Add(currentRecord);
+                }
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(result);
+        }
     }
 }
