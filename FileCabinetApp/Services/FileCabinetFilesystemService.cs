@@ -85,7 +85,7 @@ namespace FileCabinetApp.Services
 
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
-            throw new NotImplementedException();
+            return this.FindByCondition((record) => record.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
