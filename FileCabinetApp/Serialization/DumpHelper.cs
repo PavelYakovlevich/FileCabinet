@@ -49,6 +49,7 @@ namespace FileCabinetApp.Serialization
             { typeof(byte[]), (bytes, offset, length) => (byte[])bytes },
         };
 
+        private int precedingAreaSize = 0;
         private SortedList<int, DumpSliceMemberInfo> dumpMembersInfo;
 
         public DumpHelper(Type objectType)
@@ -62,6 +63,39 @@ namespace FileCabinetApp.Serialization
         }
 
         public int SliceSize { get; private set; }
+
+        public void Update(Stream stream, object obj)
+        {
+            if (!this.objectType.Equals(obj.GetType()))
+            {
+                throw new ArgumentException($"Object must be of type {this.objectType.FullName}.", nameof(obj));
+            }
+
+            byte[] buffer = new byte[this.SliceSize - this.precedingAreaSize];
+            stream.Seek(this.precedingAreaSize, SeekOrigin.Current);
+
+            var offset = 0;
+            foreach (var dumpMember in this.dumpMembersInfo)
+            {
+                if (dumpMember.Value.HolderName is null)
+                {
+                    continue;
+                }
+
+                var converter = this.getBytesConverters[dumpMember.Value.HolderType!];
+                var value = this.objectType.GetProperty(dumpMember.Value.HolderName!)!.GetValue(obj);
+
+                var valueDump = converter(value!);
+                for (int i = 0; i < valueDump.Length; i++)
+                {
+                    buffer[offset + i] = valueDump[i];
+                }
+
+                offset += dumpMember.Value.SizeInBytes;
+            }
+
+            stream.Write(buffer);
+        }
 
         public object? Read(Stream stream)
         {
@@ -115,7 +149,7 @@ namespace FileCabinetApp.Serialization
             throw new ArgumentException($"Area with name '{areaName}' does not exist.", nameof(areaName));
         }
 
-        public void Write(Stream stream, object obj)
+        public void Create(Stream stream, object obj)
         {
             if (!this.objectType.Equals(obj.GetType()))
             {
@@ -161,7 +195,6 @@ namespace FileCabinetApp.Serialization
             }
         }
 
-
         private void InitializeDumpMembersInfo()
         {
             var classAttribute = Attribute.GetCustomAttribute(this.objectType, typeof(DumpSliceAttribute)) as DumpSliceAttribute;
@@ -175,6 +208,7 @@ namespace FileCabinetApp.Serialization
             if (classAttribute.PrecedingAreaSize != 0)
             {
                 this.dumpMembersInfo.Add(1, new DumpSliceMemberInfo(classAttribute.PrecedingAreaName, classAttribute.PrecedingAreaSize, null, typeof(byte[])));
+                this.precedingAreaSize = classAttribute.PrecedingAreaSize;
             }
 
             var members = this.objectType.GetMembers();
