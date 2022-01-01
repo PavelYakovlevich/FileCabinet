@@ -91,8 +91,16 @@ namespace FileCabinetApp.Services
 
         public int GetStat()
         {
-            throw new NotImplementedException();
+            var recordsCount = 0;
+
+            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                recordsCount++;
+            }
+
+            return recordsCount;
         }
+
         public bool RecordExists(int id)
         {
             throw new NotImplementedException();
