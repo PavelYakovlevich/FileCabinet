@@ -43,14 +43,34 @@ namespace FileCabinetApp.Services
 
             this.fileStream.Seek(0, SeekOrigin.End);
 
-            this.dumpHelper.Write(this.fileStream, newRecord);
+            this.dumpHelper.Create(this.fileStream, newRecord);
 
             return this.lastRecordId;
         }
 
         public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
-            throw new NotImplementedException();
+            this.recordValidator.ValidateParameters(parameterObject);
+
+            var recordAddress = this.GetRecordAddressById(parameterObject.Id);
+            if (recordAddress < 0)
+            {
+                throw new ArgumentException($"User with {parameterObject.Id} does not exist!");
+            }
+
+            var newRecord = new FileCabinetRecord
+            {
+                Id = parameterObject.Id,
+                FirstName = parameterObject.FirstName,
+                LastName = parameterObject.LastName,
+                DateOfBirth = parameterObject.DateOfBirth,
+                Gender = parameterObject.Gender,
+                Weight = parameterObject.Weight,
+                Stature = parameterObject.Stature,
+            };
+
+            this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+            this.dumpHelper.Update(this.fileStream, newRecord);
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
