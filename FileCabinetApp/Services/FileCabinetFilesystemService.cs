@@ -103,6 +103,13 @@ namespace FileCabinetApp.Services
 
         public bool RecordExists(int id)
         {
+            Guard.ArgumentGreaterThan(id, 0);
+
+            return this.GetRecordAddressById(id) >= 0;
+        }
+
+        private int GetRecordAddressById(int id)
+        {
             var recordIdOffset = this.dumpHelper.GetOffset("Id");
             var sizeOfId = this.dumpHelper.GetSize("Id");
 
@@ -113,13 +120,13 @@ namespace FileCabinetApp.Services
 
                 if (id == recordId)
                 {
-                    return true;
+                    return i - recordIdOffset;
                 }
 
                 this.fileStream.Seek(this.dumpHelper.SliceSize - sizeOfId, SeekOrigin.Current);
             }
 
-            return false;
+            return -1;
         }
 
         private void SetLastRecordId()
