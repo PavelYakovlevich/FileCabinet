@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using FileCabinetApp.Serialization;
@@ -69,14 +70,29 @@ namespace FileCabinetApp.Services
 
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            throw new NotImplementedException();
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var result = new List<FileCabinetRecord>();
+            var recordsCount = this.fileStream.Length / this.dumpHelper.SliceSize;
+            for (int i = 0; i < recordsCount; i++)
+            {
+                var record = this.dumpHelper.Read(this.fileStream);
+
+                if (record is null)
+                {
+                    throw new InvalidDataException($"Record with number {i} can't be read.");
+                }
+
+                result.Add((FileCabinetRecord)record);
+            }
+
+            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
         public int GetStat()
         {
             throw new NotImplementedException();
         }
-
         public bool RecordExists(int id)
         {
             throw new NotImplementedException();
