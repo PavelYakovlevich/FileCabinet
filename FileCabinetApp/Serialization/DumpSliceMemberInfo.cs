@@ -2,6 +2,9 @@
 
 namespace FileCabinetApp.Serialization
 {
+    /// <summary>
+    ///     Class for working with objects, which are saved in memory.
+    /// </summary>
     public partial class DumpHelper
     {
         private class DumpSliceMemberInfo
