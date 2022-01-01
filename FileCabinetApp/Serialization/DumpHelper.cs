@@ -7,6 +7,9 @@ using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.Serialization
 {
+    /// <summary>
+    ///     Class for working with objects, which are saved in memory.
+    /// </summary>
     public partial class DumpHelper
     {
         private readonly Type objectType;
@@ -52,18 +55,33 @@ namespace FileCabinetApp.Serialization
         private int precedingAreaSize = 0;
         private SortedList<int, DumpSliceMemberInfo> dumpMembersInfo;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DumpHelper"/> class.
+        /// </summary>
+        /// <param name="objectType"><see cref="Type"/> object, which represents type of manipulated objects.</param>
         public DumpHelper(Type objectType)
         {
             Guard.ArgumentIsNotNull(objectType, nameof(objectType));
 
             this.objectType = objectType;
+            this.dumpMembersInfo = new SortedList<int, DumpSliceMemberInfo>();
 
             this.InitializeDumpMembersInfo();
             this.SetDumpMembersOffsets();
         }
 
+        /// <summary>
+        /// Gets the size of a manipulated object in memory.
+        /// </summary>
+        /// <value>Size of memory including extra memory areas.</value>
         public int SliceSize { get; private set; }
 
+        /// <summary>
+        ///     Updates object without updating an extra memory areas.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object for working with file.</param>
+        /// <param name="obj">Object, which must be replaced with the old one.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
         public void Update(Stream stream, object obj)
         {
             if (!this.objectType.Equals(obj.GetType()))
@@ -83,7 +101,7 @@ namespace FileCabinetApp.Serialization
                 }
 
                 var converter = this.getBytesConverters[dumpMember.Value.HolderType!];
-                var value = this.objectType.GetProperty(dumpMember.Value.HolderName!)!.GetValue(obj);
+                var value = this.objectType.GetProperty(dumpMember.Value.HolderName!, this.bindingFlags) !.GetValue(obj);
 
                 var valueDump = converter(value!);
                 for (int i = 0; i < valueDump.Length; i++)
@@ -97,6 +115,11 @@ namespace FileCabinetApp.Serialization
             stream.Write(buffer);
         }
 
+        /// <summary>
+        ///     Reads an object from the current stream's position.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object for working with file.</param>
+        /// <returns>Object, that was read from the stream.</returns>
         public object? Read(Stream stream)
         {
             byte[] buffer = new byte[this.SliceSize];
@@ -116,13 +139,18 @@ namespace FileCabinetApp.Serialization
 
                 var converter = this.toValueConverters[dumpMember.Value.HolderType!];
                 var value = converter(buffer, offset, dumpMember.Value.SizeInBytes);
-                this.objectType.GetProperty(dumpMember.Value.HolderName) !.SetValue(result, value);
+                this.objectType.GetProperty(dumpMember.Value.HolderName, this.bindingFlags) !.SetValue(result, value);
                 offset += dumpMember.Value.SizeInBytes;
             }
 
             return result;
         }
 
+        /// <summary>
+        ///     Gets an offset in bytes of memory area.
+        /// </summary>
+        /// <param name="areaName">Memory area name.</param>
+        /// <returns>Offset in bytes of memory area.</returns>
         public int GetOffset(string areaName)
         {
             foreach (var memoryArea in this.dumpMembersInfo)
@@ -136,6 +164,11 @@ namespace FileCabinetApp.Serialization
             throw new ArgumentException($"Area with name '{areaName}' does not exist.", nameof(areaName));
         }
 
+        /// <summary>
+        ///     Gets an size in bytes of memory area.
+        /// </summary>
+        /// <param name="areaName">Memory area name.</param>
+        /// <returns>Size in bytes of memory area.</returns>
         public int GetSize(string areaName)
         {
             foreach (var memoryArea in this.dumpMembersInfo)
@@ -149,6 +182,12 @@ namespace FileCabinetApp.Serialization
             throw new ArgumentException($"Area with name '{areaName}' does not exist.", nameof(areaName));
         }
 
+        /// <summary>
+        ///     Insert a dump of an object into a stream.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object for working with file.</param>
+        /// <param name="obj">Object, which must be placed.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
         public void Create(Stream stream, object obj)
         {
             if (!this.objectType.Equals(obj.GetType()))
@@ -167,7 +206,7 @@ namespace FileCabinetApp.Serialization
                 }
 
                 var converter = this.getBytesConverters[dumpMember.Value.HolderType!];
-                var value = this.objectType.GetProperty(dumpMember.Value.HolderName!) !.GetValue(obj);
+                var value = this.objectType.GetProperty(dumpMember.Value.HolderName!, this.bindingFlags) !.GetValue(obj);
 
                 var valueDump = converter(value!);
                 for (int i = 0; i < valueDump.Length; i++)
@@ -204,7 +243,6 @@ namespace FileCabinetApp.Serialization
                 throw new ArgumentException($"Class {this.objectType.FullName} is not marked with ${typeof(DumpSliceAttribute).FullName}.");
             }
 
-            this.dumpMembersInfo = new SortedList<int, DumpSliceMemberInfo>();
             if (classAttribute.PrecedingAreaSize != 0)
             {
                 this.dumpMembersInfo.Add(1, new DumpSliceMemberInfo(classAttribute.PrecedingAreaName, classAttribute.PrecedingAreaSize, null, typeof(byte[])));
