@@ -103,7 +103,23 @@ namespace FileCabinetApp.Services
 
         public bool RecordExists(int id)
         {
-            throw new NotImplementedException();
+            var recordIdOffset = this.dumpHelper.GetOffset("Id");
+            var sizeOfId = this.dumpHelper.GetSize("Id");
+
+            this.fileStream.Seek(recordIdOffset, SeekOrigin.Begin);
+            for (int i = recordIdOffset; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                var recordId = StreamHelper.ReadInt(this.fileStream);
+
+                if (id == recordId)
+                {
+                    return true;
+                }
+
+                this.fileStream.Seek(this.dumpHelper.SliceSize - sizeOfId, SeekOrigin.Current);
+            }
+
+            return false;
         }
 
         private void SetLastRecordId()
