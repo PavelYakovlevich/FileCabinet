@@ -1,53 +1,61 @@
-﻿using System;
+﻿using FileCabinetApp.Serialization;
+using System;
 
 namespace FileCabinetApp
 {
     /// <summary>
     ///     Class for a user information.
     /// </summary>
-    [MemoryMapRecord]
+    [DumpSlice("Reserved", sizeof(short))]
     public class FileCabinetRecord
     {
         /// <summary>
         ///     Gets or sets id value of the user.
         /// </summary>
         /// <value>Id of the user.</value>
+        [DumpSliceMember("Id", sizeof(int))]
         public int Id { get; set; }
 
         /// <summary>
         ///     Gets or sets first name value of the user.
         /// </summary>
         /// <value>First name of the user.</value>
+        [DumpSliceMember("FirstName", sizeof(char) * 60)]
         public string FirstName { get; set; } = string.Empty;
 
         /// <summary>
         ///     Gets or sets last name value of the user.
         /// </summary>
         /// <value>Last name of the user.</value>
+        [DumpSliceMember("LastName", sizeof(char) * 60)]
         public string LastName { get; set; } = string.Empty;
 
         /// <summary>
         ///     Gets or sets date of birth value of the user.
         /// </summary>
         /// <value>Date of birth of the user.</value>
+        [DumpSliceMember("DateOfBirth", sizeof(int) * 3)]
         public DateTime DateOfBirth { get; set; }
 
         /// <summary>
         ///     Gets or sets stature value of the user.
         /// </summary>
         /// <value>Stature of the user.</value>
+        [DumpSliceMember("Stature", sizeof(short))]
         public short Stature { get; set; }
 
         /// <summary>
         ///     Gets or sets gender value of the user.
         /// </summary>
         /// <value>Gender of the user.</value>
+        [DumpSliceMember("Gender", sizeof(char))]
         public char Gender { get; set; }
 
         /// <summary>
         ///     Gets or sets weight value of the user.
         /// </summary>
         /// <value>Weight of the user.</value>
+        [DumpSliceMember("Weight", sizeof(decimal))]
         public decimal Weight { get; set; }
 
         /// <summary>
