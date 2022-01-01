@@ -5,8 +5,17 @@ using FileCabinetApp.Utils;
 
 namespace FileCabinetApp
 {
+    /// <summary>
+    ///     Class for reading, writing an primitive objects from, to a stream.
+    /// </summary>
     public static class StreamHelper
     {
+        /// <summary>
+        ///     Read a <see cref="string"/> object from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a string will be read.</param>
+        /// <param name="maxSize">Maximum size of string.</param>
+        /// <returns><see cref="string"/> object, which was read from a <see cref="Stream"/>.</returns>
         public static string ReadString(Stream stream, int maxSize)
         {
             var buffer = new byte[maxSize];
@@ -16,6 +25,11 @@ namespace FileCabinetApp
             return Encoding.Default.GetString(buffer);
         }
 
+        /// <summary>
+        ///     Read a <see cref="int"/> object from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a <see cref="int"/> will be read.</param>
+        /// <returns><see cref="int"/>, which was read from a <see cref="Stream"/>.</returns>
         public static int ReadInt(Stream stream)
         {
             var buffer = new byte[sizeof(int)];
@@ -25,6 +39,11 @@ namespace FileCabinetApp
             return BitConverter.ToInt32(buffer);
         }
 
+        /// <summary>
+        ///     Read a <see cref="short"/> object from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a <see cref="short"/> will be read.</param>
+        /// <returns><see cref="short"/>, which was read from a <see cref="Stream"/>.</returns>
         public static short ReadShort(Stream stream)
         {
             var buffer = new byte[sizeof(short)];
@@ -34,6 +53,11 @@ namespace FileCabinetApp
             return BitConverter.ToInt16(buffer);
         }
 
+        /// <summary>
+        ///     Read a <see cref="decimal"/> from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a <see cref="decimal"/> will be read.</param>
+        /// <returns><see cref="decimal"/>, which was read from a <see cref="Stream"/>.</returns>
         public static decimal ReadDecimal(Stream stream)
         {
             var buffer = new byte[sizeof(decimal)];
@@ -43,6 +67,11 @@ namespace FileCabinetApp
             return BitConverterExtension.ToDecimal(buffer);
         }
 
+        /// <summary>
+        ///     Read a <see cref="char"/> from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a <see cref="char"/> will be read.</param>
+        /// <returns><see cref="char"/> object, which was read from a <see cref="Stream"/>.</returns>
         public static char ReadChar(Stream stream)
         {
             var buffer = new byte[sizeof(char)];
@@ -52,6 +81,11 @@ namespace FileCabinetApp
             return BitConverter.ToChar(buffer);
         }
 
+        /// <summary>
+        ///     Read a <see cref="DateTime"/> object from a <see cref="Stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, from which a <see cref="DateTime"/> will be read.</param>
+        /// <returns><see cref="DateTime"/>, which was read from a <see cref="Stream"/>.</returns>
         public static DateTime ReadDateTime(Stream stream)
         {
             var buffer = new byte[sizeof(int) * 3];
@@ -65,6 +99,11 @@ namespace FileCabinetApp
             return new DateTime(year, month, day);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
         public static void Write(Stream stream, int value)
         {
             var buffer = BitConverter.GetBytes(value);
@@ -72,6 +111,11 @@ namespace FileCabinetApp
             stream.Write(buffer);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
         public static void Write(Stream stream, short value)
         {
             var buffer = BitConverter.GetBytes(value);
@@ -79,6 +123,11 @@ namespace FileCabinetApp
             stream.Write(buffer);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
         public static void Write(Stream stream, char value)
         {
             var buffer = BitConverter.GetBytes(value);
@@ -86,6 +135,11 @@ namespace FileCabinetApp
             stream.Write(buffer);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
         public static void Write(Stream stream, decimal value)
         {
             var buffer = BitConverterExtension.GetBytes(value);
@@ -93,6 +147,11 @@ namespace FileCabinetApp
             stream.Write(buffer);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
         public static void Write(Stream stream, DateTime value)
         {
             var year = BitConverter.GetBytes(value.Year);
@@ -104,6 +163,12 @@ namespace FileCabinetApp
             stream.Write(day);
         }
 
+        /// <summary>
+        ///     Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+        /// </summary>
+        /// <param name="stream"><see cref="Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+        /// <param name="value">String, which will ne written to a <paramref name="stream"/>.</param>
+        /// <param name="maxSize">Length of a <paramref name="value"/>.</param>
         public static void Write(Stream stream, string value, int maxSize)
         {
             var buffer = Encoding.Default.GetBytes(value, 0, maxSize);
