@@ -75,23 +75,12 @@ namespace FileCabinetApp.Services
 
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            this.fileStream.Seek(0, SeekOrigin.Begin);
-            var result = new List<FileCabinetRecord>();
-            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
-            {
-                var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream) !;
-                if (currentRecord.DateOfBirth.Equals(dateOfBirth))
-                {
-                    result.Add(currentRecord);
-                }
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return this.FindByCondition((record) => record.DateOfBirth.Equals(dateOfBirth));
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            throw new NotImplementedException();
+            return this.FindByCondition((record) => record.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
