@@ -21,7 +21,8 @@ namespace FileCabinetApp.Serialization
             { typeof(short), (integer) => BitConverter.GetBytes((short)integer) },
             { typeof(char), (ch) => BitConverter.GetBytes((char)ch) },
             { typeof(decimal), (number) => BitConverterExtension.GetBytes((decimal)number) },
-            { typeof(DateTime), (date) =>
+            {
+                typeof(DateTime), (date) =>
                 {
                     var dateTime = (DateTime)date;
                     var result = new List<byte>(sizeof(int) * 3);
@@ -41,7 +42,8 @@ namespace FileCabinetApp.Serialization
             { typeof(short), (bytes, offset, length) => BitConverter.ToInt16(bytes, offset) },
             { typeof(char), (bytes, offset, length) => BitConverter.ToChar(bytes, offset) },
             { typeof(decimal), (bytes, offset, length) => BitConverterExtension.ToDecimal(bytes[offset.. (offset + length)]) },
-            { typeof(DateTime), (bytes, offset, length) =>
+            {
+                typeof(DateTime), (bytes, offset, length) =>
                 {
                     var year = BitConverter.ToInt32(bytes, offset);
                     var month = BitConverter.ToInt32(bytes, offset + sizeof(int));

@@ -180,7 +180,7 @@ namespace FileCabinetApp.Services
             var result = new List<FileCabinetRecord>();
             for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
-                var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream)!;
+                var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream) !;
                 if (condition(currentRecord))
                 {
                     result.Add(currentRecord);

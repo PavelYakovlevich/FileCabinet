@@ -20,7 +20,6 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static readonly string DBFilePath = @"cabinet-records.db";
-        private static FileStream? databaseFileStream;
 
         private static readonly string ValidationRulesAttributeName = "validation-rules";
         private static readonly string StorageAttributeName = "storage";
@@ -31,6 +30,7 @@ namespace FileCabinetApp
             new ProgramInputArgument(StorageAttributeName, "s", new[] { "memory", "file" }),
         };
 
+        private static FileStream? databaseFileStream;
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
         private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
 

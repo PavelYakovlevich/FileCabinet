@@ -25,7 +25,7 @@ namespace FileCabinetApp.Serialization
         /// <summary>
         /// Gets a size of field in bytes.
         /// </summary>
-        /// <value>Size of field in bytes</value>
+        /// <value>Size of field in bytes.</value>
         public int SizeInBytes { get; }
 
         /// <summary>

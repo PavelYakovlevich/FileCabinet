@@ -1,5 +1,5 @@
-﻿using FileCabinetApp.Serialization;
-using System;
+﻿using System;
+using FileCabinetApp.Serialization;
 
 namespace FileCabinetApp
 {
