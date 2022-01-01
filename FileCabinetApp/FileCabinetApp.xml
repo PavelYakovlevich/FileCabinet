@@ -238,66 +238,6 @@
             <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
         </member>
-        <member name="T:FileCabinetApp.InputUtils">
-            <summary>
-                Class for the ant input util functions.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.InputUtils.StringConverter(System.String)">
-            <summary>
-                Converts <paramref name="input"/>'s value into the <see cref="T:System.String"/>.
-            </summary>
-            <param name="input">String, which must be converted to <see cref="T:System.String"/>.</param>
-            <returns>
-                <see cref="T:System.Tuple`3"/> object, whose values means:
-                conversion result, conversion error message and converted value accordingly.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.InputUtils.DateTimeConverter(System.String)">
-            <summary>
-                Converts <paramref name="input"/>'s value into the <see cref="T:System.DateTime"/>.
-            </summary>
-            <param name="input">String, which must be converted to <see cref="T:System.DateTime"/>.</param>
-            <returns>
-                <see cref="T:System.Tuple`3"/> object, whose values means:
-                conversion result, conversion error message and converted value accordingly.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.InputUtils.ShortConverter(System.String)">
-            <summary>
-                Converts <paramref name="input"/>'s value into the <see cref="T:System.Int16"/>.
-            </summary>
-            <param name="input">String, which must be converted to <see cref="T:System.Int16"/>.</param>
-            <returns>
-                <see cref="T:System.Tuple`3"/> object, whose values means:
-                conversion result, conversion error message and converted value accordingly.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.InputUtils.CharConverter(System.String)">
-            <summary>
-                Converts <paramref name="input"/>'s value into the <see cref="T:System.Char"/>.
-            </summary>
-            <param name="input">String, which must be converted to <see cref="T:System.Char"/>.</param>
-            <returns>
-                <see cref="T:System.Tuple`3"/> object, whose values means:
-                conversion result, conversion error message and converted value accordingly.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.InputUtils.DecimalConverter(System.String)">
-            <summary>
-                Converts <paramref name="input"/>'s value into the <see cref="T:System.Decimal"/>.
-            </summary>
-            <param name="input">String, which must be converted to <see cref="T:System.Decimal"/>.</param>
-            <returns>
-                <see cref="T:System.Tuple`3"/> object, whose values means:
-                conversion result, conversion error message and converted value accordingly.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
-        </member>
         <member name="T:FileCabinetApp.ConsoleParameterReader">
             <summary>
                 Class for the reading of input parameter's values.
@@ -370,18 +310,171 @@
             </summary>
             <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
         </member>
-        <member name="T:FileCabinetApp.Services.FileCabinetService">
+        <member name="T:FileCabinetApp.Serialization.DumpHelper">
+            <summary>
+                Class for working with objects, which are saved in memory.
+            </summary>
+            <summary>
+                Class for working with objects, which are saved in memory.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.#ctor(System.Type)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpHelper"/> class.
+            </summary>
+            <param name="objectType"><see cref="T:System.Type"/> object, which represents type of manipulated objects.</param>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpHelper.SliceSize">
+            <summary>
+            Gets the size of a manipulated object in memory.
+            </summary>
+            <value>Size of memory including extra memory areas.</value>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Update(System.IO.Stream,System.Object)">
+            <summary>
+                Updates object without updating an extra memory areas.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <param name="obj">Object, which must be replaced with the old one.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Read(System.IO.Stream)">
+            <summary>
+                Reads an object from the current stream's position.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <returns>Object, that was read from the stream.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetOffset(System.String)">
+            <summary>
+                Gets an offset in bytes of memory area.
+            </summary>
+            <param name="areaName">Memory area name.</param>
+            <returns>Offset in bytes of memory area.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetSize(System.String)">
+            <summary>
+                Gets an size in bytes of memory area.
+            </summary>
+            <param name="areaName">Memory area name.</param>
+            <returns>Size in bytes of memory area.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Create(System.IO.Stream,System.Object)">
+            <summary>
+                Insert a dump of an object into a stream.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <param name="obj">Object, which must be placed.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Serialization.DumpSliceAttribute">
+            <summary>
+                Specifies extra memory areas, which can be placed before an serialized object.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpSliceAttribute.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpSliceAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpSliceAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpSliceAttribute"/> class.
+            </summary>
+            <param name="precedingSpaceName">Name of preceding extra memory area.</param>
+            <param name="precedingSpaceSize">Size of preceding extra memory area.</param>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpSliceAttribute.PrecedingAreaName">
+            <summary>
+            Gets a name of preceding extra memory area.
+            </summary>
+            <value>Name of preceding extra memory area.</value>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpSliceAttribute.PrecedingAreaSize">
+            <summary>
+            Gets a size of preceding extra memory area.
+            </summary>
+            <value>Size of preceding extra memory area.</value>
+        </member>
+        <member name="T:FileCabinetApp.Serialization.DumpSliceMemberAttribute">
+            <summary>
+                Specifies an information about named field of serializable object.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpSliceMemberAttribute.#ctor(System.String,System.Int32,System.Int32)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpSliceMemberAttribute"/> class.
+            </summary>
+            <param name="name">Name of field.</param>
+            <param name="sizeInBytes">Size of field.</param>
+            <param name="order">Order of member in memory.</param>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpSliceMemberAttribute.SizeInBytes">
+            <summary>
+            Gets a size of field in bytes.
+            </summary>
+            <value>Size of field in bytes.</value>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpSliceMemberAttribute.Name">
+            <summary>
+            Gets a name of field.
+            </summary>
+            <value>Name of field.</value>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpSliceMemberAttribute.Order">
+            <summary>
+            Gets an order of field on memory.
+            </summary>
+            <value>Order of field on memory.</value>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetFilesystemService">
+            <summary>
+                Service class for the work with a file system.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.#ctor(FileCabinetApp.IRecordValidator,System.IO.Stream)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetFilesystemService"/> class.
+            </summary>
+            <param name="recordValidator">Validation function, which validates input parameter object.</param>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with a file system.</param>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetRecords">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.GetStat">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RecordExists(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
                 Class for the file cabinet's services.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.#ctor(FileCabinetApp.IRecordValidator)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.#ctor(FileCabinetApp.IRecordValidator)">
             <summary>
-            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetService"/> class.
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Services.FileCabinetMemoryService"/> class.
             </summary>
             <param name="recordValidator">Validator for the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/>.</param>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
             <exception cref="T:System.ArgumentException">
@@ -395,10 +488,10 @@
             </exception>
             <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.GetStat">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetStat">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="parameterObject"/>'s firstName or lastName is null.</exception>
             <exception cref="T:System.ArgumentException">
@@ -412,26 +505,29 @@
             </exception>
             <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="parameterObject"/>'s gender is not equal to M or F.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.RecordExists(System.Int32)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.RecordExists(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
             <exception cref="T:System.ArgumentException">Thrown when id is less than 1.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.GetRecords">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecords">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByFirstName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByLastName(System.String)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByLastName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when lastName is null.</exception>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.FindByDateOfBirth(System.DateTime)">
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByDateOfBirth(System.DateTime)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
-        <member name="M:FileCabinetApp.Services.FileCabinetService.MakeSnapshot">
-            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
+            <summary>
+                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
@@ -491,11 +587,177 @@
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
         </member>
-        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
+        <member name="T:FileCabinetApp.StreamHelper">
             <summary>
-                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+                Class for reading, writing an primitive objects from, to a stream.
             </summary>
-            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadString(System.IO.Stream,System.Int32)">
+            <summary>
+                Read a <see cref="T:System.String"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a string will be read.</param>
+            <param name="maxSize">Maximum size of string.</param>
+            <returns><see cref="T:System.String"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadInt(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Int32"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int32"/> will be read.</param>
+            <returns><see cref="T:System.Int32"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadShort(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Int16"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int16"/> will be read.</param>
+            <returns><see cref="T:System.Int16"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadDecimal(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Decimal"/> from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Decimal"/> will be read.</param>
+            <returns><see cref="T:System.Decimal"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadChar(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Char"/> from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Char"/> will be read.</param>
+            <returns><see cref="T:System.Char"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadDateTime(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.DateTime"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.DateTime"/> will be read.</param>
+            <returns><see cref="T:System.DateTime"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int32)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int16)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Char)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Decimal)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.DateTime)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.String,System.Int32)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">String, which will ne written to a <paramref name="stream"/>.</param>
+            <param name="maxSize">Length of a <paramref name="value"/>.</param>
+        </member>
+        <member name="T:FileCabinetApp.Utils.BitConverterExtension">
+            <summary>
+                Class with methods for converting <see cref="T:System.Decimal"/> to bytes array and vice versa.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.BitConverterExtension.ToDecimal(System.Byte[])">
+            <summary>
+                Converts bytes array <paramref name="bytes"/> to a decimal.
+            </summary>
+            <param name="bytes">Byte array, which will be converted to a <see cref="T:System.Decimal"/>.</param>
+            <returns><see cref="T:System.Decimal"/> converted from a <paramref name="bytes"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="bytes"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="bytes"/> length is not equal to 16.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Utils.BitConverterExtension.GetBytes(System.Decimal)">
+            <summary>
+                Converts <paramref name="dec"/> to bytes array.
+            </summary>
+            <param name="dec"><see cref="T:System.Decimal"/>, which will be converted bytes array.</param>
+            <returns><see cref="T:System.Array"/> of bytes with the converted <paramref name="dec"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.InputUtils">
+            <summary>
+                Class for the ant input util functions.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.StringConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.String"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.String"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DateTimeConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.DateTime"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.ShortConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Int16"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Int16"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.CharConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Char"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Char"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.InputUtils.DecimalConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Decimal"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Decimal"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
         </member>
         <member name="T:FileCabinetApp.Validators.CustomConsoleInputValidator">
             <summary>

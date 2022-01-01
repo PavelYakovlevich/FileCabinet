@@ -7,7 +7,7 @@ namespace FileCabinetApp.Services
     /// <summary>
     ///     Class for the file cabinet's services.
     /// </summary>
-    public class FileCabinetService : IFileCabinetService
+    public class FileCabinetMemoryService : IFileCabinetService
     {
         private readonly List<FileCabinetRecord> existingRecords = new List<FileCabinetRecord>();
         private readonly Dictionary<string, List<FileCabinetRecord>> firstNameSearchDictionary = new Dictionary<string, List<FileCabinetRecord>>();
@@ -17,10 +17,10 @@ namespace FileCabinetApp.Services
         private readonly IRecordValidator recordValidator;
 
         /// <summary>
-            /// Initializes a new instance of the <see cref="FileCabinetService"/> class.
+            /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
         /// </summary>
         /// <param name="recordValidator">Validator for the <see cref="FileCabinetRecordParameterObject"/>.</param>
-        public FileCabinetService(IRecordValidator recordValidator)
+        public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
             this.recordValidator = recordValidator;
         }
@@ -153,7 +153,10 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
-        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        /// <summary>
+        ///     Makes snapshot of a <see cref="IFileCabinetService"/>.
+        /// </summary>
+        /// <returns>Snapshot with saved state of <see cref="IFileCabinetService"/> object.</returns>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());
