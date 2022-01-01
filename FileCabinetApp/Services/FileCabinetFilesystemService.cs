@@ -6,6 +6,9 @@ using FileCabinetApp.Serialization;
 
 namespace FileCabinetApp.Services
 {
+    /// <summary>
+    ///     Service class for the work with a file system.
+    /// </summary>
     public class FileCabinetFilesystemService : IFileCabinetService
     {
         private readonly IRecordValidator recordValidator;
@@ -14,6 +17,11 @@ namespace FileCabinetApp.Services
 
         private int lastRecordId;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FileCabinetFilesystemService"/> class.
+        /// </summary>
+        /// <param name="recordValidator">Validation function, which validates input parameter object.</param>
+        /// <param name="stream"><see cref="Stream"/> object for working with a file system.</param>
         public FileCabinetFilesystemService(IRecordValidator recordValidator, Stream stream)
         {
             Guard.ArgumentIsNotNull(recordValidator, nameof(recordValidator));
@@ -26,6 +34,7 @@ namespace FileCabinetApp.Services
             this.SetLastRecordId();
         }
 
+        /// <inheritdoc cref="IFileCabinetService.CreateRecord(FileCabinetRecordParameterObject)"/>
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
             this.recordValidator.ValidateParameters(parameterObject);
@@ -48,6 +57,7 @@ namespace FileCabinetApp.Services
             return this.lastRecordId;
         }
 
+        /// <inheritdoc cref="IFileCabinetService.EditRecord(FileCabinetRecordParameterObject)"/>
         public void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
             this.recordValidator.ValidateParameters(parameterObject);
@@ -73,21 +83,25 @@ namespace FileCabinetApp.Services
             this.dumpHelper.Update(this.fileStream, newRecord);
         }
 
+        /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             return this.FindByCondition((record) => record.DateOfBirth.Equals(dateOfBirth));
         }
 
+        /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
         public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             return this.FindByCondition((record) => record.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
         public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             return this.FindByCondition((record) => record.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
@@ -109,6 +123,7 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
 
+        /// <inheritdoc cref="IFileCabinetService.GetStat"/>
         public int GetStat()
         {
             var recordsCount = 0;
@@ -121,6 +136,7 @@ namespace FileCabinetApp.Services
             return recordsCount;
         }
 
+        /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
         public bool RecordExists(int id)
         {
             Guard.ArgumentGreaterThan(id, 0);
