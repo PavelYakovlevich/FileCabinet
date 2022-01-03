@@ -18,4 +18,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileCabinetApp\FileCabinetApp.csproj" />
+    <ProjectReference Include="..\ProgramInputHandling\ProgramInputHandling.csproj" />
+  </ItemGroup>
+
 </Project>
