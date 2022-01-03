@@ -1,4 +1,4 @@
-﻿namespace FileCabinetGenerator
+﻿namespace ProgramInputHandling
 {
     public enum ArgumentType
     {

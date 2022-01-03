@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace FileCabinetGenerator
+namespace ProgramInputHandling
 {
     /// <summary>
     ///     Class for the input arguments, which are passed from console.
