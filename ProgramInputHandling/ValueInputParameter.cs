@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace ProgramInputHandling
 {
-    public class ValueInputParameter : AbstractInputParamter
+    public class ValueInputParameter : AbstractInputParameter
     {
         private static readonly Dictionary<ArgumentType, Predicate<string>> ValidationFunctions = new Dictionary<ArgumentType, Predicate<string>>()
         {

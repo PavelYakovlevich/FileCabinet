@@ -5,7 +5,7 @@ namespace ProgramInputHandling
     /// <summary>
     ///     Abstract class for all console input paramters.
     /// </summary>
-    public abstract class AbstractInputParamter : IInputParameter
+    public abstract class AbstractInputParameter : IInputParameter
     {
         private string name;
         private string abbreviation;
@@ -18,7 +18,7 @@ namespace ProgramInputHandling
         /// <param name="abbreviation">Shortcut fo the parameter's name.</param>
         /// <param name="isMandatory">Specifies if paramter is mandatory or not.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="name"/> or <paramref name="abbreviation"/> is empty or whitespace or null.</exception>
-        protected AbstractInputParamter(string name, string abbreviation, bool isMandatory)
+        protected AbstractInputParameter(string name, string abbreviation, bool isMandatory)
         {
             if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
