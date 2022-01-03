@@ -31,10 +31,12 @@ namespace FileCabinetGenerator
         };
 
         private int minYear;
+        private Random random;
 
         public FileCabinetRecordFaker(int minYear)
         {
             this.minYear = minYear;
+            this.random = new Random();
         }
 
         public FileCabinetRecord Generate(int id)
@@ -59,29 +61,26 @@ namespace FileCabinetGenerator
 
         private decimal GenerateWeight()
         {
-            return Math.Round((decimal)new Random().NextDouble() * 100, 2);
+            return Math.Round((decimal)this.random.NextDouble() * 100, 2);
         }
 
         private short GenerateStature()
         {
-            return (short)new Random().Next(160, 300);
+            return (short)this.random.Next(160, 300);
         }
 
         private DateTime GenerateDateTime()
         {
-            var random = new Random();
-
-            int year = random.Next(this.minYear, DateTime.Now.Year);
-            int month = random.Next(1, 12);
-            int day = random.Next(1, DateTime.DaysInMonth(year, month));
+            int year = this.random.Next(this.minYear, DateTime.Now.Year);
+            int month = this.random.Next(1, 12);
+            int day = this.random.Next(1, DateTime.DaysInMonth(year, month));
 
             return new DateTime(year, month, day);
         }
 
         private T TakeRandomItem<T>(T[] values)
         {
-            var random = new Random();
-            var index = random.Next(0, values.Length - 1);
+            var index = this.random.Next(0, values.Length);
             return values[index];
         }
     }
