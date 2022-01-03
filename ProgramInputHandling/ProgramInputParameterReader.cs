@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace ProgramInputHandling
 {
-    public class ProgramInputArgumentReader
+    public class ProgramInputParameterReader
     {
         private readonly IInputParameter[] programDefinedArguments;
         private int mandatoryParamsCount;
 
-        public ProgramInputArgumentReader(IInputParameter[] programInputs)
+        public ProgramInputParameterReader(IInputParameter[] programInputs)
         {
             if (programInputs is null)
             {

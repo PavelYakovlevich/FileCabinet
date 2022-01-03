@@ -1,7 +1,7 @@
 ﻿namespace ProgramInputHandling
 {
     /// <summary>
-    ///     Interface for all console input paramters.
+    ///     Interface for all console input parameters.
     /// </summary>
     public interface IInputParameter
     {

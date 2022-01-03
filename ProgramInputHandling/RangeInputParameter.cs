@@ -6,13 +6,13 @@ namespace ProgramInputHandling
     /// <summary>
     ///     Class for the input arguments, which are passed from console.
     /// </summary>
-    public class RangeInputArgument : AbstractInputParamter
+    public class RangeInputParameter : AbstractInputParameter
     {
         private string defaultValue;
 
         /// <inheritdoc cref="AbstractInputParamter"/>
         /// <param name="values">Values, which can be specified.</param>
-        public RangeInputArgument(string name, string abbreviation, bool isMandatory, string[] values)
+        public RangeInputParameter(string name, string abbreviation, bool isMandatory, string[] values)
             : base(name, abbreviation, isMandatory)
         {
             if (values is null)
