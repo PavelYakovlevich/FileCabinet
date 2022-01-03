@@ -1,5 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
+
+using FileCabinetApp;
+using ProgramInputHandling;
 
 namespace FileCabinetGenerator
 {
@@ -12,7 +17,7 @@ namespace FileCabinetGenerator
 
         private static readonly IInputParameter[] ProgramInputs = new IInputParameter[]
         {
-            new RangeInputArgument(OutputFormatArgumentName, "t", true, new[] { "csv", "xml" }),
+            new RangeInputParameter(OutputFormatArgumentName, "t", true, new[] { "csv", "xml" }),
             new ValueInputParameter(OutputFilePathArgumentName, "o", true, ArgumentType.FilePath),
             new ValueInputParameter(RecordsAmountArgumentName, "a", true, ArgumentType.PositiveInteger),
             new ValueInputParameter(StartIdArgumentName, "i", true, ArgumentType.PositiveInteger),
@@ -20,16 +25,16 @@ namespace FileCabinetGenerator
 
         private static string outputFormat = string.Empty;
         private static string outputFilePath = string.Empty;
-        private static int recordAmount = 0;
+        private static int recordsAmount = 0;
         private static int startId = 0;
 
         public static void Main(string[] args)
         {
-            var parametersReader = new ProgramInputArgumentReader(ProgramInputs);
+            var parametersReader = new ProgramInputParameterReader(ProgramInputs);
 
             var readArgumentsResult = parametersReader.ReadInputArguments(args);
-            var inputArguments = readArgumentsResult.Item1;
 
+            var inputArguments = readArgumentsResult.Item1;
             if (inputArguments is null)
             {
                 Console.WriteLine(readArgumentsResult.Item2);
@@ -37,12 +42,63 @@ namespace FileCabinetGenerator
                 return;
             }
 
-            recordAmount = int.Parse(inputArguments[RecordsAmountArgumentName]);
+            recordsAmount = int.Parse(inputArguments[RecordsAmountArgumentName]);
             outputFilePath = inputArguments[OutputFilePathArgumentName];
             startId = int.Parse(inputArguments[StartIdArgumentName]);
             outputFormat = inputArguments[OutputFormatArgumentName];
 
-            Console.WriteLine($"{recordAmount} records were written to {outputFilePath}");
+            var recordFaker = new FileCabinetRecordFaker(1950);
+            int currentRecordId = startId;
+
+            var records = new FileCabinetRecord[recordsAmount];
+            for (int i = 0; i < recordsAmount; i++)
+            {
+                var generatedRecord = recordFaker.Generate(currentRecordId);
+                records[i] = generatedRecord;
+                currentRecordId++;
+            }
+
+            try
+            {
+                if (outputFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new NotImplementedException();
+                }
+                else
+                {
+                    ExportToCsv(records);
+                }
+            }
+            catch (IOException exception)
+            {
+                Console.WriteLine($"Export failed: {exception.Message}");
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                Console.WriteLine($"Access error: {unauthorizedAccessException.Message}");
+            }
+            catch (InvalidOperationException exception)
+            {
+                Console.WriteLine($"Error: {exception.Message}");
+            }
+            catch
+            {
+                Console.WriteLine("Ops, something went wrong.");
+            }
+
+            Console.WriteLine($"{recordsAmount} records were written to {outputFilePath}");
+        }
+
+        private static void ExportToCsv(IList<FileCabinetRecord> records)
+        {
+            using (var stream = new StreamWriter(outputFilePath, false))
+            {
+                foreach (var record in records)
+                {
+                    var csvString = $"{record.Id},{record.FirstName},{record.LastName},{record.DateOfBirth.ToString("MM/dd/yyyy")},{record.Gender},{record.Stature},{record.Weight}";
+                    stream.WriteLine(csvString);
+                }
+            }
         }
 
         private static void PrintReadArgumentsErrorMessage()
@@ -57,9 +113,9 @@ namespace FileCabinetGenerator
                 {
                     argumentValuesString = (definedArgument as ValueInputParameter) !.ValueType.ToString();
                 }
-                else if (definedArgument is RangeInputArgument)
+                else if (definedArgument is RangeInputParameter)
                 {
-                    argumentValuesString = (definedArgument as RangeInputArgument) !.GetValidValuesString();
+                    argumentValuesString = (definedArgument as RangeInputParameter) !.GetValidValuesString();
                 }
 
                 errorMessage.AppendLine($"\t--{definedArgument.Name}(-{definedArgument.Abbreviation}) : {argumentValuesString}");
