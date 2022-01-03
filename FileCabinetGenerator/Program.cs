@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-
+using System.Xml;
+using System.Xml.Serialization;
 using FileCabinetApp;
 using ProgramInputHandling;
 
@@ -62,7 +63,7 @@ namespace FileCabinetGenerator
             {
                 if (outputFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    throw new NotImplementedException();
+                    ExportToXml(records);
                 }
                 else
                 {
@@ -87,6 +88,20 @@ namespace FileCabinetGenerator
             }
 
             Console.WriteLine($"{recordsAmount} records were written to {outputFilePath}");
+        }
+
+        private static void ExportToXml(IList<FileCabinetRecord> records)
+        {
+            using (var stream = new StreamWriter(outputFilePath, false))
+            {
+                XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
+                using (var xmlWriter = XmlWriter.Create(stream, settings))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(FileCabinetRecord[]), new XmlRootAttribute("records"));
+
+                    serializer.Serialize(xmlWriter, records);
+                }
+            }
         }
 
         private static void ExportToCsv(IList<FileCabinetRecord> records)
