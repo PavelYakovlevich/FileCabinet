@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileCabinetGenerator
+namespace ProgramInputHandling
 {
     /// <summary>
     ///     Abstract class for all console input paramters.

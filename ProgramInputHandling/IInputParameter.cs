@@ -1,4 +1,4 @@
-﻿namespace FileCabinetGenerator
+﻿namespace ProgramInputHandling
 {
     /// <summary>
     ///     Interface for all console input paramters.

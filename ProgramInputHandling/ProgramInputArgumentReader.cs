@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileCabinetGenerator
+namespace ProgramInputHandling
 {
-    internal class ProgramInputArgumentReader
+    public class ProgramInputArgumentReader
     {
         private readonly IInputParameter[] programDefinedArguments;
         private int mandatoryParamsCount;
 
-        internal ProgramInputArgumentReader(IInputParameter[] programInputs)
+        public ProgramInputArgumentReader(IInputParameter[] programInputs)
         {
             if (programInputs is null)
             {
@@ -31,7 +31,7 @@ namespace FileCabinetGenerator
             }
         }
 
-        internal Tuple<Dictionary<string, string>?, string> ReadInputArguments(string[] args)
+        public Tuple<Dictionary<string, string>?, string> ReadInputArguments(string[] args)
         {
             var result = new Dictionary<string, string>();
 

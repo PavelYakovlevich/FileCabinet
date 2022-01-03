@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace FileCabinetGenerator
+namespace ProgramInputHandling
 {
     public class ValueInputParameter : AbstractInputParamter
     {
