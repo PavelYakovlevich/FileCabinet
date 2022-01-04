@@ -10,5 +10,11 @@
         /// </summary>
         /// <param name="parameterObject">Parameter object.</param>
         void ValidateParameters(FileCabinetRecordParameterObject parameterObject);
+
+        /// <summary>
+        ///     Validates <see cref="FileCabinetRecord"/> object.
+        /// </summary>
+        /// <param name="parameterObject">File cabinet record object.</param>
+        void Validate(FileCabinetRecord parameterObject);
     }
 }
