@@ -54,9 +54,7 @@ namespace FileCabinetApp.Services
 
             this.existingRecords.Add(newRecord);
 
-            this.AddSearchEntry(parameterObject.FirstName, this.firstNameSearchDictionary, newRecord);
-            this.AddSearchEntry(parameterObject.LastName, this.lastNameSearchDictionary, newRecord);
-            this.AddSearchEntry(parameterObject.DateOfBirth, this.dateOfBirthSearchDictionary, newRecord);
+            this.AddEntryToSearchDictionaries(newRecord);
 
             return newRecord.Id;
         }
@@ -94,9 +92,7 @@ namespace FileCabinetApp.Services
             editableRecord!.Weight = parameterObject.Weight;
             editableRecord!.Stature = parameterObject.Stature;
 
-            this.UpdateSearchEntry(parameterObject.FirstName, this.firstNameSearchDictionary, editableRecord);
-            this.UpdateSearchEntry(parameterObject.LastName, this.lastNameSearchDictionary, editableRecord);
-            this.UpdateSearchEntry(parameterObject.DateOfBirth, this.dateOfBirthSearchDictionary, editableRecord);
+            this.UpdateSearchDictionaries(editableRecord);
         }
 
         /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
@@ -162,6 +158,48 @@ namespace FileCabinetApp.Services
             return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());
         }
 
+        public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
+        {
+            Guard.ArgumentIsNotNull(snapshot, nameof(snapshot));
+
+            var records = snapshot.Records;
+            var importedRecords = 0;
+            foreach (var record in records)
+            {
+                try
+                {
+                    this.recordValidator.Validate(record);
+
+                    var editableRecord = this.GetRecordById(record.Id);
+                    if (editableRecord is null)
+                    {
+                        this.existingRecords.Add(record);
+
+                        this.AddEntryToSearchDictionaries(record);
+                    }
+                    else
+                    {
+                        editableRecord!.FirstName = record.FirstName;
+                        editableRecord!.LastName = record.LastName;
+                        editableRecord!.DateOfBirth = record.DateOfBirth;
+                        editableRecord!.Gender = record.Gender;
+                        editableRecord!.Weight = record.Weight;
+                        editableRecord!.Stature = record.Stature;
+
+                        this.UpdateSearchDictionaries(record);
+                    }
+
+                    importedRecords++;
+                }
+                catch (ArgumentException exception)
+                {
+                    onInvalidRecordImported?.Invoke(record, exception.Message);
+                }
+            }
+
+            return importedRecords;
+        }
+
         private FileCabinetRecord? GetRecordById(int id)
         {
             foreach (var record in this.existingRecords)
@@ -173,6 +211,20 @@ namespace FileCabinetApp.Services
             }
 
             return null;
+        }
+
+        private void AddEntryToSearchDictionaries(FileCabinetRecord record)
+        {
+            this.AddSearchEntry(record.FirstName, this.firstNameSearchDictionary, record);
+            this.AddSearchEntry(record.LastName, this.lastNameSearchDictionary, record);
+            this.AddSearchEntry(record.DateOfBirth, this.dateOfBirthSearchDictionary, record);
+        }
+
+        private void UpdateSearchDictionaries(FileCabinetRecord record)
+        {
+            this.UpdateSearchEntry(record.FirstName, this.firstNameSearchDictionary, record);
+            this.UpdateSearchEntry(record.LastName, this.lastNameSearchDictionary, record);
+            this.UpdateSearchEntry(record.DateOfBirth, this.dateOfBirthSearchDictionary, record);
         }
 
         private void AddSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
