@@ -46,6 +46,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("edit", Edit),
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
+            new Tuple<string, Action<string>>("import", Import),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -58,6 +59,7 @@ namespace FileCabinetApp
             new string[] { "edit", "edits existing record", "The 'edit' command edits existing record." },
             new string[] { "find", "finds all records with specified criterias", "The 'find' command finds all records with specified criterias." },
             new string[] { "export", "expots all records to the file with specified format", "The 'export' command expots all records to the file with specified format." },
+            new string[] { "import", "imports records from the file with specified format", "The 'import' command imports records from the file with specified format." },
         };
 
         /// <summary>
@@ -512,6 +514,33 @@ namespace FileCabinetApp
             }
 
             return result;
+        }
+
+        private static void Import(string parameters)
+        {
+            var parametersValues = parameters.Split(' ');
+
+            if (parametersValues.Length < 2)
+            {
+                Console.WriteLine("Missing export method or file path.");
+                return;
+            }
+
+            var exportMethod = parametersValues[0];
+            if (!exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Console.WriteLine($"Unsupported export method: {exportMethod}");
+                return;
+            }
+
+            var importFilePath = parametersValues[1];
+            if (!File.Exists(importFilePath))
+            {
+                Console.WriteLine($"Import error: file {importFilePath} is not exist.");
+                return;
+            }
+
+            throw new NotImplementedException();
         }
     }
 }
