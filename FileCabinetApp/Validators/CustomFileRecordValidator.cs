@@ -10,28 +10,45 @@ namespace FileCabinetApp.Validators
         /// <inheritdoc cref="IRecordValidator.ValidateParameters(FileCabinetRecordParameterObject)"/>
         public void ValidateParameters(FileCabinetRecordParameterObject parameterObject)
         {
-            Guard.ArgumentIsNotNull(parameterObject, nameof(parameterObject));
+            var record = new FileCabinetRecord
+            {
+                Id = parameterObject.Id,
+                FirstName = parameterObject.FirstName,
+                LastName = parameterObject.LastName,
+                DateOfBirth = parameterObject.DateOfBirth,
+                Gender = parameterObject.Gender,
+                Weight = parameterObject.Weight,
+                Stature = parameterObject.Stature,
+            };
 
-            Guard.ArgumentIsNotNull(parameterObject.FirstName, nameof(parameterObject.FirstName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.FirstName, nameof(parameterObject.FirstName));
-            Guard.ArgumentMatchRegex(parameterObject.FirstName, nameof(parameterObject.FirstName), @"^[A-Za-z]{2,60}$");
+            this.Validate(record);
+        }
 
-            Guard.ArgumentIsNotNull(parameterObject.LastName, nameof(parameterObject.LastName));
-            Guard.ArgumentIsNotEmptyOrWhiteSpace(parameterObject.LastName, nameof(parameterObject.LastName));
-            Guard.ArgumentMatchRegex(parameterObject.LastName, nameof(parameterObject.LastName), @"^[A-Za-z]{2,60}$");
+        /// <inheritdoc cref="IRecordValidator.Validate(FileCabinetRecord)"/>
+        public void Validate(FileCabinetRecord record)
+        {
+            Guard.ArgumentIsNotNull(record, nameof(record));
+
+            Guard.ArgumentIsNotNull(record.FirstName, nameof(record.FirstName));
+            Guard.ArgumentIsNotEmptyOrWhiteSpace(record.FirstName, nameof(record.FirstName));
+            Guard.ArgumentMatchRegex(record.FirstName, nameof(record.FirstName), @"^[A-Za-z]{2,60}$");
+
+            Guard.ArgumentIsNotNull(record.LastName, nameof(record.LastName));
+            Guard.ArgumentIsNotEmptyOrWhiteSpace(record.LastName, nameof(record.LastName));
+            Guard.ArgumentMatchRegex(record.LastName, nameof(record.LastName), @"^[A-Za-z]{2,60}$");
 
             Guard.ArgumentSatisfies(
-                parameterObject.DateOfBirth,
+                record.DateOfBirth,
                 (dateOfBirth) => dateOfBirth.CompareTo(new DateTime(1950, 1, 1)) >= 0 && dateOfBirth.CompareTo(DateTime.Now) <= 0,
-                $"{nameof(parameterObject.DateOfBirth)} must be greater than 01-Jan-1950 and less or equal to current date.");
+                $"{nameof(record.DateOfBirth)} must be greater than 01-Jan-1950 and less or equal to current date.");
 
-            Guard.ArgumentIsInRange(parameterObject.Gender, new[] { 'M', 'F' });
+            Guard.ArgumentIsInRange(record.Gender, new[] { 'M', 'F' });
 
-            Guard.ArgumentGreaterThan(parameterObject.Weight, 0);
-            Guard.ArgumentLessThan(parameterObject.Weight, 1000.0m);
+            Guard.ArgumentGreaterThan(record.Weight, 0);
+            Guard.ArgumentLessThan(record.Weight, 1000.0m);
 
-            Guard.ArgumentGreaterThan(parameterObject.Stature, 0);
-            Guard.ArgumentLessThan(parameterObject.Stature, 300);
+            Guard.ArgumentGreaterThan(record.Stature, 0);
+            Guard.ArgumentLessThan(record.Stature, 300);
         }
     }
 }
