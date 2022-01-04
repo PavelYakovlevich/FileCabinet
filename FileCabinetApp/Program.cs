@@ -522,25 +522,83 @@ namespace FileCabinetApp
 
             if (parametersValues.Length < 2)
             {
-                Console.WriteLine("Missing export method or file path.");
+                Console.WriteLine("Missing import file format or file path.");
                 return;
             }
 
-            var exportMethod = parametersValues[0];
-            if (!exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !exportMethod.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+            var importFormat = parametersValues[0].Trim();
+            if (!importFormat.Equals("csv", StringComparison.InvariantCultureIgnoreCase) && !importFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
             {
-                Console.WriteLine($"Unsupported export method: {exportMethod}");
+                Console.WriteLine($"Import error: Unsupported import format: {importFormat}");
                 return;
             }
 
-            var importFilePath = parametersValues[1];
+            var importFilePath = parametersValues[1].Trim();
+            if (importFilePath.Length == 0)
+            {
+                Console.WriteLine($"Import error: import file was not specified.");
+                return;
+            }
+
             if (!File.Exists(importFilePath))
             {
                 Console.WriteLine($"Import error: file {importFilePath} is not exist.");
                 return;
             }
 
-            throw new NotImplementedException();
+            try
+            {
+                int importedRecordsCount = 0;
+
+                using (var stream = new FileStream(importFilePath, FileMode.Open))
+                {
+                    if (importFormat.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        importedRecordsCount = ImportFromCsv(stream);
+                    }
+                    else if (importFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Import error: format: {importFormat} is not defined.");
+                        return;
+                    }
+                }
+
+                Console.WriteLine($"{importedRecordsCount} records were imported from {importFilePath}.");
+            }
+            catch (IOException exception)
+            {
+                Console.WriteLine($"Import failed: {exception.Message}");
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                Console.WriteLine($"Access error: {unauthorizedAccessException.Message}");
+            }
+            catch
+            {
+                Console.WriteLine("Oops, something went wrong.");
+            }
+        }
+
+        private static int ImportFromCsv(FileStream stream)
+        {
+            switch (fileCabinetService)
+            {
+                case FileCabinetMemoryService service:
+                    var snapshot = new FileCabinetServiceSnapshot();
+                    using (var streamReader = new StreamReader(stream))
+                    {
+                        snapshot.LoadFromCsv(streamReader);
+                    }
+
+                    return service.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
+
+                default:
+                    return 0;
+            }
         }
     }
 }
