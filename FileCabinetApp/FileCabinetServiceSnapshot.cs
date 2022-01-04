@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Xml;
-
+using FileCabinetApp.Readers;
 using FileCabinetApp.Writers;
 
 namespace FileCabinetApp
@@ -12,6 +14,11 @@ namespace FileCabinetApp
     {
         private FileCabinetRecord[] records;
 
+        public FileCabinetServiceSnapshot()
+        {
+            this.records = Array.Empty<FileCabinetRecord>();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
         /// </summary>
@@ -21,6 +28,14 @@ namespace FileCabinetApp
             Guard.ArgumentIsNotNull(fileCabinetRecords, nameof(fileCabinetRecords));
 
             this.records = fileCabinetRecords;
+        }
+
+        public ReadOnlyCollection<FileCabinetRecord> Records
+        {
+            get
+            {
+                return new ReadOnlyCollection<FileCabinetRecord>(this.records);
+            }
         }
 
         /// <summary>
@@ -35,6 +50,16 @@ namespace FileCabinetApp
             {
                 csvWriter.Write(record);
             }
+        }
+
+        public void LoadFromCsv(StreamReader reader)
+        {
+            var csvReader = new FileCabinetRecordCsvReader(reader);
+
+            var loadedRecords = csvReader.ReadAll();
+
+            Array.Resize(ref this.records, loadedRecords.Count);
+            loadedRecords.CopyTo(this.records, 0);
         }
 
         /// <summary>
