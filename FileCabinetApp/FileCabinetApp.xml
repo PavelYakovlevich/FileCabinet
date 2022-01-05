@@ -160,11 +160,22 @@
                 Class for the creating a <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/>.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.#ctor(FileCabinetApp.FileCabinetRecord[])">
             <summary>
             Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> class.
             </summary>
             <param name="fileCabinetRecords"><see cref="T:System.Array"/> of file cabinet records.</param>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetServiceSnapshot.Records">
+            <summary>
+            Gets all file cabinet records, which are saved in the snapshot.
+            </summary>
+            <value>All file cabinet records, which are saved in the snapshot.</value>
         </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToCsv(System.IO.StreamWriter)">
             <summary>
@@ -172,11 +183,23 @@
             </summary>
             <param name="writer"><see cref="T:System.IO.StreamWriter"/> object to write to a stream.</param>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromCsv(System.IO.StreamReader)">
+            <summary>
+                Loads records from a csv file.
+            </summary>
+            <param name="reader">><see cref="T:System.IO.StreamReader"/> object to read from a stream.</param>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.SaveToXml(System.IO.StreamWriter)">
             <summary>
                 Saves snapshot data into the xml file.
             </summary>
             <param name="writer"><see cref="T:System.IO.StreamWriter"/> object to write to a stream.</param>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetServiceSnapshot.LoadFromXml(System.IO.StreamReader)">
+            <summary>
+                Loads records from a xml file.
+            </summary>
+            <param name="reader">><see cref="T:System.IO.StreamReader"/> object to read from a stream.</param>
         </member>
         <member name="T:FileCabinetApp.Guard">
             <summary>
@@ -339,8 +362,44 @@
             </summary>
             <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
         </member>
+        <member name="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader">
+            <summary>
+                Class for a reading <see cref="T:FileCabinetApp.FileCabinetRecord"/> objects from a csv file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordCsvReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordCsvReader"/> class.
+            </summary>
+            <param name="reader"><see cref="T:System.IO.StreamReader"/> object, from which records will be read.</param>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordCsvReader.ReadAll">
+            <inheritdoc cref="M:FileCabinetApp.Readers.IFileCabinetRecordReader.ReadAll"/>
+        </member>
+        <member name="T:FileCabinetApp.Readers.FileCabinetRecordXmlReader">
+            <summary>
+                Class for a reading <see cref="T:FileCabinetApp.FileCabinetRecord"/> objects from a xml file.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.#ctor(System.IO.StreamReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:FileCabinetApp.Readers.FileCabinetRecordXmlReader"/> class.
+            </summary>
+            <param name="reader"><see cref="T:System.IO.StreamReader"/> object, from which records will be read.</param>
+        </member>
         <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.ReadAll">
-            <inheritdoc cref="!:IFileCabinetRecordReader."/>
+            <inheritdoc cref="M:FileCabinetApp.Readers.IFileCabinetRecordReader.ReadAll"/>
+        </member>
+        <member name="T:FileCabinetApp.Readers.IFileCabinetRecordReader">
+            <summary>
+                Interface for records readers.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Readers.IFileCabinetRecordReader.ReadAll">
+            <summary>
+                Reads all records from a file.
+            </summary>
+            <returns><see cref="T:System.Collections.Generic.IList`1"/> object with all records, extracted from a file.</returns>
         </member>
         <member name="T:FileCabinetApp.Serialization.DumpHelper">
             <summary>
