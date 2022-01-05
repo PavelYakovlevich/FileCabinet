@@ -147,7 +147,37 @@ namespace FileCabinetApp.Services
         /// <inheritdoc cref="IFileCabinetService.Restore(FileCabinetServiceSnapshot, Action{FileCabinetRecord, string})"/>
         public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
         {
-            throw new NotImplementedException();
+            Guard.ArgumentIsNotNull(snapshot, nameof(snapshot));
+
+            var importedRecords = 0;
+            foreach (var record in snapshot.Records)
+            {
+                try
+                {
+                    this.recordValidator.Validate(record);
+                }
+                catch (ArgumentException exception)
+                {
+                    onInvalidRecordImported?.Invoke(record, exception.Message);
+                    continue;
+                }
+
+                var recordAddress = this.GetRecordAddressById(record.Id);
+                if (recordAddress < 0)
+                {
+                    this.fileStream.Seek(0, SeekOrigin.End);
+                }
+                else
+                {
+                    this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+                }
+
+                this.dumpHelper.Create(this.fileStream, record);
+
+                importedRecords++;
+            }
+
+            return importedRecords;
         }
 
         private int GetRecordAddressById(int id)
