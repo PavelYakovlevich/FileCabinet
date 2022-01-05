@@ -158,6 +158,7 @@ namespace FileCabinetApp.Services
             return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());
         }
 
+        /// <inheritdoc cref="IFileCabinetService.Restore(FileCabinetServiceSnapshot, Action{FileCabinetRecord, string})"/>
         public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
         {
             Guard.ArgumentIsNotNull(snapshot, nameof(snapshot));
