@@ -60,5 +60,13 @@ namespace FileCabinetApp.Services
         /// <param name="dateOfBirth">Date of birth search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
         public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+
+        /// <summary>
+        ///     Restores state of service from a snapshot.
+        /// </summary>
+        /// <param name="snapshot"><see cref="FileCabinetServiceSnapshot"/> object, which holds a state of the service.</param>
+        /// <param name="onInvalidRecordImported">Action, which is called after an invalid record was imported.</param>
+        /// <returns>Restored <see cref="FileCabinetRecord"/>'s count.</returns>
+        public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported);
     }
 }

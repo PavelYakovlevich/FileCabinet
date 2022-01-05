@@ -144,6 +144,12 @@ namespace FileCabinetApp.Services
             return this.GetRecordAddressById(id) >= 0;
         }
 
+        /// <inheritdoc cref="IFileCabinetService.Restore(FileCabinetServiceSnapshot, Action{FileCabinetRecord, string})"/>
+        public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
+        {
+            throw new NotImplementedException();
+        }
+
         private int GetRecordAddressById(int id)
         {
             var recordIdOffset = this.dumpHelper.GetOffset("Id");
