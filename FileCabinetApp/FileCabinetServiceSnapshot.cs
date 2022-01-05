@@ -14,6 +14,9 @@ namespace FileCabinetApp
     {
         private FileCabinetRecord[] records;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileCabinetServiceSnapshot"/> class.
+        /// </summary>
         public FileCabinetServiceSnapshot()
         {
             this.records = Array.Empty<FileCabinetRecord>();
@@ -30,6 +33,10 @@ namespace FileCabinetApp
             this.records = fileCabinetRecords;
         }
 
+        /// <summary>
+        /// Gets all file cabinet records, which are saved in the snapshot.
+        /// </summary>
+        /// <value>All file cabinet records, which are saved in the snapshot.</value>
         public ReadOnlyCollection<FileCabinetRecord> Records
         {
             get
@@ -52,6 +59,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        ///     Loads records from a csv file.
+        /// </summary>
+        /// <param name="reader">><see cref="StreamReader"/> object to read from a stream.</param>
         public void LoadFromCsv(StreamReader reader)
         {
             var csvReader = new FileCabinetRecordCsvReader(reader);
@@ -86,6 +97,10 @@ namespace FileCabinetApp
             }
         }
 
+        /// <summary>
+        ///     Loads records from a xml file.
+        /// </summary>
+        /// <param name="reader">><see cref="StreamReader"/> object to read from a stream.</param>
         public void LoadFromXml(StreamReader reader)
         {
             var xmlReader = new FileCabinetRecordXmlReader(reader);

@@ -4,6 +4,9 @@ using FileCabinetApp;
 
 namespace FileCabinetGenerator
 {
+    /// <summary>
+    ///     Class for generating a <see cref="FileCabinetRecord"/> object.
+    /// </summary>
     public class FileCabinetRecordFaker
     {
         private static Dictionary<char, string[]> genderNamesDictionary = new Dictionary<char, string[]>()
@@ -33,12 +36,21 @@ namespace FileCabinetGenerator
         private int minYear;
         private Random random;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FileCabinetRecordFaker"/> class.
+        /// </summary>
+        /// <param name="minYear">Minimal year of generated <see cref="DateTime"/> object.</param>
         public FileCabinetRecordFaker(int minYear)
         {
             this.minYear = minYear;
             this.random = new Random();
         }
 
+        /// <summary>
+        ///     Generates a <see cref="FileCabinetRecord"/> object.
+        /// </summary>
+        /// <param name="id">Id of generated <see cref="FileCabinetRecord"/> object.</param>
+        /// <returns>Generated <see cref="FileCabinetRecord"/> object.</returns>
         public FileCabinetRecord Generate(int id)
         {
             if (id < 0)
