@@ -552,9 +552,14 @@ namespace FileCabinetApp
 
                 using (var stream = new FileStream(importFilePath, FileMode.Open))
                 {
+                    var snapshot = new FileCabinetServiceSnapshot();
+
                     if (importFormat.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        importedRecordsCount = ImportFromCsv(stream);
+                        using (var streamReader = new StreamReader(stream))
+                        {
+                            snapshot.LoadFromCsv(streamReader);
+                        }
                     }
                     else if (importFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -565,6 +570,8 @@ namespace FileCabinetApp
                         Console.WriteLine($"Import error: format: {importFormat} is not defined.");
                         return;
                     }
+
+                    importedRecordsCount = fileCabinetService.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
                 }
 
                 Console.WriteLine($"{importedRecordsCount} records were imported from {importFilePath}.");
@@ -580,24 +587,6 @@ namespace FileCabinetApp
             catch
             {
                 Console.WriteLine("Oops, something went wrong.");
-            }
-        }
-
-        private static int ImportFromCsv(FileStream stream)
-        {
-            switch (fileCabinetService)
-            {
-                case FileCabinetMemoryService service:
-                    var snapshot = new FileCabinetServiceSnapshot();
-                    using (var streamReader = new StreamReader(stream))
-                    {
-                        snapshot.LoadFromCsv(streamReader);
-                    }
-
-                    return service.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
-
-                default:
-                    return 0;
             }
         }
     }
