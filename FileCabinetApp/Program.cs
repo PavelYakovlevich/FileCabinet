@@ -554,21 +554,20 @@ namespace FileCabinetApp
                 {
                     var snapshot = new FileCabinetServiceSnapshot();
 
-                    if (importFormat.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
+                    using (var streamReader = new StreamReader(stream))
                     {
-                        using (var streamReader = new StreamReader(stream))
+                        switch (importFormat)
                         {
-                            snapshot.LoadFromCsv(streamReader);
+                            case "csv":
+                                snapshot.LoadFromCsv(streamReader);
+                                break;
+                            case "xml":
+                                snapshot.LoadFromXml(streamReader);
+                                break;
+                            default:
+                                Console.WriteLine($"Import error: format: {importFormat} is not defined.");
+                                return;
                         }
-                    }
-                    else if (importFormat.Equals("xml", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Import error: format: {importFormat} is not defined.");
-                        return;
                     }
 
                     importedRecordsCount = fileCabinetService.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
@@ -584,9 +583,9 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Access error: {unauthorizedAccessException.Message}");
             }
-            catch
+            catch (Exception exception)
             {
-                Console.WriteLine("Oops, something went wrong.");
+                Console.WriteLine($"Oops, something went wrong: {exception.InnerException?.Message}.");
             }
         }
     }

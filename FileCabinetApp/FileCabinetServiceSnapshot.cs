@@ -85,5 +85,15 @@ namespace FileCabinetApp
                 xmlTextWriter.WriteEndElement();
             }
         }
+
+        public void LoadFromXml(StreamReader reader)
+        {
+            var xmlReader = new FileCabinetRecordXmlReader(reader);
+
+            var loadedRecords = xmlReader.ReadAll();
+
+            Array.Resize(ref this.records, loadedRecords.Count);
+            loadedRecords.CopyTo(this.records, 0);
+        }
     }
 }
