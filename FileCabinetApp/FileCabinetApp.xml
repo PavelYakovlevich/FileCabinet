@@ -15,6 +15,12 @@
             </summary>
             <value>Id of the user.</value>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.FullName">
+            <summary>
+                Gets or sets the <see cref="T:FileCabinetApp.FileCabinetRecord.Name"/> object. For xml serialization purpose only.
+            </summary>
+            <value><see cref="T:FileCabinetApp.FileCabinetRecord.Name"/> object for holding first and last names.</value>
+        </member>
         <member name="P:FileCabinetApp.FileCabinetRecord.FirstName">
             <summary>
                 Gets or sets first name value of the user.
@@ -51,6 +57,12 @@
             </summary>
             <value>Weight of the user.</value>
         </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.GenderString">
+            <summary>
+                Gets or sets gender value of the user. For xml serialization purpose only.
+            </summary>
+            <value>Gender string of the user.</value>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
             <summary>
                 Transform object into the string representation.
@@ -63,6 +75,23 @@
             </summary>
             <param name="dateFormat">Format of date of birth.</param>
             <returns>Csv string with all object's properties.</returns>
+        </member>
+        <member name="T:FileCabinetApp.FileCabinetRecord.Name">
+            <summary>
+                Class for holding first and last names of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Name.FirstName">
+            <summary>
+                Gets or sets first name.
+            </summary>
+            <value>First name.</value>
+        </member>
+        <member name="P:FileCabinetApp.FileCabinetRecord.Name.LastName">
+            <summary>
+                Gets or sets last name.
+            </summary>
+            <value>Last name.</value>
         </member>
         <member name="T:FileCabinetApp.FileCabinetRecordParameterObject">
             <summary>
@@ -310,6 +339,9 @@
             </summary>
             <returns><see cref="T:System.String"/>, which contains all valid values, separated by the comma.</returns>
         </member>
+        <member name="M:FileCabinetApp.Readers.FileCabinetRecordXmlReader.ReadAll">
+            <inheritdoc cref="!:IFileCabinetRecordReader."/>
+        </member>
         <member name="T:FileCabinetApp.Serialization.DumpHelper">
             <summary>
                 Class for working with objects, which are saved in memory.
@@ -463,6 +495,9 @@
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RecordExists(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
                 Class for the file cabinet's services.
@@ -529,6 +564,9 @@
             </summary>
             <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
                 Interface for the file cabinet services.
@@ -586,6 +624,14 @@
             </summary>
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <summary>
+                Restores state of service from a snapshot.
+            </summary>
+            <param name="snapshot"><see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> object, which holds a state of the service.</param>
+            <param name="onInvalidRecordImported">Action, which is called after an invalid record was imported.</param>
+            <returns>Restored <see cref="T:FileCabinetApp.FileCabinetRecord"/>'s count.</returns>
         </member>
         <member name="T:FileCabinetApp.StreamHelper">
             <summary>
@@ -790,6 +836,9 @@
         <member name="M:FileCabinetApp.Validators.CustomFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
         </member>
+        <member name="M:FileCabinetApp.Validators.CustomFileRecordValidator.Validate(FileCabinetApp.FileCabinetRecord)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.Validate(FileCabinetApp.FileCabinetRecord)"/>
+        </member>
         <member name="T:FileCabinetApp.Validators.DefaultConsoleInputValidator">
             <summary>
                 Default console input validator.
@@ -820,6 +869,9 @@
         </member>
         <member name="M:FileCabinetApp.Validators.DefaultFileRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.IRecordValidator.ValidateParameters(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultFileRecordValidator.Validate(FileCabinetApp.FileCabinetRecord)">
+            <inheritdoc cref="M:FileCabinetApp.IRecordValidator.Validate(FileCabinetApp.FileCabinetRecord)"/>
         </member>
         <member name="T:FileCabinetApp.Validators.IConsoleInputValidator">
             <summary>
@@ -878,6 +930,12 @@
                 Validates <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> object.
             </summary>
             <param name="parameterObject">Parameter object.</param>
+        </member>
+        <member name="M:FileCabinetApp.IRecordValidator.Validate(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+                Validates <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.
+            </summary>
+            <param name="parameterObject">File cabinet record object.</param>
         </member>
         <member name="T:FileCabinetApp.Writers.FileCabinetRecordCsvWriter">
             <summary>
