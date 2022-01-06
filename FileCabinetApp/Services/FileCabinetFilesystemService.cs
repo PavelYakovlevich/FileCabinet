@@ -112,15 +112,23 @@ namespace FileCabinetApp.Services
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
 
-            var result = new List<FileCabinetRecord>();
-            var recordsCount = this.fileStream.Length / this.dumpHelper.SliceSize;
-            for (int i = 0; i < recordsCount; i++)
-            {
-                var record = this.dumpHelper.Read(this.fileStream);
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
+            var result = new List<FileCabinetRecord>();
+            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    continue;
+                }
+
+                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+                var record = this.dumpHelper.Read(this.fileStream);
                 if (record is null)
                 {
-                    throw new InvalidDataException($"Record with number {i} can't be read.");
+                    throw new InvalidDataException($"Record with number {i / this.dumpHelper.SliceSize} can't be read.");
                 }
 
                 result.Add((FileCabinetRecord)record);
@@ -245,9 +253,21 @@ namespace FileCabinetApp.Services
         private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
             var result = new List<FileCabinetRecord>();
             for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    continue;
+                }
+
+                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+
                 var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream) !;
                 if (condition(currentRecord))
                 {
