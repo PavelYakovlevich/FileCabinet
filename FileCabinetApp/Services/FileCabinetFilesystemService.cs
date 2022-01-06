@@ -221,6 +221,8 @@ namespace FileCabinetApp.Services
 
             var flags = (short)RecordStatus.IsDeleted;
             StreamHelper.Write(this.fileStream, flags);
+
+            this.fileStream.Flush();
         }
 
         private int GetRecordAddressById(int id)
