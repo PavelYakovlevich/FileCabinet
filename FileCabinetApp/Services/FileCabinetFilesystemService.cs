@@ -125,6 +125,7 @@ namespace FileCabinetApp.Services
                 }
 
                 this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+
                 var record = this.dumpHelper.Read(this.fileStream);
                 if (record is null)
                 {
@@ -200,6 +201,8 @@ namespace FileCabinetApp.Services
                 importedRecords++;
             }
 
+            this.SetLastRecordId();
+
             return importedRecords;
         }
 
@@ -243,11 +246,23 @@ namespace FileCabinetApp.Services
 
         private void SetLastRecordId()
         {
-            var recordIdOffset = this.dumpHelper.GetOffset("Id");
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
-            this.fileStream.Seek(-this.dumpHelper.SliceSize + recordIdOffset, SeekOrigin.End);
+            this.fileStream.Seek(-this.dumpHelper.SliceSize, SeekOrigin.End);
 
-            this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
+            for (var i = this.fileStream.Length - this.dumpHelper.SliceSize; i >= 0; i -= this.dumpHelper.SliceSize)
+            {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
+                {
+                    this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
+                    return;
+                }
+
+                this.fileStream.Seek(-this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+            }
+
+            this.lastRecordId = 0;
         }
 
         private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
