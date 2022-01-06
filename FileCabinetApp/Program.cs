@@ -47,6 +47,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -60,6 +61,7 @@ namespace FileCabinetApp
             new string[] { "find", "finds all records with specified criterias", "The 'find' command finds all records with specified criterias." },
             new string[] { "export", "expots all records to the file with specified format", "The 'export' command expots all records to the file with specified format." },
             new string[] { "import", "imports records from the file with specified format", "The 'import' command imports records from the file with specified format." },
+            new string[] { "remove", "removes record", "The 'remove' command removes record." },
         };
 
         /// <summary>
@@ -587,6 +589,32 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Oops, something went wrong: {exception.InnerException?.Message}.");
             }
+        }
+
+        private static void Remove(string parameters)
+        {
+            int recordId;
+            if (!int.TryParse(parameters, out recordId))
+            {
+                Console.WriteLine($"Invalid id '{parameters}'.");
+                return;
+            }
+
+            if (recordId < 1)
+            {
+                Console.WriteLine($"Id can't be lower than 1.");
+                return;
+            }
+
+            if (!fileCabinetService.RecordExists(recordId))
+            {
+                Console.WriteLine($"Record #{recordId} doesn't exists.");
+                return;
+            }
+
+            fileCabinetService.RemoveRecord(recordId);
+
+            Console.WriteLine($"Record #{recordId} is removed.");
         }
     }
 }
