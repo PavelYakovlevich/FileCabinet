@@ -22,10 +22,10 @@ namespace FileCabinetApp.Services
         void EditRecord(FileCabinetRecordParameterObject parameterObject);
 
         /// <summary>
-        ///     Gets count of all existing file cabinet records.
+        ///     Gets amount of total and deleted file cabinet records.
         /// </summary>
-        /// <returns>Count of all existing file cabinet records.</returns>
-        int GetStat();
+        /// <returns>Amount of total and deleted file cabinet records.</returns>
+        (int total, int deleted) GetStat();
 
         /// <summary>
         ///     Checks if file cabinet record with specified <paramref name="id"/> exists.

@@ -66,9 +66,9 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetStat"/>
-        public int GetStat()
+        public (int total, int deleted) GetStat()
         {
-            return this.existingRecords.Count;
+            return (this.existingRecords.Count, 0);
         }
 
         /// <inheritdoc cref="IFileCabinetService.EditRecord(FileCabinetRecordParameterObject)"/>

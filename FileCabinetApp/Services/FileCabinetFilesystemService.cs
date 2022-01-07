@@ -139,25 +139,27 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetStat"/>
-        public int GetStat()
+        public (int total, int deleted) GetStat()
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
 
             var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
             var recordsCount = 0;
+            var deletedRecordsCount = 0;
             for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
                 var reserved = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
-                if ((reserved & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
+                if ((reserved & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
                 {
-                    recordsCount++;
+                    deletedRecordsCount++;
                 }
 
+                recordsCount++;
                 this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
             }
 
-            return recordsCount;
+            return (recordsCount, deletedRecordsCount);
         }
 
         /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
