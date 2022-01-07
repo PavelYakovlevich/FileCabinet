@@ -48,6 +48,7 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
             new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -62,6 +63,7 @@ namespace FileCabinetApp
             new string[] { "export", "expots all records to the file with specified format", "The 'export' command expots all records to the file with specified format." },
             new string[] { "import", "imports records from the file with specified format", "The 'import' command imports records from the file with specified format." },
             new string[] { "remove", "removes record", "The 'remove' command removes record." },
+            new string[] { "purge", "makes defragmentation of the database file", "The 'purge' command makes defragmentation of the database file." },
         };
 
         /// <summary>
@@ -155,7 +157,9 @@ namespace FileCabinetApp
             }
             else
             {
-                fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                databaseFileStream = new FileStream(DBFilePath, FileMode.OpenOrCreate);
+                fileCabinetService = new FileCabinetFilesystemService(recordValidator, databaseFileStream);
+                //fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
         }
 
@@ -615,6 +619,25 @@ namespace FileCabinetApp
             fileCabinetService.RemoveRecord(recordId);
 
             Console.WriteLine($"Record #{recordId} is removed.");
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is not FileCabinetFilesystemService)
+            {
+                Console.WriteLine("This command is only allowed for the filesystem service.");
+                return;
+            }
+
+            var fileSystemService = (FileCabinetFilesystemService)fileCabinetService;
+
+            var recordsAmount = fileSystemService.GetStat().total;
+
+            fileSystemService.Purge();
+
+            var purgedRecords = recordsAmount - fileCabinetService.GetStat().total;
+
+            Console.WriteLine($"Data file processing is completed: {purgedRecords} of {recordsAmount} records were purged.");
         }
     }
 }
