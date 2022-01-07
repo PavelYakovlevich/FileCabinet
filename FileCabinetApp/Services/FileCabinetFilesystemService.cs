@@ -227,6 +227,9 @@ namespace FileCabinetApp.Services
             this.fileStream.Flush();
         }
 
+        /// <summary>
+        ///     Purges all recods, which were deleted.
+        /// </summary>
         public void Purge()
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);

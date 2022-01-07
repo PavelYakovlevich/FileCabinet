@@ -557,6 +557,14 @@
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RemoveRecord(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
+            <summary>
+                Purges all recods, which were deleted.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
                 Class for the file cabinet's services.
@@ -626,6 +634,9 @@
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.RemoveRecord(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
                 Interface for the file cabinet services.
@@ -646,9 +657,9 @@
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.GetStat">
             <summary>
-                Gets count of all existing file cabinet records.
+                Gets amount of total and deleted file cabinet records.
             </summary>
-            <returns>Count of all existing file cabinet records.</returns>
+            <returns>Amount of total and deleted file cabinet records.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)">
             <summary>
@@ -691,6 +702,13 @@
             <param name="snapshot"><see cref="T:FileCabinetApp.FileCabinetServiceSnapshot"/> object, which holds a state of the service.</param>
             <param name="onInvalidRecordImported">Action, which is called after an invalid record was imported.</param>
             <returns>Restored <see cref="T:FileCabinetApp.FileCabinetRecord"/>'s count.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)">
+            <summary>
+                Removes record with the specified id.
+            </summary>
+            <param name="recordId">Id of record, which must be removed.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="recordId"/> is less than 1 or record with <paramref name="recordId"/> does not exist.</exception>
         </member>
         <member name="T:FileCabinetApp.StreamHelper">
             <summary>
