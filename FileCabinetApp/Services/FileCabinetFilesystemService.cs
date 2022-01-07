@@ -225,6 +225,59 @@ namespace FileCabinetApp.Services
             this.fileStream.Flush();
         }
 
+        public void Purge()
+        {
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
+            var insertRecordAddress = 0L;
+            long currentRecordAddress;
+
+            for (currentRecordAddress = 0; currentRecordAddress < this.fileStream.Length; currentRecordAddress += this.dumpHelper.SliceSize)
+            {
+                var reserved = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((reserved & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    insertRecordAddress = currentRecordAddress;
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    break;
+                }
+
+                this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+            }
+
+            if (currentRecordAddress >= this.fileStream.Length)
+            {
+                return;
+            }
+
+            var buffer = new byte[this.dumpHelper.SliceSize];
+            for (currentRecordAddress = currentRecordAddress + this.dumpHelper.SliceSize; currentRecordAddress < this.fileStream.Length; currentRecordAddress += this.dumpHelper.SliceSize)
+            {
+                var reservedBytes = StreamHelper.ReadShort(this.fileStream);
+                if (((RecordStatus)reservedBytes & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
+                {
+                    var convertedReservedArea = BitConverter.GetBytes(reservedBytes);
+                    Array.Copy(convertedReservedArea, buffer, convertedReservedArea.Length);
+
+                    this.fileStream.Read(buffer, reservedAreaSize, this.dumpHelper.SliceSize - reservedAreaSize);
+
+                    this.fileStream.Seek(insertRecordAddress, SeekOrigin.Begin);
+
+                    this.fileStream.Write(buffer);
+
+                    insertRecordAddress += this.dumpHelper.SliceSize;
+                }
+
+                this.fileStream.Seek(currentRecordAddress + this.dumpHelper.SliceSize, SeekOrigin.Begin);
+            }
+
+            this.fileStream.Flush();
+
+            this.fileStream.SetLength(insertRecordAddress);
+        }
+
         private int GetRecordAddressById(int id)
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
@@ -250,6 +303,12 @@ namespace FileCabinetApp.Services
         {
             var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
+            if (this.fileStream.Length == 0)
+            {
+                this.lastRecordId = 0;
+                return;
+            }
+
             this.fileStream.Seek(-this.dumpHelper.SliceSize, SeekOrigin.End);
 
             for (var i = this.fileStream.Length - this.dumpHelper.SliceSize; i >= 0; i -= this.dumpHelper.SliceSize)
@@ -263,8 +322,6 @@ namespace FileCabinetApp.Services
 
                 this.fileStream.Seek(-this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
             }
-
-            this.lastRecordId = 0;
         }
 
         private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
