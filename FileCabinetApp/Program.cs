@@ -157,9 +157,7 @@ namespace FileCabinetApp
             }
             else
             {
-                databaseFileStream = new FileStream(DBFilePath, FileMode.OpenOrCreate);
-                fileCabinetService = new FileCabinetFilesystemService(recordValidator, databaseFileStream);
-                //fileCabinetService = new FileCabinetMemoryService(recordValidator);
+                fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
         }
 
@@ -219,8 +217,9 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            var recordsInfo = Program.fileCabinetService.GetStat();
+            Console.WriteLine($"Total amount of records: {recordsInfo.total}.");
+            Console.WriteLine($"Delete records amount: {recordsInfo.deleted}.");
         }
 
         private static void Create(string parameters)
