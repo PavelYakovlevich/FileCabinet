@@ -47,6 +47,8 @@ namespace FileCabinetApp
             new Tuple<string, Action<string>>("find", Find),
             new Tuple<string, Action<string>>("export", Export),
             new Tuple<string, Action<string>>("import", Import),
+            new Tuple<string, Action<string>>("remove", Remove),
+            new Tuple<string, Action<string>>("purge", Purge),
         };
 
         private static string[][] helpMessages = new string[][]
@@ -60,6 +62,8 @@ namespace FileCabinetApp
             new string[] { "find", "finds all records with specified criterias", "The 'find' command finds all records with specified criterias." },
             new string[] { "export", "expots all records to the file with specified format", "The 'export' command expots all records to the file with specified format." },
             new string[] { "import", "imports records from the file with specified format", "The 'import' command imports records from the file with specified format." },
+            new string[] { "remove", "removes record", "The 'remove' command removes record." },
+            new string[] { "purge", "makes defragmentation of the database file", "The 'purge' command makes defragmentation of the database file." },
         };
 
         /// <summary>
@@ -213,8 +217,9 @@ namespace FileCabinetApp
 
         private static void Stat(string parameters)
         {
-            var recordsCount = Program.fileCabinetService.GetStat();
-            Console.WriteLine($"{recordsCount} record(s).");
+            var recordsInfo = Program.fileCabinetService.GetStat();
+            Console.WriteLine($"Total amount of records: {recordsInfo.total}.");
+            Console.WriteLine($"Delete records amount: {recordsInfo.deleted}.");
         }
 
         private static void Create(string parameters)
@@ -587,6 +592,51 @@ namespace FileCabinetApp
             {
                 Console.WriteLine($"Oops, something went wrong: {exception.InnerException?.Message}.");
             }
+        }
+
+        private static void Remove(string parameters)
+        {
+            int recordId;
+            if (!int.TryParse(parameters, out recordId))
+            {
+                Console.WriteLine($"Invalid id '{parameters}'.");
+                return;
+            }
+
+            if (recordId < 1)
+            {
+                Console.WriteLine($"Id can't be lower than 1.");
+                return;
+            }
+
+            if (!fileCabinetService.RecordExists(recordId))
+            {
+                Console.WriteLine($"Record #{recordId} doesn't exists.");
+                return;
+            }
+
+            fileCabinetService.RemoveRecord(recordId);
+
+            Console.WriteLine($"Record #{recordId} is removed.");
+        }
+
+        private static void Purge(string parameters)
+        {
+            if (fileCabinetService is not FileCabinetFilesystemService)
+            {
+                Console.WriteLine("This command is only allowed for the filesystem service.");
+                return;
+            }
+
+            var fileSystemService = (FileCabinetFilesystemService)fileCabinetService;
+
+            var recordsAmount = fileSystemService.GetStat().total;
+
+            fileSystemService.Purge();
+
+            var purgedRecords = recordsAmount - fileCabinetService.GetStat().total;
+
+            Console.WriteLine($"Data file processing is completed: {purgedRecords} of {recordsAmount} records were purged.");
         }
     }
 }

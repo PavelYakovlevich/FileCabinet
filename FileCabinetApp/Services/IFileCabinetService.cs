@@ -22,10 +22,10 @@ namespace FileCabinetApp.Services
         void EditRecord(FileCabinetRecordParameterObject parameterObject);
 
         /// <summary>
-        ///     Gets count of all existing file cabinet records.
+        ///     Gets amount of total and deleted file cabinet records.
         /// </summary>
-        /// <returns>Count of all existing file cabinet records.</returns>
-        int GetStat();
+        /// <returns>Amount of total and deleted file cabinet records.</returns>
+        (int total, int deleted) GetStat();
 
         /// <summary>
         ///     Checks if file cabinet record with specified <paramref name="id"/> exists.
@@ -68,5 +68,12 @@ namespace FileCabinetApp.Services
         /// <param name="onInvalidRecordImported">Action, which is called after an invalid record was imported.</param>
         /// <returns>Restored <see cref="FileCabinetRecord"/>'s count.</returns>
         public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported);
+
+        /// <summary>
+        ///     Removes record with the specified id.
+        /// </summary>
+        /// <param name="recordId">Id of record, which must be removed.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="recordId"/> is less than 1 or record with <paramref name="recordId"/> does not exist.</exception>
+        void RemoveRecord(int recordId);
     }
 }

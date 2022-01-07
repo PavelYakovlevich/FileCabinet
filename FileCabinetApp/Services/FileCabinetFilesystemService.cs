@@ -34,6 +34,12 @@ namespace FileCabinetApp.Services
             this.SetLastRecordId();
         }
 
+        [Flags]
+        private enum RecordStatus : short
+        {
+            IsDeleted = 4,
+        }
+
         /// <inheritdoc cref="IFileCabinetService.CreateRecord(FileCabinetRecordParameterObject)"/>
         public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
@@ -106,15 +112,24 @@ namespace FileCabinetApp.Services
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
 
-            var result = new List<FileCabinetRecord>();
-            var recordsCount = this.fileStream.Length / this.dumpHelper.SliceSize;
-            for (int i = 0; i < recordsCount; i++)
-            {
-                var record = this.dumpHelper.Read(this.fileStream);
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
+            var result = new List<FileCabinetRecord>();
+            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    continue;
+                }
+
+                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+
+                var record = this.dumpHelper.Read(this.fileStream);
                 if (record is null)
                 {
-                    throw new InvalidDataException($"Record with number {i} can't be read.");
+                    throw new InvalidDataException($"Record with number {i / this.dumpHelper.SliceSize} can't be read.");
                 }
 
                 result.Add((FileCabinetRecord)record);
@@ -124,16 +139,27 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetStat"/>
-        public int GetStat()
+        public (int total, int deleted) GetStat()
         {
-            var recordsCount = 0;
+            this.fileStream.Seek(0, SeekOrigin.Begin);
 
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
+            var recordsCount = 0;
+            var deletedRecordsCount = 0;
             for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
+                var reserved = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((reserved & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    deletedRecordsCount++;
+                }
+
                 recordsCount++;
+                this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
             }
 
-            return recordsCount;
+            return (recordsCount, deletedRecordsCount);
         }
 
         /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
@@ -177,25 +203,102 @@ namespace FileCabinetApp.Services
                 importedRecords++;
             }
 
+            this.SetLastRecordId();
+
             return importedRecords;
+        }
+
+        /// <inheritdoc cref="IFileCabinetService.RemoveRecord(int)"/>
+        public void RemoveRecord(int recordId)
+        {
+            Guard.ArgumentGreaterThan(recordId, 0, $"{nameof(recordId)} must be greater than 0.");
+
+            var recordAddress = this.GetRecordAddressById(recordId);
+            if (recordAddress < 0)
+            {
+                throw new ArgumentException($"Record #{recordId} does not exist.", nameof(recordId));
+            }
+
+            this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+
+            var flags = (short)RecordStatus.IsDeleted;
+            StreamHelper.Write(this.fileStream, flags);
+
+            this.fileStream.Flush();
+        }
+
+        /// <summary>
+        ///     Purges all recods, which were deleted.
+        /// </summary>
+        public void Purge()
+        {
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
+            var insertRecordAddress = 0L;
+            long currentRecordAddress;
+
+            for (currentRecordAddress = 0; currentRecordAddress < this.fileStream.Length; currentRecordAddress += this.dumpHelper.SliceSize)
+            {
+                var reserved = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((reserved & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    insertRecordAddress = currentRecordAddress;
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    break;
+                }
+
+                this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+            }
+
+            if (currentRecordAddress >= this.fileStream.Length)
+            {
+                return;
+            }
+
+            var buffer = new byte[this.dumpHelper.SliceSize];
+            for (currentRecordAddress = currentRecordAddress + this.dumpHelper.SliceSize; currentRecordAddress < this.fileStream.Length; currentRecordAddress += this.dumpHelper.SliceSize)
+            {
+                var reservedBytes = StreamHelper.ReadShort(this.fileStream);
+                if (((RecordStatus)reservedBytes & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
+                {
+                    var convertedReservedArea = BitConverter.GetBytes(reservedBytes);
+                    Array.Copy(convertedReservedArea, buffer, convertedReservedArea.Length);
+
+                    this.fileStream.Read(buffer, reservedAreaSize, this.dumpHelper.SliceSize - reservedAreaSize);
+
+                    this.fileStream.Seek(insertRecordAddress, SeekOrigin.Begin);
+
+                    this.fileStream.Write(buffer);
+
+                    insertRecordAddress += this.dumpHelper.SliceSize;
+                }
+
+                this.fileStream.Seek(currentRecordAddress + this.dumpHelper.SliceSize, SeekOrigin.Begin);
+            }
+
+            this.fileStream.Flush();
+
+            this.fileStream.SetLength(insertRecordAddress);
         }
 
         private int GetRecordAddressById(int id)
         {
-            var recordIdOffset = this.dumpHelper.GetOffset("Id");
-            var sizeOfId = this.dumpHelper.GetSize("Id");
+            this.fileStream.Seek(0, SeekOrigin.Begin);
 
-            this.fileStream.Seek(recordIdOffset, SeekOrigin.Begin);
-            for (int i = recordIdOffset; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            var readBytesSize = this.dumpHelper.GetSize("Id") + this.dumpHelper.GetSize("Reserved");
+            for (int currentAddress = 0; currentAddress < this.fileStream.Length; currentAddress += this.dumpHelper.SliceSize)
             {
+                var reserved = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
                 var recordId = StreamHelper.ReadInt(this.fileStream);
 
-                if (id == recordId)
+                if ((reserved & RecordStatus.IsDeleted) != RecordStatus.IsDeleted && recordId == id)
                 {
-                    return i - recordIdOffset;
+                    return currentAddress;
                 }
 
-                this.fileStream.Seek(this.dumpHelper.SliceSize - sizeOfId, SeekOrigin.Current);
+                this.fileStream.Seek(this.dumpHelper.SliceSize - readBytesSize, SeekOrigin.Current);
             }
 
             return -1;
@@ -203,19 +306,47 @@ namespace FileCabinetApp.Services
 
         private void SetLastRecordId()
         {
-            var recordIdOffset = this.dumpHelper.GetOffset("Id");
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
-            this.fileStream.Seek(-this.dumpHelper.SliceSize + recordIdOffset, SeekOrigin.End);
+            if (this.fileStream.Length == 0)
+            {
+                this.lastRecordId = 0;
+                return;
+            }
 
-            this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
+            this.fileStream.Seek(-this.dumpHelper.SliceSize, SeekOrigin.End);
+
+            for (var i = this.fileStream.Length - this.dumpHelper.SliceSize; i >= 0; i -= this.dumpHelper.SliceSize)
+            {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
+                {
+                    this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
+                    return;
+                }
+
+                this.fileStream.Seek(-this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+            }
         }
 
         private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
         {
             this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
             var result = new List<FileCabinetRecord>();
             for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    continue;
+                }
+
+                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+
                 var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream) !;
                 if (condition(currentRecord))
                 {

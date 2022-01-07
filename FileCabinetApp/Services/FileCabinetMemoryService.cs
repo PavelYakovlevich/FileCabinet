@@ -41,9 +41,15 @@ namespace FileCabinetApp.Services
         {
             this.recordValidator.ValidateParameters(parameterObject);
 
+            var recordId = 1;
+            if (this.existingRecords.Count != 0)
+            {
+                recordId = this.existingRecords[this.existingRecords.Count - 1].Id + 1;
+            }
+
             var newRecord = new FileCabinetRecord
             {
-                Id = this.existingRecords.Count + 1,
+                Id = recordId,
                 FirstName = parameterObject.FirstName,
                 LastName = parameterObject.LastName,
                 DateOfBirth = parameterObject.DateOfBirth,
@@ -60,9 +66,9 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetStat"/>
-        public int GetStat()
+        public (int total, int deleted) GetStat()
         {
-            return this.existingRecords.Count;
+            return (this.existingRecords.Count, 0);
         }
 
         /// <inheritdoc cref="IFileCabinetService.EditRecord(FileCabinetRecordParameterObject)"/>
@@ -201,6 +207,21 @@ namespace FileCabinetApp.Services
             return importedRecords;
         }
 
+        /// <inheritdoc cref="IFileCabinetService.RemoveRecord(int)"/>
+        public void RemoveRecord(int recordId)
+        {
+            Guard.ArgumentGreaterThan(recordId, 0, $"{nameof(recordId)} must be greater than 0.");
+
+            var targetRecord = this.existingRecords.Find((record) => record.Id == recordId);
+            if (targetRecord is null)
+            {
+                throw new ArgumentException($"Record #{recordId} does not exist.", nameof(recordId));
+            }
+
+            this.existingRecords.Remove(targetRecord);
+            this.DeleteEntryFromSearchDictionaries(targetRecord);
+        }
+
         private FileCabinetRecord? GetRecordById(int id)
         {
             foreach (var record in this.existingRecords)
@@ -228,6 +249,13 @@ namespace FileCabinetApp.Services
             this.UpdateSearchEntry(record.DateOfBirth, this.dateOfBirthSearchDictionary, record);
         }
 
+        private void DeleteEntryFromSearchDictionaries(FileCabinetRecord record)
+        {
+            this.DeleteSearchEntry(record.FirstName, this.firstNameSearchDictionary, record);
+            this.DeleteSearchEntry(record.LastName, this.lastNameSearchDictionary, record);
+            this.DeleteSearchEntry(record.DateOfBirth, this.dateOfBirthSearchDictionary, record);
+        }
+
         private void AddSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
             where T : notnull
         {
@@ -243,6 +271,13 @@ namespace FileCabinetApp.Services
         private void UpdateSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
             where T : notnull
         {
+            this.DeleteSearchEntry(key, searchDictionary, record);
+            this.AddSearchEntry(key, searchDictionary, record);
+        }
+
+        private void DeleteSearchEntry<T>(T key, Dictionary<T, List<FileCabinetRecord>> searchDictionary, FileCabinetRecord record)
+            where T : notnull
+        {
             foreach (var searchEntry in searchDictionary)
             {
                 var referenceList = searchEntry.Value;
@@ -252,8 +287,6 @@ namespace FileCabinetApp.Services
                     referenceList.Remove(record);
                 }
             }
-
-            this.AddSearchEntry(key, searchDictionary, record);
         }
     }
 }

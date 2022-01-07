@@ -115,6 +115,7 @@ namespace FileCabinetApp.Serialization
             }
 
             stream.Write(buffer);
+            stream.Flush();
         }
 
         /// <summary>
@@ -220,6 +221,7 @@ namespace FileCabinetApp.Serialization
             }
 
             stream.Write(buffer);
+            stream.Flush();
         }
 
         private void SetDumpMembersOffsets()
