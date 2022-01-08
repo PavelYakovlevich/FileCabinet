@@ -35,11 +35,7 @@ namespace FileCabinetApp
         private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
 
-        /// <summary>
-        ///     Gets or sets a value indicating whether a program is still handling input commands.
-        /// </summary>
-        /// <value>Indicating whether a program is still handling input commands.</value>
-        public static bool IsRunning { get; set; } = true;
+        private static bool isRunning = true;
 
         /// <summary>
         ///     Entry point of the program.
@@ -83,7 +79,7 @@ namespace FileCabinetApp
 
                 commandHandler.Handle(new AppCommandRequest(command, parameters));
             }
-            while (IsRunning);
+            while (isRunning);
 
             DisposeResources();
         }
@@ -256,7 +252,7 @@ namespace FileCabinetApp
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator);
             var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator);
-            var exitHandler = new ExitCommandHandler();
+            var exitHandler = new ExitCommandHandler((value) => isRunning = value);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService);
             var importHandler = new ImportCommandHandler(fileCabinetService);
