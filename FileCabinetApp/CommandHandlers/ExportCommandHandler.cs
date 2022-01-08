@@ -8,17 +8,16 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     ///     Class for handling of 'export' command.
     /// </summary>
-    public class ExportCommandHandler : CommandHandlerBase
+    public class ExportCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
         /// </summary>
         /// <param name="service">Service for working with file cabinet records.</param>
         public ExportCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <summary>

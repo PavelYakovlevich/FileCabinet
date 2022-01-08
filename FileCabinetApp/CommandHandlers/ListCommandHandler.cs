@@ -1,22 +1,21 @@
-﻿using FileCabinetApp.Services;
-using System;
+﻿using System;
+
+using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
     ///     Class for handling of 'list' command.
     /// </summary>
-    public class ListCommandHandler : CommandHandlerBase
+    public class ListCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="service">Service for working with file cabinet records.</param>
         public ListCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <summary>

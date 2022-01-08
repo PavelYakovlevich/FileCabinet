@@ -1,22 +1,21 @@
-﻿using FileCabinetApp.Services;
-using System;
+﻿using System;
+
+using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
     ///     Class for handling of 'stat' command.
     /// </summary>
-    public class StatCommandHandler : CommandHandlerBase
+    public class StatCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="StatCommandHandler"/> class.
         /// </summary>
         /// <param name="service">Service for working with file cabinet records.</param>
         public StatCommandHandler(IFileCabinetService service)
+            : base(service)
         {
-            this.service = service;
         }
 
         /// <summary>

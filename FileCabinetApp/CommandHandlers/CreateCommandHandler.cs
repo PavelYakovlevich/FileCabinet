@@ -8,9 +8,8 @@ namespace FileCabinetApp.CommandHandlers
     /// <summary>
     ///     Class for handling of 'create' command.
     /// </summary>
-    public class CreateCommandHandler : CommandHandlerBase
+    public class CreateCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IFileCabinetService service;
         private readonly IConsoleInputValidator inputValidator;
 
         /// <summary>
@@ -19,8 +18,8 @@ namespace FileCabinetApp.CommandHandlers
         /// <param name="service">Service for working with file cabinet records.</param>
         /// <param name="validator">Validator for console input.</param>
         public CreateCommandHandler(IFileCabinetService service, IConsoleInputValidator validator)
+            : base(service)
         {
-            this.service = service;
             this.inputValidator = validator;
         }
 
