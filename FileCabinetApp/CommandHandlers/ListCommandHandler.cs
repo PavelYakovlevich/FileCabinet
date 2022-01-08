@@ -1,5 +1,5 @@
 ﻿using System;
-
+using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 
 namespace FileCabinetApp.CommandHandlers
@@ -9,13 +9,22 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ListCommandHandler : ServiceCommandHandlerBase
     {
+        private IRecordPrinter printer;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ListCommandHandler"/> class.
         /// </summary>
         /// <param name="service">Service for working with file cabinet records.</param>
-        public ListCommandHandler(IFileCabinetService service)
+        /// <param name="printer">Object, which will be responsible for printing records.</param>
+        public ListCommandHandler(IFileCabinetService service, IRecordPrinter printer)
             : base(service)
         {
+            if (printer is null)
+            {
+                throw new ArgumentNullException(nameof(printer), $"{nameof(printer)} can't be null.");
+            }
+
+            this.printer = printer;
         }
 
         /// <summary>
@@ -32,10 +41,7 @@ namespace FileCabinetApp.CommandHandlers
 
             var records = this.service.GetRecords();
 
-            foreach (var record in records)
-            {
-                Console.WriteLine($"#{record}");
-            }
+            this.printer.Print(records);
         }
     }
 }
