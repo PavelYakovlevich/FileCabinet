@@ -21,7 +21,7 @@ namespace FileCabinetApp.CommandHandlers
 
             Console.WriteLine("Exiting an application...");
 
-            Program.isRunning = false;
+            Program.IsRunning = false;
         }
     }
 }

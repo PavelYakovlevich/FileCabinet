@@ -10,6 +10,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExportCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ExportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public ExportCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'export' command.
         /// </summary>
@@ -22,7 +33,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            if (Program.fileCabinetService is FileCabinetFilesystemService)
+            if (this.service is FileCabinetFilesystemService)
             {
                 Console.WriteLine("This command is not allowed with --storage=file");
                 return;
@@ -61,7 +72,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 using (var writer = new StreamWriter(snapshotFilePath))
                 {
-                    var snapshot = ((FileCabinetMemoryService)Program.fileCabinetService).MakeSnapshot();
+                    var snapshot = ((FileCabinetMemoryService)this.service).MakeSnapshot();
 
                     if (exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                     {

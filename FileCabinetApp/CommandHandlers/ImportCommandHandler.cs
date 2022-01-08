@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using FileCabinetApp.Services;
+
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
@@ -8,6 +10,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ImportCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ImportCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public ImportCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'import' command.
         /// </summary>
@@ -72,7 +85,7 @@ namespace FileCabinetApp.CommandHandlers
                         }
                     }
 
-                    importedRecordsCount = Program.fileCabinetService.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
+                    importedRecordsCount = this.service.Restore(snapshot, (record, message) => Console.WriteLine($"Import of record with id : {record.Id} failed with error: {message}"));
                 }
 
                 Console.WriteLine($"{importedRecordsCount} records were imported from {importFilePath}.");

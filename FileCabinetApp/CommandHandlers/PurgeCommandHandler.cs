@@ -9,6 +9,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class PurgeCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="PurgeCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public PurgeCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'purge' command.
         /// </summary>
@@ -21,19 +32,19 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            if (Program.fileCabinetService is not FileCabinetFilesystemService)
+            if (this.service is not FileCabinetFilesystemService)
             {
                 Console.WriteLine("This command is only allowed for the filesystem service.");
                 return;
             }
 
-            var fileSystemService = (FileCabinetFilesystemService)Program.fileCabinetService;
+            var fileSystemService = (FileCabinetFilesystemService)this.service;
 
             var recordsAmount = fileSystemService.GetStat().total;
 
             fileSystemService.Purge();
 
-            var purgedRecords = recordsAmount - Program.fileCabinetService.GetStat().total;
+            var purgedRecords = recordsAmount - this.service.GetStat().total;
 
             Console.WriteLine($"Data file processing is completed: {purgedRecords} of {recordsAmount} records were purged.");
         }

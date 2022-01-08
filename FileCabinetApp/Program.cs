@@ -32,9 +32,14 @@ namespace FileCabinetApp
         private static readonly string DBFilePath = @"cabinet-records.db";
         private static FileStream? databaseFileStream;
 
-        public static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
-        public static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
-        public static bool isRunning = true;
+        private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether a program is still handling input commands.
+        /// </summary>
+        /// <value>Indicating whether a program is still handling input commands.</value>
+        public static bool IsRunning { get; set; } = true;
 
         /// <summary>
         ///     Entry point of the program.
@@ -78,7 +83,7 @@ namespace FileCabinetApp
 
                 commandHandler.Handle(new AppCommandRequest(command, parameters));
             }
-            while (isRunning);
+            while (IsRunning);
 
             DisposeResources();
         }
@@ -249,16 +254,16 @@ namespace FileCabinetApp
         private static ICommandHandler CreateCommandHandlers()
         {
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler();
-            var editHandler = new EditCommandHandler();
+            var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator);
+            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator);
             var exitHandler = new ExitCommandHandler();
-            var exportHandler = new ExportCommandHandler();
-            var findHandler = new FindCommandHandler();
-            var importHandler = new ImportCommandHandler();
-            var listHandler = new ListCommandHandler();
-            var purgeHandler = new PurgeCommandHandler();
-            var removeHandler = new RemoveCommandHandler();
-            var statHandler = new StatCommandHandler();
+            var exportHandler = new ExportCommandHandler(fileCabinetService);
+            var findHandler = new FindCommandHandler(fileCabinetService);
+            var importHandler = new ImportCommandHandler(fileCabinetService);
+            var listHandler = new ListCommandHandler(fileCabinetService);
+            var purgeHandler = new PurgeCommandHandler(fileCabinetService);
+            var removeHandler = new RemoveCommandHandler(fileCabinetService);
+            var statHandler = new StatCommandHandler(fileCabinetService);
             var missedHandler = new MissedCommandHandler();
 
             helpHandler.SetNext(createHandler);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileCabinetApp.Services;
+using System;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -7,6 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class StatCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="StatCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public StatCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'stat' command.
         /// </summary>
@@ -19,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var recordsInfo = Program.fileCabinetService.GetStat();
+            var recordsInfo = this.service.GetStat();
             Console.WriteLine($"Total amount of records: {recordsInfo.total}.");
             Console.WriteLine($"Delete records amount: {recordsInfo.deleted}.");
         }

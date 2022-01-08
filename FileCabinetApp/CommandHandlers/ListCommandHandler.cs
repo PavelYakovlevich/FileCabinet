@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileCabinetApp.Services;
+using System;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -7,6 +8,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ListCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ListCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public ListCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'list' command.
         /// </summary>
@@ -19,7 +31,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var records = Program.fileCabinetService.GetRecords();
+            var records = this.service.GetRecords();
 
             foreach (var record in records)
             {

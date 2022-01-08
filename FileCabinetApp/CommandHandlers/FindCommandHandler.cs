@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
+using FileCabinetApp.Services;
+
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
@@ -8,6 +10,17 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class FindCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FindCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        public FindCommandHandler(IFileCabinetService service)
+        {
+            this.service = service;
+        }
+
         /// <summary>
         ///     Handles 'find' command.
         /// </summary>
@@ -42,11 +55,11 @@ namespace FileCabinetApp.CommandHandlers
             ReadOnlyCollection<FileCabinetRecord> records;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
             {
-                records = Program.fileCabinetService.FindByFirstName(paramValue);
+                records = this.service.FindByFirstName(paramValue);
             }
             else if (paramName.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
             {
-                records = Program.fileCabinetService.FindByLastName(paramValue);
+                records = this.service.FindByLastName(paramValue);
             }
             else if (paramName.Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -57,7 +70,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                records = Program.fileCabinetService.FindByDateOfBirth(dateOfBirth);
+                records = this.service.FindByDateOfBirth(dateOfBirth);
             }
             else
             {

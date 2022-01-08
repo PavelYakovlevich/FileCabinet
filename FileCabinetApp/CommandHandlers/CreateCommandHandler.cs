@@ -1,5 +1,8 @@
 ﻿using System;
 
+using FileCabinetApp.Services;
+using FileCabinetApp.Validators;
+
 namespace FileCabinetApp.CommandHandlers
 {
     /// <summary>
@@ -7,6 +10,20 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class CreateCommandHandler : CommandHandlerBase
     {
+        private readonly IFileCabinetService service;
+        private readonly IConsoleInputValidator inputValidator;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
+        /// <param name="validator">Validator for console input.</param>
+        public CreateCommandHandler(IFileCabinetService service, IConsoleInputValidator validator)
+        {
+            this.service = service;
+            this.inputValidator = validator;
+        }
+
         /// <summary>
         ///     Handles 'create' command.
         /// </summary>
@@ -20,25 +37,25 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             Console.Write("First name: ");
-            var firstName = ConsoleParameterReader.ReadInput(InputUtils.StringConverter, Program.consoleInputValidator.ValidateFirstName);
+            var firstName = ConsoleParameterReader.ReadInput(InputUtils.StringConverter, this.inputValidator.ValidateFirstName);
 
             Console.Write("Last name: ");
-            var lastName = ConsoleParameterReader.ReadInput(InputUtils.StringConverter, Program.consoleInputValidator.ValidateLastName);
+            var lastName = ConsoleParameterReader.ReadInput(InputUtils.StringConverter, this.inputValidator.ValidateLastName);
 
             Console.Write("Date of birth: ");
-            var birthDate = ConsoleParameterReader.ReadInput(InputUtils.DateTimeConverter, Program.consoleInputValidator.ValidateBirthDay);
+            var birthDate = ConsoleParameterReader.ReadInput(InputUtils.DateTimeConverter, this.inputValidator.ValidateBirthDay);
 
             Console.Write("Stature: ");
-            var stature = ConsoleParameterReader.ReadInput(InputUtils.ShortConverter, Program.consoleInputValidator.ValidateStature);
+            var stature = ConsoleParameterReader.ReadInput(InputUtils.ShortConverter, this.inputValidator.ValidateStature);
 
             Console.Write("Weight: ");
-            var weight = ConsoleParameterReader.ReadInput(InputUtils.DecimalConverter, Program.consoleInputValidator.ValidateWeight);
+            var weight = ConsoleParameterReader.ReadInput(InputUtils.DecimalConverter, this.inputValidator.ValidateWeight);
 
             Console.Write("Gender: ");
-            var gender = ConsoleParameterReader.ReadInput(InputUtils.CharConverter, Program.consoleInputValidator.ValidateGender);
+            var gender = ConsoleParameterReader.ReadInput(InputUtils.CharConverter, this.inputValidator.ValidateGender);
 
             var parameterObject = new FileCabinetRecordParameterObject(firstName, lastName, birthDate, stature, gender, weight);
-            var createdRecIndex = Program.fileCabinetService.CreateRecord(parameterObject);
+            var createdRecIndex = this.service.CreateRecord(parameterObject);
 
             Console.WriteLine($"Record #{createdRecIndex} is created.");
         }
