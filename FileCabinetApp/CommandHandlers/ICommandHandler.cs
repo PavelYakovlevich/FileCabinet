@@ -15,7 +15,6 @@
         ///     Handles command request.
         /// </summary>
         /// <param name="commandRequest">Input data for a requested command.</param>
-        ///
         void Handle(AppCommandRequest commandRequest);
     }
 }
