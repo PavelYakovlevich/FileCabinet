@@ -3,7 +3,7 @@
 namespace FileCabinetApp.Validators
 {
     /// <summary>
-    ///     Date of birth validator.
+    ///     Date of birth parametrized validator.
     /// </summary>
     public class DateOfBirthValidator : FileRecordValidatorBase
     {

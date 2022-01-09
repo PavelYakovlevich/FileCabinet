@@ -3,7 +3,7 @@
 namespace FileCabinetApp.Validators
 {
     /// <summary>
-    ///     Last name validator.
+    ///     Last name parametrized validator.
     /// </summary>
     public class LastNameValidator : FileRecordValidatorBase
     {
