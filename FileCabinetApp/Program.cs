@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
@@ -34,7 +34,7 @@ namespace FileCabinetApp
         private static FileStream? databaseFileStream;
 
         private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new DefaultFileRecordValidator());
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
 
         private static bool isRunning = true;
 
@@ -99,19 +99,20 @@ namespace FileCabinetApp
 
                 if (argumentValue.Equals("custom"))
                 {
-                    recordValidator = new CustomFileRecordValidator();
+                    recordValidator = new ValidatorBuilder().CreateCustom();
                     consoleInputValidator = new CustomConsoleInputValidator();
                 }
                 else
                 {
-                    recordValidator = new DefaultFileRecordValidator();
+                    recordValidator = new ValidatorBuilder().CreateCustom();
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
             else
             {
-                recordValidator = new DefaultFileRecordValidator();
+                recordValidator = new ValidatorBuilder().CreateCustom();
+
                 Console.WriteLine($"Using default validation rules.");
             }
 
@@ -146,7 +147,6 @@ namespace FileCabinetApp
 
             Console.WriteLine(errorMessage);
         }
-
 
         private static Tuple<Dictionary<string, string>?, string> ReadInputArguments(string[] args)
         {

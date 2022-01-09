@@ -39,7 +39,7 @@ namespace FileCabinetApp.Validators
         public override void Validate(FileCabinetRecord record)
         {
             Guard.ArgumentGreaterThan(record.Weight, this.minValue);
-            Guard.ArgumentGreaterThan(record.Weight, this.maxValue);
+            Guard.ArgumentLessThan(record.Weight, this.maxValue);
         }
     }
 }

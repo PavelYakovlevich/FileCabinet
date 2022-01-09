@@ -80,7 +80,7 @@ namespace FileCabinetApp.Validators
         /// </summary>
         /// <param name="genderValues">Gender's acceptable values.</param>
         /// <returns>Current <see cref="ValidatorBuilder"/> object.</returns>
-        public ValidatorBuilder ValidateWeight(char[] genderValues)
+        public ValidatorBuilder ValidateGender(char[] genderValues)
         {
             this.validators.Add(new GenderValidator(genderValues));
 
