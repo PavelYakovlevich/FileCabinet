@@ -7,6 +7,7 @@ using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
+using ProgramInputHandling;
 
 namespace FileCabinetApp
 {
@@ -24,10 +25,10 @@ namespace FileCabinetApp
         private static readonly string ValidationRulesAttributeName = "validation-rules";
         private static readonly string StorageAttributeName = "storage";
 
-        private static readonly ProgramInputArgument[] ProgramDefinedArguments = new[]
+        private static readonly IInputParameter[] ProgramDefinedArguments = new IInputParameter[]
         {
-            new ProgramInputArgument(ValidationRulesAttributeName, "v", new[] { "default", "custom" }),
-            new ProgramInputArgument(StorageAttributeName, "s", new[] { "memory", "file" }),
+            new RangeInputParameter(ValidationRulesAttributeName, "v", false, new[] { "default", "custom" }),
+            new RangeInputParameter(StorageAttributeName, "s", false, new[] { "memory", "file" }),
         };
 
         private static readonly string DBFilePath = @"cabinet-records.db";
@@ -46,7 +47,9 @@ namespace FileCabinetApp
         {
             Console.WriteLine($"File Cabinet Application, developed by {Program.DeveloperName}");
 
-            var readArgumentsResult = ReadInputArguments(args);
+            var inputParameterReader = new ProgramInputParameterReader(ProgramDefinedArguments);
+
+            var readArgumentsResult = inputParameterReader.ReadInputArguments(args);
 
             if (readArgumentsResult.Item1 is null)
             {
@@ -142,110 +145,20 @@ namespace FileCabinetApp
 
             foreach (var definedArgument in ProgramDefinedArguments)
             {
-                errorMessage.AppendLine($"\t--{definedArgument.Name}(-{definedArgument.Abbreviation}) : {definedArgument.GetValidValuesString()}");
+                var validValuesStr = string.Empty;
+                if (definedArgument is RangeInputParameter)
+                {
+                    validValuesStr = ((RangeInputParameter)definedArgument).GetValidValuesString();
+                }
+                else if (definedArgument is ValueInputParameter)
+                {
+                    validValuesStr = (definedArgument as ValueInputParameter)!.ValueType.ToString();
+                }
+
+                errorMessage.AppendLine($"\t--{definedArgument.Name}(-{definedArgument.Abbreviation}) : {validValuesStr}");
             }
 
             Console.WriteLine(errorMessage);
-        }
-
-        private static Tuple<Dictionary<string, string>?, string> ReadInputArguments(string[] args)
-        {
-            var result = new Dictionary<string, string>();
-
-            var definedArgumentIndex = 0;
-            var currentArgsElementIndex = 0;
-            while (currentArgsElementIndex < args.Length && definedArgumentIndex < ProgramDefinedArguments.Length)
-            {
-                var readArgumentResult = ReadInputArgument(args, ref currentArgsElementIndex);
-
-                if (!readArgumentResult.Item3.Equals(string.Empty))
-                {
-                    return new Tuple<Dictionary<string, string>?, string>(null, readArgumentResult.Item3);
-                }
-
-                readArgumentResult = PreprocessInputArgument((readArgumentResult.Item1, readArgumentResult.Item2));
-
-                if (!readArgumentResult.Item3.Equals(string.Empty))
-                {
-                    return new Tuple<Dictionary<string, string>?, string>(null, readArgumentResult.Item3);
-                }
-
-                result.Add(readArgumentResult.Item1, readArgumentResult.Item2);
-                definedArgumentIndex++;
-            }
-
-            return new Tuple<Dictionary<string, string>?, string>(result, string.Empty);
-        }
-
-        private static (string, string, string) PreprocessInputArgument((string, string) argumentData)
-        {
-            var argumentName = argumentData.Item1;
-            foreach (var definedArgument in ProgramDefinedArguments)
-            {
-                if (argumentName.Equals(definedArgument.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                    argumentName.Equals(definedArgument.Abbreviation, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var argumentValue = argumentData.Item2;
-
-                    if (definedArgument.ValidateValue(argumentValue))
-                    {
-                        return (definedArgument.Name, argumentValue, string.Empty);
-                    }
-
-                    return (argumentData.Item1, argumentData.Item2, $"Invalid value '{argumentValue}' for the '{argumentName}' argument.");
-                }
-            }
-
-            return (argumentData.Item1, argumentData.Item2, $"Argument '{argumentName}' is not defined.");
-        }
-
-        private static (string, string, string) ReadInputArgument(string[] args, ref int currentArgsIndex)
-        {
-            (string, string, string) result = (string.Empty, string.Empty, string.Empty);
-
-            var currentArgument = args[currentArgsIndex];
-            var trimmedArgument = currentArgument.TrimStart('-');
-
-            if (string.IsNullOrEmpty(trimmedArgument))
-            {
-                result.Item3 = $"Missing argument name for the input argument[{currentArgsIndex}]";
-                return result;
-            }
-
-            if (currentArgument.StartsWith("--"))
-            {
-                var splittedData = trimmedArgument.Split('=');
-
-                if (splittedData.Length < 2)
-                {
-                    result.Item3 = $"Missing value for the '{trimmedArgument}' argument.";
-                    return result;
-                }
-
-                result.Item1 = splittedData[0];
-                result.Item2 = splittedData[1];
-
-                currentArgsIndex++;
-            }
-            else if (currentArgument.StartsWith('-'))
-            {
-                if (currentArgsIndex + 1 == args.Length)
-                {
-                    result.Item3 = $"Missing value for the '{trimmedArgument}' argument.";
-                    return result;
-                }
-
-                result.Item1 = trimmedArgument;
-                result.Item2 = args[currentArgsIndex + 1];
-
-                currentArgsIndex += 2;
-            }
-            else
-            {
-                result.Item3 = $"Invalid parameter format: '{trimmedArgument}'";
-            }
-
-            return result;
         }
 
         private static ICommandHandler CreateCommandHandlers()

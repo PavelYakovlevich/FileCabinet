@@ -107,7 +107,6 @@ namespace FileCabinetApp.Validators
         /// </summary>
         public static readonly decimal CustomWeightMaxValue = 1000m;
 
-
         /// <summary>
         ///     Default gender allowed values.
         /// </summary>
