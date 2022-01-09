@@ -6,7 +6,7 @@
     public abstract class FileRecordValidatorBase : IRecordValidator
     {
         /// <inheritdoc cref="IRecordValidator.Validate(FileCabinetRecord)"/>
-        public abstract void Validate(FileCabinetRecord parameterObject);
+        public abstract void Validate(FileCabinetRecord record);
 
         /// <inheritdoc cref="IRecordValidator.ValidateParameters(FileCabinetRecordParameterObject)"/>
         public void ValidateParameters(FileCabinetRecordParameterObject parameterObject)
