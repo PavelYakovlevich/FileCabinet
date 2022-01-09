@@ -13,9 +13,9 @@ namespace FileCabinetApp.Validators
         {
             Guard.ArgumentIsNotNull(record, nameof(record));
 
-            new CustomFirstNameValidator().Validate(record);
-            new CustomLastNameValidator().Validate(record);
-            new CustomDateOfBirthValidator().Validate(record);
+            new FirstNameValidator(2, 60).Validate(record);
+            new LastNameValidator(2, 60).Validate(record);
+            new DateOfBirthValidator(new DateTime(1950, 1, 1), DateTime.Now).Validate(record);
             new CustomGenderValidator().Validate(record);
             new CustomWeightValidator().Validate(record);
             new CustomStatureValidator().Validate(record);
