@@ -4,9 +4,11 @@ using System.IO;
 using System.Text;
 
 using FileCabinetApp.CommandHandlers;
+using FileCabinetApp.Configuration;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
 using FileCabinetApp.Validators;
+using Microsoft.Extensions.Configuration;
 using ProgramInputHandling;
 
 namespace FileCabinetApp
@@ -22,6 +24,9 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
+        private static readonly string ValidationRulesFileName = @"validation-rules.json";
+        private static readonly string ValidationRulesFilePath = @$"{Directory.GetCurrentDirectory()}\{ValidationRulesFileName}";
+
         private static readonly string ValidationRulesAttributeName = "validation-rules";
         private static readonly string StorageAttributeName = "storage";
 
@@ -34,8 +39,8 @@ namespace FileCabinetApp
         private static readonly string DBFilePath = @"cabinet-records.db";
         private static FileStream? databaseFileStream;
 
-        private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
+        private static IConsoleInputValidator? consoleInputValidator;
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault(ValidationRulesFilePath));
 
         private static bool isRunning = true;
 
@@ -102,19 +107,21 @@ namespace FileCabinetApp
 
                 if (argumentValue.Equals("custom"))
                 {
-                    recordValidator = new ValidatorBuilder().CreateCustom();
-                    consoleInputValidator = new CustomConsoleInputValidator();
+                    recordValidator = new ValidatorBuilder().CreateCustom(ValidationRulesFilePath);
+                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
                 }
                 else
                 {
-                    recordValidator = new ValidatorBuilder().CreateCustom();
+                    recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
+                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
             else
             {
-                recordValidator = new ValidatorBuilder().CreateCustom();
+                recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
+                consoleInputValidator = new ConsoleInputValidator(ReadValidationRules("default"));
 
                 Console.WriteLine($"Using default validation rules.");
             }
@@ -137,6 +144,17 @@ namespace FileCabinetApp
             {
                 fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
+        }
+
+        private static ValidationConfig ReadValidationRules(string validationRuleName)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(ValidationRulesFilePath)
+                .Build();
+
+            var validationConfig = config.GetSection(validationRuleName).Get<ValidationConfig>();
+
+            return validationConfig;
         }
 
         private static void PrintReadArgumentsErrorMessage()
@@ -166,8 +184,8 @@ namespace FileCabinetApp
             var recordsPrinter = new DefaultRecordPrinter();
 
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator);
-            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator);
+            var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator!);
+            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator!);
             var exitHandler = new ExitCommandHandler((value) => isRunning = value);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, recordsPrinter);
