@@ -1,6 +1,7 @@
 ﻿using System;
 
 using FileCabinetApp.Services;
+using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -30,19 +31,18 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            if (this.service is not FileCabinetFilesystemService)
+            var wrappedObject = (this.service as ServiceWrapperBase)?.GetWrappedObject();
+            if (wrappedObject is not FileCabinetFilesystemService)
             {
-                Console.WriteLine("This command is only allowed for the filesystem service.");
+                Console.WriteLine("Usage of this command is allowed only for the FilesystemService");
                 return;
             }
 
-            var fileSystemService = (FileCabinetFilesystemService)this.service;
+            var recordsAmount = wrappedObject.GetStat().total;
 
-            var recordsAmount = fileSystemService.GetStat().total;
+            this.service.Purge();
 
-            fileSystemService.Purge();
-
-            var purgedRecords = recordsAmount - this.service.GetStat().total;
+            var purgedRecords = recordsAmount - wrappedObject.GetStat().total;
 
             Console.WriteLine($"Data file processing is completed: {purgedRecords} of {recordsAmount} records were purged.");
         }
