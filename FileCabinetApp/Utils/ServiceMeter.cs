@@ -6,20 +6,16 @@ using FileCabinetApp.Services;
 
 namespace FileCabinetApp.Utils
 {
-    public class ServiceMeter : IFileCabinetService
+    public class ServiceMeter : ServiceWrapperBase
     {
         private static readonly string PrintFormatStr = "{0} method execution duration is {1} ticks.";
 
-        private readonly IFileCabinetService service;
-
         public ServiceMeter(IFileCabinetService service)
+            : base(service)
         {
-            Guard.ArgumentIsNotNull(service, nameof(service));
-
-            this.service = service;
         }
 
-        public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
+        public override int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -34,7 +30,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public void EditRecord(FileCabinetRecordParameterObject parameterObject)
+        public override void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -47,7 +43,7 @@ namespace FileCabinetApp.Utils
             this.PrintMeasurementResult(stopwatch.ElapsedTicks);
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -62,7 +58,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -77,7 +73,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -92,7 +88,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public override ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -107,7 +103,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public (int total, int deleted) GetStat()
+        public override (int total, int deleted) GetStat()
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -122,7 +118,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public void Purge()
+        public override void Purge()
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -135,7 +131,7 @@ namespace FileCabinetApp.Utils
             this.PrintMeasurementResult(stopwatch.ElapsedTicks);
         }
 
-        public bool RecordExists(int id)
+        public override bool RecordExists(int id)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -150,7 +146,7 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
-        public void RemoveRecord(int recordId)
+        public override void RemoveRecord(int recordId)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -163,7 +159,7 @@ namespace FileCabinetApp.Utils
             this.PrintMeasurementResult(stopwatch.ElapsedTicks);
         }
 
-        public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
+        public override int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
         {
             Stopwatch stopwatch = new Stopwatch();
 

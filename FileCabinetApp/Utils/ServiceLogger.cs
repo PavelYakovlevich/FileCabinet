@@ -6,23 +6,21 @@ using FileCabinetApp.Services;
 
 namespace FileCabinetApp.Utils
 {
-    public class ServiceLogger : IFileCabinetService
+    public class ServiceLogger : ServiceWrapperBase
     {
         private static readonly string DateStringFormat = "MM/dd/yyyy HH:mm";
 
         private readonly Stream stream;
-        private readonly IFileCabinetService service;
 
         public ServiceLogger(Stream stream, IFileCabinetService service)
+            : base(service)
         {
             Guard.ArgumentIsNotNull(stream, nameof(stream));
-            Guard.ArgumentIsNotNull(service, nameof(service));
 
             this.stream = stream;
-            this.service = service;
         }
 
-        public int CreateRecord(FileCabinetRecordParameterObject parameterObject)
+        public override int CreateRecord(FileCabinetRecordParameterObject parameterObject)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -37,7 +35,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public void EditRecord(FileCabinetRecordParameterObject parameterObject)
+        public override void EditRecord(FileCabinetRecordParameterObject parameterObject)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -49,7 +47,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -64,7 +62,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -79,7 +77,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public override ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -94,7 +92,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public ReadOnlyCollection<FileCabinetRecord> GetRecords()
+        public override ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -109,7 +107,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public (int total, int deleted) GetStat()
+        public override (int total, int deleted) GetStat()
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -124,7 +122,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public void Purge()
+        public override void Purge()
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -136,7 +134,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public bool RecordExists(int id)
+        public override bool RecordExists(int id)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -151,7 +149,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public void RemoveRecord(int recordId)
+        public override void RemoveRecord(int recordId)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -163,7 +161,7 @@ namespace FileCabinetApp.Utils
             }
         }
 
-        public int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
+        public override int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
