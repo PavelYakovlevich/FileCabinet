@@ -8,8 +8,9 @@ namespace FileCabinetApp.Utils
 {
     public class ServiceMeter : IFileCabinetService
     {
-        private IFileCabinetService service;
-        private string printFormatStr = "{0} method execution duration is {1} ticks.";
+        private static readonly string PrintFormatStr = "{0} method execution duration is {1} ticks.";
+
+        private readonly IFileCabinetService service;
 
         public ServiceMeter(IFileCabinetService service)
         {
@@ -121,6 +122,19 @@ namespace FileCabinetApp.Utils
             return result;
         }
 
+        public void Purge()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            this.service.Purge();
+
+            stopwatch.Stop();
+
+            this.PrintMeasurementResult(stopwatch.ElapsedTicks);
+        }
+
         public bool RecordExists(int id)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -166,7 +180,7 @@ namespace FileCabinetApp.Utils
 
         private void PrintMeasurementResult(long ticks, [CallerMemberName] string methodName = "")
         {
-            Console.WriteLine(this.printFormatStr, methodName, ticks);
+            Console.WriteLine(PrintFormatStr, methodName, ticks);
         }
     }
 }

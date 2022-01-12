@@ -222,6 +222,13 @@ namespace FileCabinetApp.Services
             this.DeleteEntryFromSearchDictionaries(targetRecord);
         }
 
+        /// <summary>
+        ///     Does nothing.
+        /// </summary>
+        public void Purge()
+        {
+        }
+
         private FileCabinetRecord? GetRecordById(int id)
         {
             foreach (var record in this.existingRecords)

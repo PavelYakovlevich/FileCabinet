@@ -75,5 +75,10 @@ namespace FileCabinetApp.Services
         /// <param name="recordId">Id of record, which must be removed.</param>
         /// <exception cref="ArgumentException">Thrown when <paramref name="recordId"/> is less than 1 or record with <paramref name="recordId"/> does not exist.</exception>
         void RemoveRecord(int recordId);
+
+        /// <summary>
+        ///     Defragments the data file - removes the spaces in the data file.
+        /// </summary>
+        public void Purge();
     }
 }

@@ -10,8 +10,8 @@ namespace FileCabinetApp.Utils
     {
         private static readonly string DateStringFormat = "MM/dd/yyyy HH:mm";
 
-        private Stream stream;
-        private IFileCabinetService service;
+        private readonly Stream stream;
+        private readonly IFileCabinetService service;
 
         public ServiceLogger(Stream stream, IFileCabinetService service)
         {
@@ -121,6 +121,18 @@ namespace FileCabinetApp.Utils
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} GetStat() returned '{result.total}' total and '{result.deleted}' deleted records.");
 
                 return result;
+            }
+        }
+
+        public void Purge()
+        {
+            this.stream.Seek(0, SeekOrigin.End);
+
+            using (var streamWriter = new StreamWriter(this.stream, Encoding.Default, -1, true))
+            {
+                this.service.Purge();
+
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling Purge()'");
             }
         }
 
