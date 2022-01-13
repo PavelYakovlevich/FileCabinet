@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
@@ -59,14 +60,14 @@ namespace FileCabinetApp.CommandHandlers
 
             paramValue = values[1].Substring(1, values[1].Length - 2);
 
-            IRecordIterator iterator;
+            IEnumerable<FileCabinetRecord> records;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
             {
-                iterator = this.service.FindByFirstName(paramValue);
+                records = this.service.FindByFirstName(paramValue);
             }
             else if (paramName.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
             {
-                iterator = this.service.FindByLastName(paramValue);
+                records = this.service.FindByLastName(paramValue);
             }
             else if (paramName.Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -77,7 +78,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                iterator = this.service.FindByDateOfBirth(dateOfBirth);
+                records = this.service.FindByDateOfBirth(dateOfBirth);
             }
             else
             {
@@ -85,11 +86,7 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            while (iterator.HasMore())
-            {
-                var record = iterator.GetNext();
-                this.printer.Print(record);
-            }
+            this.printer.Print(records);
         }
     }
 }

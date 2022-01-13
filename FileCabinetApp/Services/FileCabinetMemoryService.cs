@@ -118,41 +118,41 @@ namespace FileCabinetApp.Services
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
-        public IRecordIterator FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             Guard.ArgumentIsNotNull(firstName, nameof(firstName));
 
             if (!this.firstNameSearchDictionary.ContainsKey(firstName))
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            return new MemoryIterator(this.firstNameSearchDictionary[firstName]);
+            return this.firstNameSearchDictionary[firstName];
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
         /// <exception cref="ArgumentNullException">Thrown when lastName is null.</exception>
-        public IRecordIterator FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             Guard.ArgumentIsNotNull(lastName, nameof(lastName));
 
             if (!this.lastNameSearchDictionary.ContainsKey(lastName))
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            return new MemoryIterator(this.lastNameSearchDictionary[lastName]);
+            return this.lastNameSearchDictionary[lastName];
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public IRecordIterator FindByDateOfBirth(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
             if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
             {
-                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
+                return Array.Empty<FileCabinetRecord>();
             }
 
-            return new MemoryIterator(this.dateOfBirthSearchDictionary[dateOfBirth]);
+            return this.dateOfBirthSearchDictionary[dateOfBirth];
         }
 
         /// <summary>
