@@ -26,7 +26,7 @@ namespace FileCabinetApp
         private const int ExplanationHelpIndex = 2;
 
         private static readonly string ValidationRulesFileName = @"validation-rules.json";
-        private static readonly string ValidationRulesFilePath = @$"{Directory.GetCurrentDirectory()}\{ValidationRulesFileName}";
+        private static readonly string ValidationRulesFilePath = @$"{Directory.GetCurrentDirectory()}\Properties\{ValidationRulesFileName}";
 
         private static readonly string LogFileName = @"log.txt";
         private static readonly string LogFilePath = @$"{Directory.GetCurrentDirectory()}\{LogFileName}";

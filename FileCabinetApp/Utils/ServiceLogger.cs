@@ -115,7 +115,7 @@ namespace FileCabinetApp.Utils
                 var result = this.Service.FindByLastName(lastName);
 
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling FindByLastName() with LastName = '{lastName}'");
-                //streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByLastName() returned '{result.Count}' records.");
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByLastName() returned '{result}' records.");
 
                 return result;
             }
@@ -134,7 +134,7 @@ namespace FileCabinetApp.Utils
                 var result = this.Service.GetRecords();
 
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling GetRecords()");
-                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} GetRecords() returned '{result.Count}' records.");
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} GetRecords() returned '{result}' records.");
 
                 return result;
             }

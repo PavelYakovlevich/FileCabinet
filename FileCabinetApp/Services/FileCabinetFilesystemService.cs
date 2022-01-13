@@ -480,7 +480,6 @@ namespace FileCabinetApp.Services
 
                 yield return record;
             }
-
         }
     }
 }
