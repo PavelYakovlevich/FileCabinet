@@ -22,7 +22,7 @@ namespace FileCabinetApp
 
             stream.Read(buffer, 0, maxSize);
 
-            return Encoding.Default.GetString(buffer);
+            return Encoding.Default.GetString(buffer).Trim('\0');
         }
 
         /// <summary>

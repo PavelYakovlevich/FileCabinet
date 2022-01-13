@@ -37,7 +37,7 @@ namespace FileCabinetApp.Serialization
 
         private readonly Dictionary<Type, Func<byte[], int, int, object>> toValueConverters = new Dictionary<Type, Func<byte[], int, int, object>>()
         {
-            { typeof(string), (bytes, offset, length) => Encoding.Default.GetString(bytes, offset, length) },
+            { typeof(string), (bytes, offset, length) => Encoding.Default.GetString(bytes, offset, length).Trim('\0') },
             { typeof(int), (bytes, offset, lengthr) => BitConverter.ToInt32(bytes, offset) },
             { typeof(short), (bytes, offset, length) => BitConverter.ToInt16(bytes, offset) },
             { typeof(char), (bytes, offset, length) => BitConverter.ToChar(bytes, offset) },
@@ -123,13 +123,13 @@ namespace FileCabinetApp.Serialization
         /// </summary>
         /// <param name="stream"><see cref="Stream"/> object for working with file.</param>
         /// <returns>Object, that was read from the stream.</returns>
-        public object? Read(Stream stream)
+        public object Read(Stream stream)
         {
             byte[] buffer = new byte[this.SliceSize];
 
             stream.Read(buffer);
 
-            var result = Activator.CreateInstance(this.objectType);
+            var result = Activator.CreateInstance(this.objectType) !;
 
             var offset = 0;
             foreach (var dumpMember in this.dumpMembersInfo)
