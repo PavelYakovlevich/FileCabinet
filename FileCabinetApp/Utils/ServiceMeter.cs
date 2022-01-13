@@ -62,7 +62,7 @@ namespace FileCabinetApp.Utils
         ///     Measures and prints FindByDateOfBirth's command execution time.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public override IRecordIterator FindByDateOfBirth(DateTime dateOfBirth)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -81,7 +81,7 @@ namespace FileCabinetApp.Utils
         ///     Measures and prints FindByFirstName's command execution time.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IRecordIterator FindByFirstName(string firstName)
         {
             Stopwatch stopwatch = new Stopwatch();
 
@@ -100,7 +100,7 @@ namespace FileCabinetApp.Utils
         ///     Measures and prints FindByLastName's command execution time.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public override IRecordIterator FindByLastName(string lastName)
         {
             Stopwatch stopwatch = new Stopwatch();
 

@@ -45,21 +45,21 @@ namespace FileCabinetApp.Services
         /// </summary>
         /// <param name="firstName">First name search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same first name value as <paramref name="firstName"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public IRecordIterator FindByFirstName(string firstName);
 
         /// <summary>
         ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have last name's value equal to the specified <paramref name="lastName"/>.
         /// </summary>
         /// <param name="lastName">Last name search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same last name value as <paramref name="lastName"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        public IRecordIterator FindByLastName(string lastName);
 
         /// <summary>
         ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have date of birth's value equal to the specified <paramref name="dateOfBirth"/>.
         /// </summary>
         /// <param name="dateOfBirth">Date of birth search value.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+        public IRecordIterator FindByDateOfBirth(DateTime dateOfBirth);
 
         /// <summary>
         ///     Restores state of service from a snapshot.

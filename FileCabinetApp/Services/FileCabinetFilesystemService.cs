@@ -107,22 +107,36 @@ namespace FileCabinetApp.Services
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirth(DateTime dateOfBirth)
         {
-            return this.FindAllRecord(this.dateOfBirthSearchDictionary, dateOfBirth);
+            if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
+            {
+                return new FilesystemIterator(this.fileStream, Array.Empty<long>());
+            }
+
+            return new FilesystemIterator(this.fileStream, this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
-            return this.FindAllRecord(this.firstNameSearchDictionary, firstName);
+            if (!this.firstNameSearchDictionary.ContainsKey(firstName))
+            {
+                return new FilesystemIterator(this.fileStream, Array.Empty<long>());
+            }
+
+            return new FilesystemIterator(this.fileStream, this.firstNameSearchDictionary[firstName]);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
-            return this.FindAllRecord(this.lastNameSearchDictionary, lastName);
+            if (!this.lastNameSearchDictionary.ContainsKey(lastName))
+            {
+                return new FilesystemIterator(this.fileStream, Array.Empty<long>());
+            }
 
+            return new FilesystemIterator(this.fileStream, this.lastNameSearchDictionary[lastName]);
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
@@ -452,27 +466,6 @@ namespace FileCabinetApp.Services
             {
                 searchDictionary[searchKey].Remove(address);
             }
-        }
-
-        private ReadOnlyCollection<FileCabinetRecord> FindAllRecord<TKey>(Dictionary<TKey, List<long>> searchDictionary, TKey key)
-            where TKey : notnull
-        {
-            var result = new List<FileCabinetRecord>();
-
-            List<long>? addressList;
-            if (searchDictionary.TryGetValue(key, out addressList))
-            {
-                foreach (var address in addressList)
-                {
-                    this.fileStream.Seek(address, SeekOrigin.Begin);
-
-                    var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
-
-                    result.Add(record);
-                }
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
     }
 }

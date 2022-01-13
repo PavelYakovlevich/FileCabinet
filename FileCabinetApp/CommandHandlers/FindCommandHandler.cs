@@ -59,14 +59,14 @@ namespace FileCabinetApp.CommandHandlers
 
             paramValue = values[1].Substring(1, values[1].Length - 2);
 
-            ReadOnlyCollection<FileCabinetRecord> records;
+            IRecordIterator iterator;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
             {
-                records = this.service.FindByFirstName(paramValue);
+                iterator = this.service.FindByFirstName(paramValue);
             }
             else if (paramName.Equals("lastname", StringComparison.InvariantCultureIgnoreCase))
             {
-                records = this.service.FindByLastName(paramValue);
+                iterator = this.service.FindByLastName(paramValue);
             }
             else if (paramName.Equals("dateofbirth", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -77,7 +77,7 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
 
-                records = this.service.FindByDateOfBirth(dateOfBirth);
+                iterator = this.service.FindByDateOfBirth(dateOfBirth);
             }
             else
             {
@@ -85,7 +85,11 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            this.printer.Print(records);
+            while (iterator.HasMore())
+            {
+                var record = iterator.GetNext();
+                this.printer.Print(record);
+            }
         }
     }
 }

@@ -118,41 +118,41 @@ namespace FileCabinetApp.Services
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IRecordIterator FindByFirstName(string firstName)
         {
             Guard.ArgumentIsNotNull(firstName, nameof(firstName));
 
             if (!this.firstNameSearchDictionary.ContainsKey(firstName))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameSearchDictionary[firstName]);
+            return new MemoryIterator(this.firstNameSearchDictionary[firstName]);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
         /// <exception cref="ArgumentNullException">Thrown when lastName is null.</exception>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IRecordIterator FindByLastName(string lastName)
         {
             Guard.ArgumentIsNotNull(lastName, nameof(lastName));
 
             if (!this.lastNameSearchDictionary.ContainsKey(lastName))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameSearchDictionary[lastName]);
+            return new MemoryIterator(this.lastNameSearchDictionary[lastName]);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public IRecordIterator FindByDateOfBirth(DateTime dateOfBirth)
         {
             if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                return new MemoryIterator(Array.Empty<FileCabinetRecord>());
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
+            return new MemoryIterator(this.dateOfBirthSearchDictionary[dateOfBirth]);
         }
 
         /// <summary>

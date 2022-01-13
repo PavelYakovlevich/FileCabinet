@@ -67,7 +67,7 @@ namespace FileCabinetApp.Utils
         ///     Writes a log with service information about FindByDateOfBirth command.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public override IRecordIterator FindByDateOfBirth(DateTime dateOfBirth)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -76,7 +76,7 @@ namespace FileCabinetApp.Utils
                 var result = this.Service.FindByDateOfBirth(dateOfBirth);
 
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling FindByDateOfBirth() with DateOfBirth = '{dateOfBirth.ToString("MM/dd/yyyy")}'");
-                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByDateOfBirth() returned '{result.Count}' records.");
+                //streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByDateOfBirth() returned '{result.Count}' records.");
 
                 return result;
             }
@@ -86,7 +86,7 @@ namespace FileCabinetApp.Utils
         ///     Writes a log with service information about FindByFirstName command.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public override IRecordIterator FindByFirstName(string firstName)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -95,7 +95,7 @@ namespace FileCabinetApp.Utils
                 var result = this.Service.FindByFirstName(firstName);
 
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling FindByFirstName() with FirstName = '{firstName}'");
-                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByFirstName() returned '{result.Count}' records.");
+                //streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByFirstName() returned '{result.Count}' records.");
 
                 return result;
             }
@@ -105,7 +105,7 @@ namespace FileCabinetApp.Utils
         ///     Writes a log with service information about FindByLastName command.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
-        public override ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public override IRecordIterator FindByLastName(string lastName)
         {
             this.stream.Seek(0, SeekOrigin.End);
 
@@ -114,7 +114,7 @@ namespace FileCabinetApp.Utils
                 var result = this.Service.FindByLastName(lastName);
 
                 streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling FindByLastName() with LastName = '{lastName}'");
-                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByLastName() returned '{result.Count}' records.");
+                //streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} FindByLastName() returned '{result.Count}' records.");
 
                 return result;
             }
