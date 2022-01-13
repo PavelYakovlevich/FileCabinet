@@ -471,22 +471,16 @@ namespace FileCabinetApp.Services
         private IEnumerable<FileCabinetRecord> FindAllRecord<TKey>(Dictionary<TKey, List<long>> searchDictionary, TKey key)
             where TKey : notnull
         {
-            var result = new List<FileCabinetRecord>();
-
-            List<long>? addressList;
-            if (searchDictionary.TryGetValue(key, out addressList))
+            var addressList = searchDictionary[key];
+            foreach (var address in addressList)
             {
-                foreach (var address in addressList)
-                {
-                    this.fileStream.Seek(address, SeekOrigin.Begin);
+                this.fileStream.Seek(address, SeekOrigin.Begin);
 
-                    var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
+                var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
 
-                    result.Add(record);
-                }
+                yield return record;
             }
 
-            return result;
         }
     }
 }

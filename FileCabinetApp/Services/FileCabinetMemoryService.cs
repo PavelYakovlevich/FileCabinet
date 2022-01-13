@@ -122,12 +122,16 @@ namespace FileCabinetApp.Services
         {
             Guard.ArgumentIsNotNull(firstName, nameof(firstName));
 
-            if (!this.firstNameSearchDictionary.ContainsKey(firstName))
+            List<FileCabinetRecord>? records;
+            if (!this.firstNameSearchDictionary.TryGetValue(firstName, out records))
             {
-                return Array.Empty<FileCabinetRecord>();
+                records = new List<FileCabinetRecord>();
             }
 
-            return this.firstNameSearchDictionary[firstName];
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
@@ -136,23 +140,31 @@ namespace FileCabinetApp.Services
         {
             Guard.ArgumentIsNotNull(lastName, nameof(lastName));
 
-            if (!this.lastNameSearchDictionary.ContainsKey(lastName))
+            List<FileCabinetRecord>? records;
+            if (!this.lastNameSearchDictionary.TryGetValue(lastName, out records))
             {
-                return Array.Empty<FileCabinetRecord>();
+                records = new List<FileCabinetRecord>();
             }
 
-            return this.lastNameSearchDictionary[lastName];
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
+            List<FileCabinetRecord>? records;
+            if (!this.dateOfBirthSearchDictionary.TryGetValue(dateOfBirth, out records))
             {
-                return Array.Empty<FileCabinetRecord>();
+                records = new List<FileCabinetRecord>();
             }
 
-            return this.dateOfBirthSearchDictionary[dateOfBirth];
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <summary>
