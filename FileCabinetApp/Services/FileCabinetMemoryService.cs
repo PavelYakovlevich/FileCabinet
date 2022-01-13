@@ -118,41 +118,53 @@ namespace FileCabinetApp.Services
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
             Guard.ArgumentIsNotNull(firstName, nameof(firstName));
 
-            if (!this.firstNameSearchDictionary.ContainsKey(firstName))
+            List<FileCabinetRecord>? records;
+            if (!this.firstNameSearchDictionary.TryGetValue(firstName, out records))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                records = new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.firstNameSearchDictionary[firstName]);
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
         /// <exception cref="ArgumentNullException">Thrown when lastName is null.</exception>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
             Guard.ArgumentIsNotNull(lastName, nameof(lastName));
 
-            if (!this.lastNameSearchDictionary.ContainsKey(lastName))
+            List<FileCabinetRecord>? records;
+            if (!this.lastNameSearchDictionary.TryGetValue(lastName, out records))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                records = new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.lastNameSearchDictionary[lastName]);
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
+            List<FileCabinetRecord>? records;
+            if (!this.dateOfBirthSearchDictionary.TryGetValue(dateOfBirth, out records))
             {
-                return new ReadOnlyCollection<FileCabinetRecord>(Array.Empty<FileCabinetRecord>());
+                records = new List<FileCabinetRecord>();
             }
 
-            return new ReadOnlyCollection<FileCabinetRecord>(this.dateOfBirthSearchDictionary[dateOfBirth]);
+            foreach (var record in records)
+            {
+                yield return record;
+            }
         }
 
         /// <summary>

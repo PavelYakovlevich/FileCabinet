@@ -671,6 +671,9 @@
         <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
             <inheritdoc cref="M:FileCabinetApp.Printers.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})"/>
         </member>
+        <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)">
+            <inheritdoc cref="M:FileCabinetApp.Printers.IRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)"/>
+        </member>
         <member name="T:FileCabinetApp.Printers.IRecordPrinter">
             <summary>
                 Interface for printers of <see cref="N:FileCabinetApp"/> objects.
@@ -681,6 +684,12 @@
                 Prints all <paramref name="records"/>.
             </summary>
             <param name="records">Records to print.</param>
+        </member>
+        <member name="M:FileCabinetApp.Printers.IRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)">
+            <summary>
+                Prints <see cref="T:FileCabinetApp.FileCabinetRecord"/> object's data.
+            </summary>
+            <param name="record"><see cref="T:FileCabinetApp.FileCabinetRecord"/> object to print.</param>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>

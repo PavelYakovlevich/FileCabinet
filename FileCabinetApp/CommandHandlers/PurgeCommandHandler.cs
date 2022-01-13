@@ -31,18 +31,22 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var wrappedObject = (this.service as ServiceWrapperBase)?.GetWrappedObject();
-            if (wrappedObject is not FileCabinetFilesystemService)
+            if (this.service is ServiceWrapperBase)
             {
-                Console.WriteLine("Usage of this command is allowed only for the FilesystemService");
-                return;
+                var wrappedObject = ((ServiceWrapperBase)this.service).GetWrappedObject();
+
+                if (wrappedObject is not FileCabinetFilesystemService)
+                {
+                    Console.WriteLine("Usage of this command is allowed only for the FilesystemService");
+                    return;
+                }
             }
 
-            var recordsAmount = wrappedObject.GetStat().total;
+            var recordsAmount = this.service.GetStat().total;
 
             this.service.Purge();
 
-            var purgedRecords = recordsAmount - wrappedObject.GetStat().total;
+            var purgedRecords = recordsAmount - this.service.GetStat().total;
 
             Console.WriteLine($"Data file processing is completed: {purgedRecords} of {recordsAmount} records were purged.");
         }

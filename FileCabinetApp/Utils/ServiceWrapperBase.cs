@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FileCabinetApp.Services;
 
@@ -35,13 +36,13 @@ namespace FileCabinetApp.Utils
         public abstract void EditRecord(FileCabinetRecordParameterObject parameterObject);
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public abstract ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
+        public abstract IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
-        public abstract ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName);
+        public abstract IEnumerable<FileCabinetRecord> FindByFirstName(string firstName);
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
-        public abstract ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName);
+        public abstract IEnumerable<FileCabinetRecord> FindByLastName(string lastName);
 
         /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
         public abstract ReadOnlyCollection<FileCabinetRecord> GetRecords();

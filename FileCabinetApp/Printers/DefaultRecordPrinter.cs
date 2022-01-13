@@ -15,8 +15,14 @@ namespace FileCabinetApp.Printers
         {
             foreach (var record in records)
             {
-                Console.WriteLine(printFormat, record.Id, record.FirstName, record.LastName, record.DateOfBirth.ToString("MM/dd/yyyy"), record.Gender, record.Stature, record.Weight);
+                this.Print(record);
             }
+        }
+
+        /// <inheritdoc cref="IRecordPrinter.Print(FileCabinetRecord)"/>
+        public void Print(FileCabinetRecord record)
+        {
+            Console.WriteLine(printFormat, record.Id, record.FirstName, record.LastName, record.DateOfBirth.ToString("MM/dd/yyyy"), record.Gender, record.Stature, record.Weight);
         }
     }
 }

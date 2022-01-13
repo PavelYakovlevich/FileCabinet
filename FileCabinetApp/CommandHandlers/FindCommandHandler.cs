@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
@@ -59,7 +60,7 @@ namespace FileCabinetApp.CommandHandlers
 
             paramValue = values[1].Substring(1, values[1].Length - 2);
 
-            ReadOnlyCollection<FileCabinetRecord> records;
+            IEnumerable<FileCabinetRecord> records;
             if (paramName.Equals("firstname", StringComparison.InvariantCultureIgnoreCase))
             {
                 records = this.service.FindByFirstName(paramValue);

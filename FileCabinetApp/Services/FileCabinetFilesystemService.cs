@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text;
 using FileCabinetApp.Serialization;
 
 namespace FileCabinetApp.Services
@@ -14,6 +15,10 @@ namespace FileCabinetApp.Services
         private readonly IRecordValidator recordValidator;
         private readonly Stream fileStream;
         private readonly DumpHelper dumpHelper;
+
+        private readonly Dictionary<string, List<long>> firstNameSearchDictionary;
+        private readonly Dictionary<string, List<long>> lastNameSearchDictionary;
+        private readonly Dictionary<DateTime, List<long>> dateOfBirthSearchDictionary;
 
         private int lastRecordId;
 
@@ -31,7 +36,11 @@ namespace FileCabinetApp.Services
             this.fileStream = stream;
             this.dumpHelper = new DumpHelper(typeof(FileCabinetRecord));
 
-            this.SetLastRecordId();
+            this.firstNameSearchDictionary = new Dictionary<string, List<long>>();
+            this.lastNameSearchDictionary = new Dictionary<string, List<long>>();
+            this.dateOfBirthSearchDictionary = new Dictionary<DateTime, List<long>>();
+
+            this.SetServiceInfo();
         }
 
         [Flags]
@@ -58,7 +67,11 @@ namespace FileCabinetApp.Services
 
             this.fileStream.Seek(0, SeekOrigin.End);
 
+            var creationPlaceAddress = this.fileStream.Position;
+
             this.dumpHelper.Create(this.fileStream, newRecord);
+
+            this.AddEntryToSearchDictionaries(newRecord, creationPlaceAddress);
 
             return this.lastRecordId;
         }
@@ -74,37 +87,56 @@ namespace FileCabinetApp.Services
                 throw new ArgumentException($"User with {parameterObject.Id} does not exist!");
             }
 
-            var newRecord = new FileCabinetRecord
-            {
-                Id = parameterObject.Id,
-                FirstName = parameterObject.FirstName,
-                LastName = parameterObject.LastName,
-                DateOfBirth = parameterObject.DateOfBirth,
-                Gender = parameterObject.Gender,
-                Weight = parameterObject.Weight,
-                Stature = parameterObject.Stature,
-            };
+            this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+            var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
+
+            this.DeleteEntryFromSearchDictionaries(record, recordAddress);
+
+            record.Id = parameterObject.Id;
+            record.FirstName = parameterObject.FirstName;
+            record.LastName = parameterObject.LastName;
+            record.DateOfBirth = parameterObject.DateOfBirth;
+            record.Gender = parameterObject.Gender;
+            record.Weight = parameterObject.Weight;
+            record.Stature = parameterObject.Stature;
+
+            this.AddEntryToSearchDictionaries(record, recordAddress);
 
             this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
-            this.dumpHelper.Update(this.fileStream, newRecord);
+            this.dumpHelper.Update(this.fileStream, record);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
+        public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
-            return this.FindByCondition((record) => record.DateOfBirth.Equals(dateOfBirth));
+            if (!this.dateOfBirthSearchDictionary.ContainsKey(dateOfBirth))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return this.FindAllRecord(this.dateOfBirthSearchDictionary, dateOfBirth);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName(string)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByFirstName(string firstName)
+        public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)
         {
-            return this.FindByCondition((record) => record.FirstName.Equals(firstName, StringComparison.InvariantCultureIgnoreCase));
+            if (!this.firstNameSearchDictionary.ContainsKey(firstName))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return this.FindAllRecord(this.firstNameSearchDictionary, firstName);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByLastName(string)"/>
-        public ReadOnlyCollection<FileCabinetRecord> FindByLastName(string lastName)
+        public IEnumerable<FileCabinetRecord> FindByLastName(string lastName)
         {
-            return this.FindByCondition((record) => record.LastName.Equals(lastName, StringComparison.InvariantCultureIgnoreCase));
+            if (!this.lastNameSearchDictionary.ContainsKey(lastName))
+            {
+                return Array.Empty<FileCabinetRecord>();
+            }
+
+            return this.FindAllRecord(this.lastNameSearchDictionary, lastName);
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
@@ -175,6 +207,8 @@ namespace FileCabinetApp.Services
         {
             Guard.ArgumentIsNotNull(snapshot, nameof(snapshot));
 
+            var maxId = this.lastRecordId;
+
             var importedRecords = 0;
             foreach (var record in snapshot.Records)
             {
@@ -188,13 +222,26 @@ namespace FileCabinetApp.Services
                     continue;
                 }
 
+                if (maxId < record.Id)
+                {
+                    maxId = record.Id;
+                }
+
                 var recordAddress = this.GetRecordAddressById(record.Id);
                 if (recordAddress < 0)
                 {
                     this.fileStream.Seek(0, SeekOrigin.End);
+
+                    this.AddEntryToSearchDictionaries(record, this.fileStream.Position);
                 }
                 else
                 {
+                    this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+
+                    var replacableRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
+                    this.DeleteEntryFromSearchDictionaries(replacableRecord, recordAddress);
+                    this.AddEntryToSearchDictionaries(record, recordAddress);
+
                     this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
                 }
 
@@ -203,7 +250,7 @@ namespace FileCabinetApp.Services
                 importedRecords++;
             }
 
-            this.SetLastRecordId();
+            this.lastRecordId = maxId;
 
             return importedRecords;
         }
@@ -221,6 +268,12 @@ namespace FileCabinetApp.Services
 
             this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
 
+            var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
+
+            this.DeleteEntryFromSearchDictionaries(record, recordAddress);
+
+            this.fileStream.Seek(recordAddress, SeekOrigin.Begin);
+
             var flags = (short)RecordStatus.IsDeleted;
             StreamHelper.Write(this.fileStream, flags);
 
@@ -230,9 +283,16 @@ namespace FileCabinetApp.Services
         /// <inheritdoc cref="IFileCabinetService.Purge"/>
         public void Purge()
         {
+            this.ClearSearchDictionaries();
+
             this.fileStream.Seek(0, SeekOrigin.Begin);
 
             var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+            var firstNameAreaSize = this.dumpHelper.GetSize("FirstName");
+            var lastNameAreaSize = this.dumpHelper.GetSize("LastName");
+            var dateOfBirthAreaSize = this.dumpHelper.GetSize("DateOfBirth");
+
+            var firstNameOffset = this.dumpHelper.GetOffset("FirstName");
 
             var insertRecordAddress = 0L;
             long currentRecordAddress;
@@ -247,7 +307,15 @@ namespace FileCabinetApp.Services
                     break;
                 }
 
-                this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                this.fileStream.Seek(-reservedAreaSize + firstNameOffset, SeekOrigin.Current);
+
+                var firstName = StreamHelper.ReadString(this.fileStream, firstNameAreaSize);
+                var lastName = StreamHelper.ReadString(this.fileStream, lastNameAreaSize);
+                var dateOfBirth = StreamHelper.ReadDateTime(this.fileStream);
+
+                this.AddEntryToSearchDictionaries(firstName, lastName, dateOfBirth, currentRecordAddress);
+
+                this.fileStream.Seek(currentRecordAddress + this.dumpHelper.SliceSize, SeekOrigin.Begin);
             }
 
             if (currentRecordAddress >= this.fileStream.Length)
@@ -261,13 +329,18 @@ namespace FileCabinetApp.Services
                 var reservedBytes = StreamHelper.ReadShort(this.fileStream);
                 if (((RecordStatus)reservedBytes & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
                 {
-                    var convertedReservedArea = BitConverter.GetBytes(reservedBytes);
-                    Array.Copy(convertedReservedArea, buffer, convertedReservedArea.Length);
+                    this.fileStream.Seek(currentRecordAddress + firstNameOffset, SeekOrigin.Begin);
 
-                    this.fileStream.Read(buffer, reservedAreaSize, this.dumpHelper.SliceSize - reservedAreaSize);
+                    var firstName = StreamHelper.ReadString(this.fileStream, firstNameAreaSize);
+                    var lastName = StreamHelper.ReadString(this.fileStream, lastNameAreaSize);
+                    var dateOfBirth = StreamHelper.ReadDateTime(this.fileStream);
+
+                    this.AddEntryToSearchDictionaries(firstName, lastName, dateOfBirth, insertRecordAddress);
+
+                    this.fileStream.Seek(currentRecordAddress, SeekOrigin.Begin);
+                    this.fileStream.Read(buffer);
 
                     this.fileStream.Seek(insertRecordAddress, SeekOrigin.Begin);
-
                     this.fileStream.Write(buffer);
 
                     insertRecordAddress += this.dumpHelper.SliceSize;
@@ -302,9 +375,11 @@ namespace FileCabinetApp.Services
             return -1;
         }
 
-        private void SetLastRecordId()
+        private void SetServiceInfo()
         {
-            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+            this.firstNameSearchDictionary.Clear();
+            this.lastNameSearchDictionary.Clear();
+            this.dateOfBirthSearchDictionary.Clear();
 
             if (this.fileStream.Length == 0)
             {
@@ -312,47 +387,99 @@ namespace FileCabinetApp.Services
                 return;
             }
 
-            this.fileStream.Seek(-this.dumpHelper.SliceSize, SeekOrigin.End);
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
 
-            for (var i = this.fileStream.Length - this.dumpHelper.SliceSize; i >= 0; i -= this.dumpHelper.SliceSize)
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var maxId = 1;
+            for (var i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
             {
                 var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
                 if ((recordStatus & RecordStatus.IsDeleted) != RecordStatus.IsDeleted)
                 {
-                    this.lastRecordId = StreamHelper.ReadInt(this.fileStream);
-                    return;
-                }
+                    this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
 
-                this.fileStream.Seek(-this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    var readRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
+
+                    if (maxId < readRecord.Id)
+                    {
+                        maxId = readRecord.Id;
+                    }
+
+                    this.AddEntryToSearchDictionaries(readRecord, i);
+                }
+                else
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                }
+            }
+
+            this.lastRecordId = maxId;
+        }
+
+        private void ClearSearchDictionaries()
+        {
+            this.firstNameSearchDictionary.Clear();
+            this.lastNameSearchDictionary.Clear();
+            this.dateOfBirthSearchDictionary.Clear();
+        }
+
+        private void AddEntryToSearchDictionaries(FileCabinetRecord readRecord, long recordAddress)
+        {
+            this.AddEntryToSearchDictionaries(readRecord.FirstName, readRecord.LastName, readRecord.DateOfBirth, recordAddress);
+        }
+
+        private void AddEntryToSearchDictionaries(string firstName, string lastName, DateTime dateOfBirth, long recordAddress)
+        {
+            this.AddSearchEntry(this.firstNameSearchDictionary, firstName, recordAddress);
+            this.AddSearchEntry(this.lastNameSearchDictionary, lastName, recordAddress);
+            this.AddSearchEntry(this.dateOfBirthSearchDictionary, dateOfBirth, recordAddress);
+        }
+
+        private void DeleteEntryFromSearchDictionaries(FileCabinetRecord readRecord, long recordAddress)
+        {
+            this.DeleteEntryFromSearchDictionaries(readRecord.FirstName, readRecord.LastName, readRecord.DateOfBirth, recordAddress);
+        }
+
+        private void DeleteEntryFromSearchDictionaries(string firstName, string lastName, DateTime dateOfBirth, long recordAddress)
+        {
+            this.DeleteSearchEntry(this.firstNameSearchDictionary, firstName, recordAddress);
+            this.DeleteSearchEntry(this.lastNameSearchDictionary, lastName, recordAddress);
+            this.DeleteSearchEntry(this.dateOfBirthSearchDictionary, dateOfBirth, recordAddress);
+        }
+
+        private void AddSearchEntry<TKey, TValue>(Dictionary<TKey, List<TValue>> searchDictionary, TKey searchKey, TValue address)
+            where TKey : notnull
+        {
+            if (!searchDictionary.ContainsKey(searchKey))
+            {
+                searchDictionary.Add(searchKey, new List<TValue>());
+            }
+
+            searchDictionary[searchKey].Add(address);
+        }
+
+        private void DeleteSearchEntry<TKey, TValue>(Dictionary<TKey, List<TValue>> searchDictionary, TKey searchKey, TValue address)
+            where TKey : notnull
+        {
+            if (searchDictionary.ContainsKey(searchKey))
+            {
+                searchDictionary[searchKey].Remove(address);
             }
         }
 
-        private ReadOnlyCollection<FileCabinetRecord> FindByCondition(Predicate<FileCabinetRecord> condition)
+        private IEnumerable<FileCabinetRecord> FindAllRecord<TKey>(Dictionary<TKey, List<long>> searchDictionary, TKey key)
+            where TKey : notnull
         {
-            this.fileStream.Seek(0, SeekOrigin.Begin);
-
-            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
-
-            var result = new List<FileCabinetRecord>();
-            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            var addressList = searchDictionary[key];
+            foreach (var address in addressList)
             {
-                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
-                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
-                {
-                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
-                    continue;
-                }
+                this.fileStream.Seek(address, SeekOrigin.Begin);
 
-                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+                var record = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream);
 
-                var currentRecord = (FileCabinetRecord)this.dumpHelper.Read(this.fileStream) !;
-                if (condition(currentRecord))
-                {
-                    result.Add(currentRecord);
-                }
+                yield return record;
             }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
         }
     }
 }
