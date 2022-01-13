@@ -269,6 +269,99 @@
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
         </member>
+        <member name="T:FileCabinetApp.Configuration.DateTimeRangeConstraint">
+            <summary>
+                Class for <see cref="T:System.DateTime"/> constraint info.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.DateTimeRangeConstraint.From">
+            <summary>
+                Gets or sets minimal date's value.
+            </summary>
+            <value>Minimal date's value.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.DateTimeRangeConstraint.To">
+            <summary>
+                Gets or sets maxinun date's value.
+            </summary>
+            <value>Maximum date's value.</value>
+        </member>
+        <member name="T:FileCabinetApp.Configuration.NumericRangeConstraint`1">
+            <summary>
+                Class for <see cref="T:System.DateTime"/> constraint info.
+            </summary>
+            <typeparam name="T">Numeric type of constraint's value.</typeparam>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.NumericRangeConstraint`1.MinValue">
+            <summary>
+                Gets or sets minimal value.
+            </summary>
+            <value>Minimal value.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.NumericRangeConstraint`1.MaxValue">
+            <summary>
+                Gets or sets maximum value.
+            </summary>
+            <value>Maximum value.</value>
+        </member>
+        <member name="T:FileCabinetApp.Configuration.StringConstraint">
+            <summary>
+                Class for <see cref="T:System.String"/> constraint info.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.StringConstraint.MinLength">
+            <summary>
+                Gets or sets minimal string's length.
+            </summary>
+            <value>Minimal string's length.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.StringConstraint.MaxLength">
+            <summary>
+                Gets or sets maximum string's length.
+            </summary>
+            <value>Maximum string's length.</value>
+        </member>
+        <member name="T:FileCabinetApp.Configuration.ValidationConfig">
+            <summary>
+                Data class for validation rules configuration.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.FirstName">
+            <summary>
+                Gets or sets first name configuration info.
+            </summary>
+            <value>Firstname configuration info.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.LastName">
+            <summary>
+                Gets or sets last name configuration info.
+            </summary>
+            <value>Lastname configuration info.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.DateOfBirth">
+            <summary>
+                Gets or sets date of birth configuration info.
+            </summary>
+            <value>Date of birth configuration info.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.Stature">
+            <summary>
+                Gets or sets stature configuration info.
+            </summary>
+            <value>Stature configuration info.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.Weight">
+            <summary>
+                Gets or sets weight configuration info.
+            </summary>
+            <value>Weight configuration info.</value>
+        </member>
+        <member name="P:FileCabinetApp.Configuration.ValidationConfig.Gender">
+            <summary>
+                Gets or sets allowed gender values.
+            </summary>
+            <value>Allowed gender values.</value>
+        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord">
             <summary>
                 Class for a user information.
@@ -799,9 +892,7 @@
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Purge">
-            <summary>
-                Purges all recods, which were deleted.
-            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Purge"/>
         </member>
         <member name="T:FileCabinetApp.Services.FileCabinetMemoryService">
             <summary>
@@ -875,6 +966,11 @@
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.RemoveRecord(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Purge">
+            <summary>
+                Does nothing.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Services.IFileCabinetService">
             <summary>
                 Interface for the file cabinet services.
@@ -947,6 +1043,11 @@
             </summary>
             <param name="recordId">Id of record, which must be removed.</param>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="recordId"/> is less than 1 or record with <paramref name="recordId"/> does not exist.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Purge">
+            <summary>
+                Defragments the data file - removes the spaces in the data file.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.StreamHelper">
             <summary>
@@ -1060,6 +1161,217 @@
             <param name="dec"><see cref="T:System.Decimal"/>, which will be converted bytes array.</param>
             <returns><see cref="T:System.Array"/> of bytes with the converted <paramref name="dec"/>.</returns>
         </member>
+        <member name="T:FileCabinetApp.Utils.ServiceLogger">
+            <summary>
+                Logger wrapper for the <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> objects.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.#ctor(System.IO.Stream,FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Utils.ServiceLogger"/> class.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which logs will be written.</param>
+            <param name="service">Wrappable <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Writes a log with service information about CreateRecord command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Writes a log with service information about EditRecord command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.FindByDateOfBirth(System.DateTime)">
+            <summary>
+                Writes a log with service information about FindByDateOfBirth command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.FindByFirstName(System.String)">
+            <summary>
+                Writes a log with service information about FindByFirstName command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.FindByLastName(System.String)">
+            <summary>
+                Writes a log with service information about FindByLastName command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.GetRecords">
+            <summary>
+                Writes a log with service information about GetRecords command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.GetStat">
+            <summary>
+                Writes a log with service information about GetStat command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.Purge">
+            <summary>
+                Writes a log with service information about Purge command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Purge"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.RecordExists(System.Int32)">
+            <summary>
+                Writes a log with service information about RecordExists command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.RemoveRecord(System.Int32)">
+            <summary>
+                Writes a log with service information about RemoveRecord command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <summary>
+                Writes a log with service information about Restore command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
+        </member>
+        <member name="T:FileCabinetApp.Utils.ServiceMeter">
+            <summary>
+                Wrapper class for measuring the time of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object's commands execution.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Utils.ServiceMeter"/> class.
+            </summary>
+            <param name="service">Wrappable <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Measures and prints CreateRecord's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <summary>
+                Measures and prints EditRecord's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.FindByDateOfBirth(System.DateTime)">
+            <summary>
+                Measures and prints FindByDateOfBirth's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.FindByFirstName(System.String)">
+            <summary>
+                Measures and prints FindByFirstName's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.FindByLastName(System.String)">
+            <summary>
+                Measures and prints FindByLastName's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.GetRecords">
+            <summary>
+                Measures and prints GetRecords's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.GetStat">
+            <summary>
+                Measures and prints GetStat's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.Purge">
+            <summary>
+                Measures and prints Purge's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Purge"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.RecordExists(System.Int32)">
+            <summary>
+                Measures and prints RecordExists's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.RemoveRecord(System.Int32)">
+            <summary>
+                Measures and prints RemoveRecord's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <summary>
+                Measures and prints RemoveRecord's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
+        </member>
+        <member name="T:FileCabinetApp.Utils.ServiceWrapperBase">
+            <summary>
+                Abstract base class for all <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> objects wrappers.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Utils.ServiceWrapperBase"/> class.
+            </summary>
+            <param name="service">Wrappable <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</param>
+        </member>
+        <member name="P:FileCabinetApp.Utils.ServiceWrapperBase.Service">
+            <summary>
+                Gets wrapped service object.
+            </summary>
+            <value>Wrapped service object.</value>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.CreateRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.FindByDateOfBirth(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.FindByFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.FindByLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.GetRecords">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.GetStat">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.Purge">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Purge"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.RecordExists(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.RemoveRecord(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.GetWrappedObject">
+            <summary>
+                Gets initial wrapped object.
+            </summary>
+            <returns>Initial wrapped object.</returns>
+        </member>
         <member name="T:FileCabinetApp.InputUtils">
             <summary>
                 Class for the ant input util functions.
@@ -1138,27 +1450,34 @@
             <param name="record">Object, which must be validated.</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="record"/> is null.</exception>
         </member>
-        <member name="T:FileCabinetApp.Validators.CustomConsoleInputValidator">
+        <member name="T:FileCabinetApp.Validators.ConsoleInputValidator">
             <summary>
-                Custom console input validator.
+                Console input validator.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateBirthDay(System.DateTime)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.#ctor(FileCabinetApp.Configuration.ValidationConfig)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ConsoleInputValidator"/> class.
+            </summary>
+            <param name="validationConfig"><see cref="T:FileCabinetApp.Configuration.ValidationConfig"/> object, which have all validation constraints.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="validationConfig"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateBirthDay(System.DateTime)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)"/>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateFirstName(System.String)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateFirstName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)"/>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateGender(System.Char)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateGender(System.Char)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateLastName(System.String)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateLastName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateStature(System.Int16)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateStature(System.Int16)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)"/>
         </member>
-        <member name="M:FileCabinetApp.Validators.CustomConsoleInputValidator.ValidateWeight(System.Decimal)">
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateWeight(System.Decimal)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)"/>
         </member>
         <member name="T:FileCabinetApp.Validators.DateOfBirthValidator">
@@ -1179,29 +1498,6 @@
             </summary>
             <param name="record">Object to validate.</param>
             <exception cref="T:System.ArgumentException">Thrown when date of birth is less than minimal date or greater than maximum date.</exception>
-        </member>
-        <member name="T:FileCabinetApp.Validators.DefaultConsoleInputValidator">
-            <summary>
-                Default console input validator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateBirthDay(System.DateTime)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateFirstName(System.String)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateGender(System.Char)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateLastName(System.String)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateStature(System.Int16)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.DefaultConsoleInputValidator.ValidateWeight(System.Decimal)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)"/>
         </member>
         <member name="T:FileCabinetApp.Validators.FileRecordValidatorBase">
             <summary>
@@ -1351,134 +1647,21 @@
                 Class with extension methods for <see cref="T:FileCabinetApp.Validators.ValidatorBuilder"/>.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.ValidationBuilderExtension.CreateDefault(FileCabinetApp.Validators.ValidatorBuilder)">
+        <member name="M:FileCabinetApp.Validators.ValidationBuilderExtension.CreateDefault(FileCabinetApp.Validators.ValidatorBuilder,System.String)">
             <summary>
                 Creates validator with default validation rules.
             </summary>
             <param name="builder">Builder object, which must be appended with default validators.</param>
+            <param name="configFilePath">Config file path.</param>
             <returns>Built validator.</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.ValidationBuilderExtension.CreateCustom(FileCabinetApp.Validators.ValidatorBuilder)">
+        <member name="M:FileCabinetApp.Validators.ValidationBuilderExtension.CreateCustom(FileCabinetApp.Validators.ValidatorBuilder,System.String)">
             <summary>
                 Creates validator with custom validation rules.
             </summary>
             <param name="builder">Builder object, which must be appended with custom validators.</param>
+            <param name="configFilePath">Config file path.</param>
             <returns>Built validator.</returns>
-        </member>
-        <member name="T:FileCabinetApp.Validators.ValidationConstraints">
-            <summary>
-                Static class for holding all validation rules.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultFirstNameMinLength">
-            <summary>
-                Default first name minimal length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultFirstNameMaxLength">
-            <summary>
-                Default first name maximum length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomFirstNameMinLength">
-            <summary>
-                Custom first name minimal length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomFirstNameMaxLength">
-            <summary>
-                Custom first name maximum length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultLastNameMinLength">
-            <summary>
-                Default first name minimal length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultLastNameMaxLength">
-            <summary>
-                Default first name maximum length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomLastNameMinLength">
-            <summary>
-                Custom first name minimal length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomLastNameMaxLength">
-            <summary>
-                Custom first name maximum length.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultDateOfBirthMinValue">
-            <summary>
-                Default date of birth minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultDateOfBirthMaxValue">
-            <summary>
-                Default date of birth maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomDateOfBirthMinValue">
-            <summary>
-                Custom date of birth minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomDateOfBirthMaxValue">
-            <summary>
-                Custom date of birth maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultStatureMinValue">
-            <summary>
-                Default stature minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultStatureMaxValue">
-            <summary>
-                Default stature maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomStatureMinValue">
-            <summary>
-                Custom stature minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomStatureMaxValue">
-            <summary>
-                Custom stature maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultWeightMinValue">
-            <summary>
-                Default weight minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultWeightMaxValue">
-            <summary>
-                Default weight maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomWeightMinValue">
-            <summary>
-                Custom weight minimal value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomWeightMaxValue">
-            <summary>
-                Custom weight maximum value.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.DefaultGenderValues">
-            <summary>
-                Default gender allowed values.
-            </summary>
-        </member>
-        <member name="F:FileCabinetApp.Validators.ValidationConstraints.CustomGenderValues">
-            <summary>
-                Custom gender allowed values.
-            </summary>
         </member>
         <member name="T:FileCabinetApp.Validators.ValidatorBuilder">
             <summary>

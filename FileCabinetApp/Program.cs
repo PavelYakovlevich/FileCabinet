@@ -4,9 +4,12 @@ using System.IO;
 using System.Text;
 
 using FileCabinetApp.CommandHandlers;
+using FileCabinetApp.Configuration;
 using FileCabinetApp.Printers;
 using FileCabinetApp.Services;
+using FileCabinetApp.Utils;
 using FileCabinetApp.Validators;
+using Microsoft.Extensions.Configuration;
 using ProgramInputHandling;
 
 namespace FileCabinetApp
@@ -22,20 +25,31 @@ namespace FileCabinetApp
         private const int DescriptionHelpIndex = 1;
         private const int ExplanationHelpIndex = 2;
 
-        private static readonly string ValidationRulesAttributeName = "validation-rules";
-        private static readonly string StorageAttributeName = "storage";
+        private static readonly string ValidationRulesFileName = @"validation-rules.json";
+        private static readonly string ValidationRulesFilePath = @$"{Directory.GetCurrentDirectory()}\{ValidationRulesFileName}";
+
+        private static readonly string LogFileName = @"log.txt";
+        private static readonly string LogFilePath = @$"{Directory.GetCurrentDirectory()}\{LogFileName}";
+
+        private static readonly string ValidationRulesParameterName = "validation-rules";
+        private static readonly string StorageParameterName = "storage";
+        private static readonly string ServiceMeterParameterName = "use-stopwatch";
+        private static readonly string LoggerParameterName = "use-logger";
 
         private static readonly IInputParameter[] ProgramDefinedArguments = new IInputParameter[]
         {
-            new RangeInputParameter(ValidationRulesAttributeName, "v", false, new[] { "default", "custom" }),
-            new RangeInputParameter(StorageAttributeName, "s", false, new[] { "memory", "file" }),
+            new RangeInputParameter(ValidationRulesParameterName, "v", false, new[] { "default", "custom" }),
+            new RangeInputParameter(StorageParameterName, "s", false, new[] { "memory", "file" }),
+            new FlagInputParameter(ServiceMeterParameterName, false),
+            new FlagInputParameter(LoggerParameterName, false),
         };
 
         private static readonly string DBFilePath = @"cabinet-records.db";
         private static FileStream? databaseFileStream;
+        private static FileStream? loggerFileStream;
 
-        private static IConsoleInputValidator consoleInputValidator = new DefaultConsoleInputValidator();
-        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault());
+        private static IConsoleInputValidator? consoleInputValidator;
+        private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault(ValidationRulesFilePath));
 
         private static bool isRunning = true;
 
@@ -91,37 +105,40 @@ namespace FileCabinetApp
         private static void DisposeResources()
         {
             databaseFileStream?.Close();
+            loggerFileStream?.Close();
         }
 
         private static void HandleArguments(Dictionary<string, string> inputArguments)
         {
             IRecordValidator recordValidator;
-            if (inputArguments.ContainsKey(ValidationRulesAttributeName))
+            if (inputArguments.ContainsKey(ValidationRulesParameterName))
             {
-                var argumentValue = inputArguments[ValidationRulesAttributeName].ToLower();
+                var argumentValue = inputArguments[ValidationRulesParameterName].ToLower();
 
                 if (argumentValue.Equals("custom"))
                 {
-                    recordValidator = new ValidatorBuilder().CreateCustom();
-                    consoleInputValidator = new CustomConsoleInputValidator();
+                    recordValidator = new ValidatorBuilder().CreateCustom(ValidationRulesFilePath);
+                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
                 }
                 else
                 {
-                    recordValidator = new ValidatorBuilder().CreateCustom();
+                    recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
+                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
             }
             else
             {
-                recordValidator = new ValidatorBuilder().CreateCustom();
+                recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
+                consoleInputValidator = new ConsoleInputValidator(ReadValidationRules("default"));
 
                 Console.WriteLine($"Using default validation rules.");
             }
 
-            if (inputArguments.ContainsKey(StorageAttributeName))
+            if (inputArguments.ContainsKey(StorageParameterName))
             {
-                var argumentValue = inputArguments[StorageAttributeName].ToLower();
+                var argumentValue = inputArguments[StorageParameterName].ToLower();
 
                 if (argumentValue.Equals("file"))
                 {
@@ -137,6 +154,28 @@ namespace FileCabinetApp
             {
                 fileCabinetService = new FileCabinetMemoryService(recordValidator);
             }
+
+            if (inputArguments.ContainsKey(ServiceMeterParameterName))
+            {
+                fileCabinetService = new ServiceMeter(fileCabinetService);
+            }
+
+            if (inputArguments.ContainsKey(LoggerParameterName))
+            {
+                loggerFileStream = new FileStream(LogFilePath, FileMode.OpenOrCreate);
+                fileCabinetService = new ServiceLogger(loggerFileStream, fileCabinetService);
+            }
+        }
+
+        private static ValidationConfig ReadValidationRules(string validationRuleName)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(ValidationRulesFilePath)
+                .Build();
+
+            var validationConfig = config.GetSection(validationRuleName).Get<ValidationConfig>();
+
+            return validationConfig;
         }
 
         private static void PrintReadArgumentsErrorMessage()
@@ -152,10 +191,14 @@ namespace FileCabinetApp
                 }
                 else if (definedArgument is ValueInputParameter)
                 {
-                    validValuesStr = (definedArgument as ValueInputParameter)!.ValueType.ToString();
+                    validValuesStr = (definedArgument as ValueInputParameter) !.ValueType.ToString();
+                }
+                else if (definedArgument is FlagInputParameter)
+                {
+                    validValuesStr = "none";
                 }
 
-                errorMessage.AppendLine($"\t--{definedArgument.Name}(-{definedArgument.Abbreviation}) : {validValuesStr}");
+                errorMessage.AppendLine($"\t{definedArgument.Name}({definedArgument.Abbreviation}) : {validValuesStr}");
             }
 
             Console.WriteLine(errorMessage);
@@ -166,8 +209,8 @@ namespace FileCabinetApp
             var recordsPrinter = new DefaultRecordPrinter();
 
             var helpHandler = new HelpCommandHandler();
-            var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator);
-            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator);
+            var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator!);
+            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator!);
             var exitHandler = new ExitCommandHandler((value) => isRunning = value);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, recordsPrinter);

@@ -1,0 +1,48 @@
+{
+	"default": {
+		"firstName": {
+			"minLength": 2,
+			"maxLength": 60
+		},
+		"lastName": {
+			"minLength": 2,
+			"maxLength": 60
+		},
+		"dateOfBirth": {
+			"from": "1/1/1950",
+			"to": "1/10/2022"
+		},
+		"gender": ["M", "F"],
+		"stature": {
+			"minValue": 1,
+			"maxValue": 1000
+		},
+		"weight": {
+			"minValue": 1,
+			"maxValue": 1000000
+		}
+	},
+	"custom": {
+		"firstName": {
+			"minLength": 2,
+			"maxLength": 60
+		},
+		"lastName": {
+			"minLength": 2,
+			"maxLength": 60
+		},
+		"dateOfBirth": {
+			"from": "1/1/1900",
+			"to": "1/10/2022"
+		},
+		"gender": ["M", "F", "N"],
+		"stature": {
+			"minValue": 1,
+			"maxValue": 300
+		},
+		"weight": {
+			"minValue": 1,
+			"maxValue": 1000
+		}
+	}
+}

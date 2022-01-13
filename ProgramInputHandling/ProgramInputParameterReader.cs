@@ -140,6 +140,23 @@ namespace ProgramInputHandling
             }
             else if (currentArgument.StartsWith('-'))
             {
+                var isFlagParameter = false;
+                foreach (var definedArgument in this.programDefinedArguments)
+                {
+                    if (definedArgument.Abbreviation.Equals(trimmedArgument) && definedArgument is FlagInputParameter)
+                    {
+                        isFlagParameter = true;
+                    }
+                }
+
+                if (isFlagParameter)
+                {
+                    result.Item1 = trimmedArgument;
+                    result.Item2 = String.Empty;
+                    currentArgsIndex++;
+                    return result;
+                }
+
                 if (currentArgsIndex + 1 == args.Length)
                 {
                     result.Item3 = $"Missing value for the '{trimmedArgument}' argument.";

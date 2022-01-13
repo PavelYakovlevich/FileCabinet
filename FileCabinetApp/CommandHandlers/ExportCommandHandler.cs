@@ -2,6 +2,7 @@
 using System.IO;
 
 using FileCabinetApp.Services;
+using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -31,9 +32,10 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            if (this.service is FileCabinetFilesystemService)
+            var wrappedObject = (this.service as ServiceWrapperBase)?.GetWrappedObject();
+            if (wrappedObject is not FileCabinetMemoryService)
             {
-                Console.WriteLine("This command is not allowed with --storage=file");
+                Console.WriteLine("Usage of this command is allowed only for the FileCabinetMemoryService");
                 return;
             }
 
