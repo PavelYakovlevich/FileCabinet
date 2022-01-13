@@ -292,12 +292,6 @@
             </summary>
             <typeparam name="T">Numeric type of constraint's value.</typeparam>
         </member>
-        <member name="M:FileCabinetApp.Configuration.NumericRangeConstraint`1.#ctor">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.Configuration.NumericRangeConstraint`1"/> class.
-            </summary>
-            <exception cref="T:System.ArgumentException">Thrown when <typeparamref name="T"/> is not a primitive type.</exception>
-        </member>
         <member name="P:FileCabinetApp.Configuration.NumericRangeConstraint`1.MinValue">
             <summary>
                 Gets or sets minimal value.

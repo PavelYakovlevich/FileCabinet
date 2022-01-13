@@ -10,18 +10,6 @@ namespace FileCabinetApp.Configuration
         where T : struct
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="NumericRangeConstraint{T}"/> class.
-        /// </summary>
-        /// <exception cref="ArgumentException">Thrown when <typeparamref name="T"/> is not a primitive type.</exception>
-        public NumericRangeConstraint()
-        {
-            if (!typeof(T).IsPrimitive)
-            {
-                throw new ArgumentException($"{typeof(T).FullName} is not a primitive type!.");
-            }
-        }
-
-        /// <summary>
         ///     Gets or sets minimal value.
         /// </summary>
         /// <value>Minimal value.</value>
