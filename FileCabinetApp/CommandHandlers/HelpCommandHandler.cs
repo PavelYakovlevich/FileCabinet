@@ -24,6 +24,7 @@ namespace FileCabinetApp.CommandHandlers
                     new string[] { "import", "imports records from the file with specified format", "The 'import' command imports records from the file with specified format." },
                     new string[] { "remove", "removes record", "The 'remove' command removes record." },
                     new string[] { "purge", "makes defragmentation of the database file", "The 'purge' command makes defragmentation of the database file." },
+                    new string[] { "insert", "inserts a new record", "The 'insert' command inserts a new record." },
         };
 
         /// <summary>

@@ -89,6 +89,22 @@ namespace FileCabinetApp
             return Convert<decimal>(input, decimal.TryParse);
         }
 
+        /// <summary>
+        ///     Converts <paramref name="input"/>'s value into the <see cref="int"/>.
+        /// </summary>
+        /// <param name="input">String, which must be converted to <see cref="int"/>.</param>
+        /// <returns>
+        ///     <see cref="Tuple{T1, T2, T3}"/> object, whose values means:
+        ///     conversion result, conversion error message and converted value accordingly.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        internal static Tuple<bool, string, int> IntConverter(string input)
+        {
+            Guard.ArgumentIsNotNull(input, nameof(input));
+
+            return Convert<int>(input, int.TryParse);
+        }
+
         private static Tuple<bool, string, T> Convert<T>(string input, TryParseHandler<T> parser)
         {
             T parsedValue;
