@@ -220,6 +220,7 @@ namespace FileCabinetApp
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService, consoleInputValidator!);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService, consoleInputValidator!);
             var missedHandler = new MissedCommandHandler();
 
             helpHandler.SetNext(createHandler);
@@ -233,7 +234,8 @@ namespace FileCabinetApp
             importHandler.SetNext(exportHandler);
             exportHandler.SetNext(exitHandler);
             exportHandler.SetNext(insertHandler);
-            insertHandler.SetNext(missedHandler);
+            insertHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(missedHandler);
 
             return helpHandler;
         }

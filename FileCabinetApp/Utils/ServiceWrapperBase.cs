@@ -35,6 +35,9 @@ namespace FileCabinetApp.Utils
         /// <inheritdoc cref="IFileCabinetService.EditRecord(FileCabinetRecordParameterObject)"/>
         public abstract void EditRecord(FileCabinetRecordParameterObject parameterObject);
 
+        /// <inheritdoc cref="IFileCabinetService.Find(SearchInfo{FileCabinetRecord})"/>
+        public abstract IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo);
+
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public abstract IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
 

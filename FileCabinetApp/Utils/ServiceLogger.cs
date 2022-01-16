@@ -65,6 +65,25 @@ namespace FileCabinetApp.Utils
         }
 
         /// <summary>
+        ///     Writes a log with service information about Find command.
+        /// </summary>
+        /// <inheritdoc cref="IFileCabinetService.Find(SearchInfo{FileCabinetRecord})"/>
+        public override IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo)
+        {
+            this.stream.Seek(0, SeekOrigin.End);
+
+            using (var streamWriter = new StreamWriter(this.stream, Encoding.Default, -1, true))
+            {
+                var result = this.Service.Find(searchInfo);
+
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling Find()'");
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Find() returned '{result}'.");
+
+                return result;
+            }
+        }
+
+        /// <summary>
         ///     Writes a log with service information about FindByDateOfBirth command.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>

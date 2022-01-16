@@ -106,6 +106,41 @@ namespace FileCabinetApp.Services
             this.dumpHelper.Update(this.fileStream, record);
         }
 
+        /// <inheritdoc cref="IFileCabinetService.Find(SearchInfo{FileCabinetRecord})"/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="searchInfo"/> is null.</exception>
+        public IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo)
+        {
+            Guard.ArgumentIsNotNull(searchInfo, nameof(searchInfo));
+
+            IEnumerable<FileCabinetRecord> records;
+
+            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
+            {
+                records = this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
+            }
+            else if (searchInfo.SearchCriterias.ContainsKey("lastname"))
+            {
+                records = this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
+            }
+            else if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
+            {
+                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
+                records = this.FindByDateOfBirth(dateOfBirth);
+            }
+            else
+            {
+                records = this.FindAll();
+            }
+
+            foreach (var record in records)
+            {
+                if (searchInfo.SearchPredicate(record))
+                {
+                    yield return record;
+                }
+            }
+        }
+
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
@@ -142,32 +177,9 @@ namespace FileCabinetApp.Services
         /// <inheritdoc cref="IFileCabinetService.GetRecords"/>
         public ReadOnlyCollection<FileCabinetRecord> GetRecords()
         {
-            this.fileStream.Seek(0, SeekOrigin.Begin);
+            var records = this.FindAll();
 
-            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
-
-            var result = new List<FileCabinetRecord>();
-            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
-            {
-                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
-                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
-                {
-                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
-                    continue;
-                }
-
-                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
-
-                var record = this.dumpHelper.Read(this.fileStream);
-                if (record is null)
-                {
-                    throw new InvalidDataException($"Record with number {i / this.dumpHelper.SliceSize} can't be read.");
-                }
-
-                result.Add((FileCabinetRecord)record);
-            }
-
-            return new ReadOnlyCollection<FileCabinetRecord>(result);
+            return new ReadOnlyCollection<FileCabinetRecord>(records);
         }
 
         /// <inheritdoc cref="IFileCabinetService.GetStat"/>
@@ -471,7 +483,7 @@ namespace FileCabinetApp.Services
         private IEnumerable<FileCabinetRecord> FindAllRecord<TKey>(Dictionary<TKey, List<long>> searchDictionary, TKey key)
             where TKey : notnull
         {
-            var addressList = searchDictionary[key];
+            var addressList = searchDictionary[key].GetRange(0, searchDictionary[key].Count);
             foreach (var address in addressList)
             {
                 this.fileStream.Seek(address, SeekOrigin.Begin);
@@ -480,6 +492,39 @@ namespace FileCabinetApp.Services
 
                 yield return record;
             }
+        }
+
+        private List<FileCabinetRecord> FindAll(Predicate<FileCabinetRecord>? searchPredicate = null)
+        {
+            this.fileStream.Seek(0, SeekOrigin.Begin);
+
+            var reservedAreaSize = this.dumpHelper.GetSize("Reserved");
+
+            var result = new List<FileCabinetRecord>();
+            for (int i = 0; i < this.fileStream.Length; i += this.dumpHelper.SliceSize)
+            {
+                var recordStatus = (RecordStatus)StreamHelper.ReadShort(this.fileStream);
+                if ((recordStatus & RecordStatus.IsDeleted) == RecordStatus.IsDeleted)
+                {
+                    this.fileStream.Seek(this.dumpHelper.SliceSize - reservedAreaSize, SeekOrigin.Current);
+                    continue;
+                }
+
+                this.fileStream.Seek(-reservedAreaSize, SeekOrigin.Current);
+
+                var record = this.dumpHelper.Read(this.fileStream) as FileCabinetRecord;
+                if (record is null)
+                {
+                    throw new InvalidDataException($"Record with number {i / this.dumpHelper.SliceSize} can't be read.");
+                }
+
+                if (searchPredicate?.Invoke(record) ?? true)
+                {
+                    result.Add(record);
+                }
+            }
+
+            return result;
         }
     }
 }

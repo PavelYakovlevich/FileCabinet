@@ -116,6 +116,31 @@ namespace FileCabinetApp.Services
             return new ReadOnlyCollection<FileCabinetRecord>(this.existingRecords);
         }
 
+        /// <inheritdoc cref="IFileCabinetService.Find(SearchInfo{FileCabinetRecord})"/>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="searchInfo"/> is null.</exception>
+        public IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo)
+        {
+            Guard.ArgumentIsNotNull(searchInfo, nameof(searchInfo));
+
+            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
+            {
+                return this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
+            }
+
+            if (searchInfo.SearchCriterias.ContainsKey("lastname"))
+            {
+                return this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
+            }
+
+            if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
+            {
+                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
+                return this.FindByDateOfBirth(dateOfBirth);
+            }
+
+            return this.existingRecords.FindAll(searchInfo.SearchPredicate);
+        }
+
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
         /// <exception cref="ArgumentNullException">Thrown when firstName is null.</exception>
         public IEnumerable<FileCabinetRecord> FindByFirstName(string firstName)

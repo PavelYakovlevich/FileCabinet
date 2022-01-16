@@ -62,6 +62,25 @@ namespace FileCabinetApp.Utils
         /// <summary>
         ///     Measures and prints FindByDateOfBirth's command execution time.
         /// </summary>
+        /// <inheritdoc cref="IFileCabinetService.Find(SearchInfo{FileCabinetRecord})"/>
+        public override IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            var result = this.Service.Find(searchInfo);
+
+            stopwatch.Stop();
+
+            this.PrintMeasurementResult(stopwatch.ElapsedTicks);
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Measures and prints FindByDateOfBirth's command execution time.
+        /// </summary>
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>
         public override IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth)
         {
