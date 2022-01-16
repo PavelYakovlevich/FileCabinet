@@ -1,33 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using FileCabinetApp.Services;
-using FileCabinetApp.Validators;
+using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.CommandHandlers
 {
     public class DeleteCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IDictionary<string, Func<string, Tuple<bool, string, Predicate<FileCabinetRecord>?>>> conditionCreators;
-        private readonly IConsoleInputValidator validator;
-
-        public DeleteCommandHandler(IFileCabinetService service, IConsoleInputValidator validator)
+        public DeleteCommandHandler(IFileCabinetService service)
             : base(service)
         {
-            Guard.ArgumentIsNotNull(validator, nameof(validator));
-
-            this.conditionCreators = new Dictionary<string, Func<string, Tuple<bool, string, Predicate<FileCabinetRecord>?>>>()
-            {
-                { "id", this.CreateIdCondition },
-                { "firstname", this.CreateFirstNameCondition },
-                { "lastname", this.CreateLastNameCondition },
-                { "dateofbirth", this.CreateDateOFBirthCondition },
-                { "stature", this.CreateStatureCondition },
-                { "weight", this.CreateWeightCondition },
-                { "gender", this.CreateGenderCondition },
-            };
-
-            this.validator = validator;
         }
 
         public override void Handle(AppCommandRequest commandRequest)
@@ -57,7 +39,7 @@ namespace FileCabinetApp.CommandHandlers
 
             try
             {
-                var searchCondition = SearchInfo<FileCabinetRecord>.Create(this.conditionCreators, searchCriteriasPairs);
+                var searchCondition = SearchInfo<FileCabinetRecord>.Create(RecordsUtils.ConditionCreators, searchCriteriasPairs);
 
                 var deletedRecordsIdsStr = new StringBuilder();
                 var deletedRecordsCount = 0;
@@ -87,58 +69,6 @@ namespace FileCabinetApp.CommandHandlers
             {
                 Console.WriteLine($"Delete error: {exception.Message}");
             }
-        }
-
-        private static Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateCondition<T>(string value, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator, Func<FileCabinetRecord, T, bool> condition)
-        {
-            var conversionResult = converter(value);
-            if (!conversionResult.Item1)
-            {
-                return new Tuple<bool, string, Predicate<FileCabinetRecord>?>(false, $"conversion failed with an error '{conversionResult.Item2}'", null);
-            }
-
-            var validationResult = validator(conversionResult.Item3);
-            if (!validationResult.Item1)
-            {
-                return new Tuple<bool, string, Predicate<FileCabinetRecord>?>(false, $"validation failed with an error '{validationResult.Item2}'", null);
-            }
-
-            return new Tuple<bool, string, Predicate<FileCabinetRecord>?>(true, string.Empty, (record) => condition(record, conversionResult.Item3));
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateIdCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.IntConverter, this.validator.ValidateId, (record, id) => record.Id == id);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateFirstNameCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.StringConverter, this.validator.ValidateFirstName, (record, firstname) => record.FirstName == firstname);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateLastNameCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.StringConverter, this.validator.ValidateFirstName, (record, lastname) => record.LastName == lastname);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateDateOFBirthCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.DateTimeConverter, this.validator.ValidateBirthDay, (record, dateOfBirth) => record.DateOfBirth == dateOfBirth);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateStatureCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.ShortConverter, this.validator.ValidateStature, (record, stature) => record.Stature == stature);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateWeightCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.DecimalConverter, this.validator.ValidateWeight, (record, weight) => record.Weight == weight);
-        }
-
-        private Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateGenderCondition(string value)
-        {
-            return CreateCondition(value, InputUtils.CharConverter, this.validator.ValidateGender, (record, gender) => record.Gender == gender);
         }
     }
 }

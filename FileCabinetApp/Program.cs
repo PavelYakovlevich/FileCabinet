@@ -165,6 +165,8 @@ namespace FileCabinetApp
                 loggerFileStream = new FileStream(LogFilePath, FileMode.OpenOrCreate);
                 fileCabinetService = new ServiceLogger(loggerFileStream, fileCabinetService);
             }
+
+            RecordsUtils.Initialize(consoleInputValidator!);
         }
 
         private static ValidationConfig ReadValidationRules(string validationRuleName)
@@ -219,8 +221,9 @@ namespace FileCabinetApp
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
-            var insertHandler = new InsertCommandHandler(fileCabinetService, consoleInputValidator!);
-            var deleteHandler = new DeleteCommandHandler(fileCabinetService, consoleInputValidator!);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var missedHandler = new MissedCommandHandler();
 
             helpHandler.SetNext(createHandler);
@@ -235,7 +238,8 @@ namespace FileCabinetApp
             exportHandler.SetNext(exitHandler);
             exportHandler.SetNext(insertHandler);
             insertHandler.SetNext(deleteHandler);
-            deleteHandler.SetNext(missedHandler);
+            deleteHandler.SetNext(updateHandler);
+            updateHandler.SetNext(missedHandler);
 
             return helpHandler;
         }

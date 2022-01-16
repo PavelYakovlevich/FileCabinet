@@ -25,7 +25,8 @@ namespace FileCabinetApp.CommandHandlers
                     new string[] { "remove", "removes record", "The 'remove' command removes record." },
                     new string[] { "purge", "makes defragmentation of the database file", "The 'purge' command makes defragmentation of the database file." },
                     new string[] { "insert", "inserts a new record", "The 'insert' command inserts a new record." },
-                    new string[] { "delete", "deletes existing record(s)", "The 'delete' command deletes existing record(s)." },
+                    new string[] { "delete", "deletes records, which satisfies specified criterias", "The 'delete' command deletes records, which satisfies specified criterias." },
+                    new string[] { "update", "updates records, which satisfies specified criterias", "The 'delete' command updates records, , which satisfies specified criterias." },
         };
 
         /// <summary>

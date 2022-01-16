@@ -7,7 +7,7 @@ namespace FileCabinetApp
     /// <summary>
     ///     Class for the creation and editing input parameters.
     /// </summary>
-    public class FileCabinetRecordParameterObject
+    public class FileCabinetRecordParameterObject : ICloneable
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="FileCabinetRecordParameterObject"/> class.
@@ -84,5 +84,14 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>Weight of the user.</value>
         public decimal Weight { get; set; }
+
+        /// <summary>
+        ///     Copies this instance.
+        /// </summary>
+        /// <returns>Cloned object.</returns>
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }
