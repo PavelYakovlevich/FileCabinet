@@ -25,6 +25,7 @@ namespace FileCabinetApp.CommandHandlers
                     new string[] { "insert", "inserts a new record", "The 'insert' command inserts a new record." },
                     new string[] { "delete", "deletes records, which satisfies specified criterias", "The 'delete' command deletes records, which satisfies specified criterias." },
                     new string[] { "update", "updates records, which satisfies specified criterias", "The 'delete' command updates records, , which satisfies specified criterias." },
+                    new string[] { "select", "selects records, which satisfies specified criterias", "The 'select' command selectes records, , which satisfies specified criterias." },
         };
 
         /// <summary>

@@ -208,33 +208,29 @@ namespace FileCabinetApp
 
         private static ICommandHandler CreateCommandHandlers()
         {
-            var recordsPrinter = new DefaultRecordPrinter();
-
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator!);
             var exitHandler = new ExitCommandHandler((value) => isRunning = value);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
-            var findHandler = new FindCommandHandler(fileCabinetService, recordsPrinter);
             var importHandler = new ImportCommandHandler(fileCabinetService);
-            var listHandler = new ListCommandHandler(fileCabinetService, recordsPrinter);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
             var insertHandler = new InsertCommandHandler(fileCabinetService);
             var deleteHandler = new DeleteCommandHandler(fileCabinetService);
             var updateHandler = new UpdateCommandHandler(fileCabinetService);
+            var selectHandler = new SelectCommandHandler(fileCabinetService, new TablePrinter<FileCabinetRecord>());
             var missedHandler = new MissedCommandHandler();
 
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(findHandler);
-            findHandler.SetNext(statHandler);
+            createHandler.SetNext(statHandler);
             statHandler.SetNext(purgeHandler);
-            purgeHandler.SetNext(listHandler);
-            listHandler.SetNext(importHandler);
+            purgeHandler.SetNext(importHandler);
             importHandler.SetNext(exportHandler);
             exportHandler.SetNext(insertHandler);
             insertHandler.SetNext(deleteHandler);
             deleteHandler.SetNext(updateHandler);
-            updateHandler.SetNext(missedHandler);
+            updateHandler.SetNext(selectHandler);
+            selectHandler.SetNext(missedHandler);
             missedHandler.SetNext(exitHandler);
 
             return helpHandler;
