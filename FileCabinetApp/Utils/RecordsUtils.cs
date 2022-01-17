@@ -7,6 +7,9 @@ using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.Utils
 {
+    /// <summary>
+    ///     Static class for common data for the finsert, delete, update commands.
+    /// </summary>
     public static class RecordsUtils
     {
         private static IConsoleInputValidator validator;
@@ -36,16 +39,28 @@ namespace FileCabinetApp.Utils
             };
         }
 
+        /// <summary>
+        ///     Gets condition creators dictionary.
+        /// </summary>
+        /// <value>Condition creators dictionary.</value>
+        public static Dictionary<string, Func<string, Tuple<bool, string, Predicate<FileCabinetRecord>?>>> ConditionCreators { get; }
+
+        /// <summary>
+        ///     Gets fields setters dictionary.
+        /// </summary>
+        /// <value>Fields setters dictionary.</value>
+        public static Dictionary<string, Func<FileCabinetRecordParameterObject, string, Tuple<bool, string>>> FieldsSetters { get; }
+
+        /// <summary>
+        ///     Initializes class data.
+        /// </summary>
+        /// <param name="inputValidator">Validator, which will validates input for the proper fields.</param>
         public static void Initialize(IConsoleInputValidator inputValidator)
         {
             Guard.ArgumentIsNotNull(inputValidator, nameof(inputValidator));
 
             validator = inputValidator;
         }
-
-        public static Dictionary<string, Func<string, Tuple<bool, string, Predicate<FileCabinetRecord>?>>> ConditionCreators { get;  }
-
-        public static Dictionary<string, Func<FileCabinetRecordParameterObject, string, Tuple<bool, string>>> FieldsSetters { get; }
 
         private static Tuple<bool, string, Predicate<FileCabinetRecord>?> CreateCondition<T>(string value, Func<string, Tuple<bool, string, T>> converter, Func<T, Tuple<bool, string>> validator, Func<FileCabinetRecord, T, bool> condition)
         {

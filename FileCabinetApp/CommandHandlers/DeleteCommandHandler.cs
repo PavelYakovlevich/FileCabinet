@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Text;
+
 using FileCabinetApp.Services;
 using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    ///     Class for handling 'delete' command.
+    /// </summary>
     public class DeleteCommandHandler : ServiceCommandHandlerBase
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DeleteCommandHandler"/> class.
+        /// </summary>
+        /// <inheritdoc cref="ServiceCommandHandlerBase"/>
         public DeleteCommandHandler(IFileCabinetService service)
             : base(service)
         {
         }
 
+        /// <summary>
+        ///     Handles delete command.
+        /// </summary>
+        /// <inheritdoc cref="ICommandHandler.Handle(AppCommandRequest)"/>
         public override void Handle(AppCommandRequest commandRequest)
         {
             if (!commandRequest.Command.Equals("delete", StringComparison.InvariantCultureIgnoreCase))

@@ -58,23 +58,22 @@
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.EditCommandHandler">
+        <member name="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler">
             <summary>
-                Class for handling of 'edit' command.
+                Class for handling 'delete' command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.IConsoleInputValidator)">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
             <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.EditCommandHandler"/> class.
+                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.DeleteCommandHandler"/> class.
             </summary>
-            <param name="service">Service for working with file cabinet records.</param>
-            <param name="validator">Validator for console input.</param>
+            <inheritdoc cref="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase"/>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.EditCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+        <member name="M:FileCabinetApp.CommandHandlers.DeleteCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
-                Handles 'edit' command.
+                Handles delete command.
             </summary>
-            <param name="commandRequest">Input data for a requested command.</param>
+            <inheritdoc cref="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)"/>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ExitCommandHandler">
             <summary>
@@ -173,6 +172,23 @@
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
         </member>
+        <member name="T:FileCabinetApp.CommandHandlers.InsertCommandHandler">
+            <summary>
+                Class for handling of 'insert' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.InsertCommandHandler"/> class.
+            </summary>
+            <param name="service">Service for working with file cabinet records.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.InsertCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+                Handles insert command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)"/>
+        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
             <summary>
                 Class for handling of 'list' command.
@@ -219,23 +235,6 @@
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler">
-            <summary>
-                Class for handling of 'remove' command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.RemoveCommandHandler"/> class.
-            </summary>
-            <param name="service">Service for working with file cabinet records.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.RemoveCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
-            <summary>
-                Handles 'remove' command.
-            </summary>
-            <param name="commandRequest">Input data for a requested command.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
             <summary>
                 Class for handlers of program commands, which require <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.
@@ -268,6 +267,23 @@
                 Handles 'stat' command.
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler">
+            <summary>
+                Class for handling of 'update' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.UpdateCommandHandler"/> class.
+            </summary>
+            <param name="service">Service for working with file cabinet records.</param>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.UpdateCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <summary>
+                Handles update command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)"/>
         </member>
         <member name="T:FileCabinetApp.Configuration.DateTimeRangeConstraint">
             <summary>
@@ -456,6 +472,11 @@
                 Class for the creation and editing input parameters.
             </summary>
         </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> class.
+            </summary>
+        </member>
         <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.#ctor(System.String,System.String,System.DateTime,System.Int16,System.Char,System.Decimal)">
             <summary>
                 Initializes a new instance of the <see cref="T:FileCabinetApp.FileCabinetRecordParameterObject"/> class.
@@ -473,45 +494,51 @@
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Id">
             <summary>
-                Gets id value of the user.
+                Gets or sets id value of the user.
             </summary>
             <value>Id of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.FirstName">
             <summary>
-                Gets first name value of the user.
+                Gets or sets first name value of the user.
             </summary>
             <value>First name of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.LastName">
             <summary>
-                Gets last name value of the user.
+                Gets or sets last name value of the user.
             </summary>
             <value>Last name of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.DateOfBirth">
             <summary>
-                Gets date of birth value of the user.
+                Gets or sets date of birth value of the user.
             </summary>
             <value>Date of birth of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Stature">
             <summary>
-                Gets stature value of the user.
+                Gets or sets  stature value of the user.
             </summary>
             <value>Stature of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Gender">
             <summary>
-                Gets gender value of the user.
+                Gets or sets  gender value of the user.
             </summary>
             <value>Gender of the user.</value>
         </member>
         <member name="P:FileCabinetApp.FileCabinetRecordParameterObject.Weight">
             <summary>
-                Gets weight value of the user.
+                Gets or sets  weight value of the user.
             </summary>
             <value>Weight of the user.</value>
+        </member>
+        <member name="M:FileCabinetApp.FileCabinetRecordParameterObject.Clone">
+            <summary>
+                Copies this instance.
+            </summary>
+            <returns>Cloned object.</returns>
         </member>
         <member name="T:FileCabinetApp.FileCabinetServiceSnapshot">
             <summary>
@@ -741,6 +768,34 @@
             </summary>
             <returns><see cref="T:System.Collections.Generic.IList`1"/> object with all records, extracted from a file.</returns>
         </member>
+        <member name="T:FileCabinetApp.SearchInfo`1">
+            <summary>
+                Class for holding info for the searching.
+            </summary>
+            <typeparam name="T">Type of a searchable object.</typeparam>
+        </member>
+        <member name="P:FileCabinetApp.SearchInfo`1.SearchCriterias">
+            <summary>
+                Gets dictionary with all search criterias.
+            </summary>
+            <value>Dictionary with all search criterias.</value>
+        </member>
+        <member name="P:FileCabinetApp.SearchInfo`1.SearchPredicate">
+            <summary>
+                Gets search condition.
+            </summary>
+            <value>Search condition.</value>
+        </member>
+        <member name="M:FileCabinetApp.SearchInfo`1.Create(System.Collections.Generic.IDictionary{System.String,System.Func{System.String,System.Tuple{System.Boolean,System.String,System.Predicate{`0}}}},System.String[])">
+            <summary>
+                Parses an <paramref name="searchCriteriasPairs"/> and creates an instance of the <see cref="T:FileCabinetApp.SearchInfo`1"/> class.
+            </summary>
+            <param name="conditionCreators"><see cref="T:System.Collections.Generic.IDictionary`2"/> object with methods, which are responsible for creating of predicates according to the found fields. </param>
+            <param name="searchCriteriasPairs"><see cref="T:System.Array"/> object, which must be parsed.</param>
+            <returns>Created instance of the <see cref="T:FileCabinetApp.SearchInfo`1"/> class.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="conditionCreators"/> or <paramref name="searchCriteriasPairs"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="conditionCreators"/> is empty.</exception>
+        </member>
         <member name="T:FileCabinetApp.Serialization.DumpHelper">
             <summary>
                 Class for working with objects, which are saved in memory.
@@ -876,6 +931,10 @@
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="searchInfo"/> is null.</exception>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.FindByDateOfBirth(System.DateTime)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
@@ -952,6 +1011,10 @@
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.GetRecords">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetRecords"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})"/>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="searchInfo"/> is null.</exception>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.FindByFirstName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)"/>
             <exception cref="T:System.ArgumentNullException">Thrown when firstName is null.</exception>
@@ -1017,6 +1080,13 @@
             </summary>
             <returns>Array of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/>.</returns>
         </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+                Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that satisfy conditions in <paramref name="searchInfo"/>.
+            </summary>
+            <param name="searchInfo"><see cref="T:FileCabinetApp.SearchInfo`1"/> object with all search info.</param>
+            <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which satisfy <paramref name="searchInfo"/>.</returns>
+        </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.FindByFirstName(System.String)">
             <summary>
                 Perfoms search of all existing <see cref="T:FileCabinetApp.FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
@@ -1058,97 +1128,6 @@
                 Defragments the data file - removes the spaces in the data file.
             </summary>
         </member>
-        <member name="T:FileCabinetApp.StreamHelper">
-            <summary>
-                Class for reading, writing an primitive objects from, to a stream.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadString(System.IO.Stream,System.Int32)">
-            <summary>
-                Read a <see cref="T:System.String"/> object from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a string will be read.</param>
-            <param name="maxSize">Maximum size of string.</param>
-            <returns><see cref="T:System.String"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadInt(System.IO.Stream)">
-            <summary>
-                Read a <see cref="T:System.Int32"/> object from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int32"/> will be read.</param>
-            <returns><see cref="T:System.Int32"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadShort(System.IO.Stream)">
-            <summary>
-                Read a <see cref="T:System.Int16"/> object from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int16"/> will be read.</param>
-            <returns><see cref="T:System.Int16"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadDecimal(System.IO.Stream)">
-            <summary>
-                Read a <see cref="T:System.Decimal"/> from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Decimal"/> will be read.</param>
-            <returns><see cref="T:System.Decimal"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadChar(System.IO.Stream)">
-            <summary>
-                Read a <see cref="T:System.Char"/> from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Char"/> will be read.</param>
-            <returns><see cref="T:System.Char"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.ReadDateTime(System.IO.Stream)">
-            <summary>
-                Read a <see cref="T:System.DateTime"/> object from a <see cref="T:System.IO.Stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.DateTime"/> will be read.</param>
-            <returns><see cref="T:System.DateTime"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int32)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int16)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Char)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Decimal)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.DateTime)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
-        </member>
-        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.String,System.Int32)">
-            <summary>
-                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
-            <param name="value">String, which will ne written to a <paramref name="stream"/>.</param>
-            <param name="maxSize">Length of a <paramref name="value"/>.</param>
-        </member>
         <member name="T:FileCabinetApp.Utils.BitConverterExtension">
             <summary>
                 Class with methods for converting <see cref="T:System.Decimal"/> to bytes array and vice versa.
@@ -1169,6 +1148,29 @@
             </summary>
             <param name="dec"><see cref="T:System.Decimal"/>, which will be converted bytes array.</param>
             <returns><see cref="T:System.Array"/> of bytes with the converted <paramref name="dec"/>.</returns>
+        </member>
+        <member name="T:FileCabinetApp.Utils.RecordsUtils">
+            <summary>
+                Static class for common data for the finsert, delete, update commands.
+            </summary>
+        </member>
+        <member name="P:FileCabinetApp.Utils.RecordsUtils.ConditionCreators">
+            <summary>
+                Gets condition creators dictionary.
+            </summary>
+            <value>Condition creators dictionary.</value>
+        </member>
+        <member name="P:FileCabinetApp.Utils.RecordsUtils.FieldsSetters">
+            <summary>
+                Gets fields setters dictionary.
+            </summary>
+            <value>Fields setters dictionary.</value>
+        </member>
+        <member name="M:FileCabinetApp.Utils.RecordsUtils.Initialize(FileCabinetApp.Validators.IConsoleInputValidator)">
+            <summary>
+                Initializes class data.
+            </summary>
+            <param name="inputValidator">Validator, which will validates input for the proper fields.</param>
         </member>
         <member name="T:FileCabinetApp.Utils.ServiceLogger">
             <summary>
@@ -1193,6 +1195,12 @@
                 Writes a log with service information about EditRecord command.
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+                Writes a log with service information about Find command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})"/>
         </member>
         <member name="M:FileCabinetApp.Utils.ServiceLogger.FindByDateOfBirth(System.DateTime)">
             <summary>
@@ -1271,6 +1279,12 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+                Measures and prints FindByDateOfBirth's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceMeter.FindByDateOfBirth(System.DateTime)">
             <summary>
                 Measures and prints FindByDateOfBirth's command execution time.
@@ -1347,6 +1361,9 @@
         </member>
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.EditRecord(FileCabinetApp.FileCabinetRecordParameterObject)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Find(FileCabinetApp.SearchInfo{FileCabinetApp.FileCabinetRecord})"/>
         </member>
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.FindByDateOfBirth(System.DateTime)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
@@ -1441,6 +1458,108 @@
             </returns>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
         </member>
+        <member name="M:FileCabinetApp.InputUtils.IntConverter(System.String)">
+            <summary>
+                Converts <paramref name="input"/>'s value into the <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="input">String, which must be converted to <see cref="T:System.Int32"/>.</param>
+            <returns>
+                <see cref="T:System.Tuple`3"/> object, whose values means:
+                conversion result, conversion error message and converted value accordingly.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="input"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.StreamHelper">
+            <summary>
+                Class for reading, writing an primitive objects from, to a stream.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadString(System.IO.Stream,System.Int32)">
+            <summary>
+                Read a <see cref="T:System.String"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a string will be read.</param>
+            <param name="maxSize">Maximum size of string.</param>
+            <returns><see cref="T:System.String"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadInt(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Int32"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int32"/> will be read.</param>
+            <returns><see cref="T:System.Int32"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadShort(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Int16"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Int16"/> will be read.</param>
+            <returns><see cref="T:System.Int16"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadDecimal(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Decimal"/> from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Decimal"/> will be read.</param>
+            <returns><see cref="T:System.Decimal"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadChar(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.Char"/> from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.Char"/> will be read.</param>
+            <returns><see cref="T:System.Char"/> object, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.ReadDateTime(System.IO.Stream)">
+            <summary>
+                Read a <see cref="T:System.DateTime"/> object from a <see cref="T:System.IO.Stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, from which a <see cref="T:System.DateTime"/> will be read.</param>
+            <returns><see cref="T:System.DateTime"/>, which was read from a <see cref="T:System.IO.Stream"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int32)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Int16)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Char)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.Decimal)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.DateTime)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">Value, which will ne written to a <paramref name="stream"/>.</param>
+        </member>
+        <member name="M:FileCabinetApp.StreamHelper.Write(System.IO.Stream,System.String,System.Int32)">
+            <summary>
+                Writes an <paramref name="value"/> to a <paramref name="stream"/>.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object, to which a <paramref name="value"/> will be written.</param>
+            <param name="value">String, which will ne written to a <paramref name="stream"/>.</param>
+            <param name="maxSize">Length of a <paramref name="value"/>.</param>
+        </member>
         <member name="T:FileCabinetApp.Validators.CompositeValidator">
             <summary>
                 Composite validator.
@@ -1479,6 +1598,9 @@
         </member>
         <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateGender(System.Char)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateId(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateId(System.Int32)"/>
         </member>
         <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateLastName(System.String)">
             <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
@@ -1563,6 +1685,13 @@
             <summary>
                 Interface for the console input validators.
             </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateId(System.Int32)">
+            <summary>
+                Validates <paramref name="id"/>.
+            </summary>
+            <param name="id">Id.</param>
+            <returns>(true,"") if <paramref name="id"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
         <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)">
             <summary>

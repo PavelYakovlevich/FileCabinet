@@ -42,7 +42,7 @@ namespace FileCabinetApp.Services
         ReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         /// <summary>
-        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that satisfy <paramref name="condition"/>.
+        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that satisfy conditions in <paramref name="searchInfo"/>.
         /// </summary>
         /// <param name="searchInfo"><see cref="SearchInfo{FileCabinetRecord}"/> object with all search info.</param>
         /// <returns>All <see cref="FileCabinetRecord"/> records, which satisfy <paramref name="searchInfo"/>.</returns>

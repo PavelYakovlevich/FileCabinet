@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+
 using FileCabinetApp.Services;
 using FileCabinetApp.Utils;
-using FileCabinetApp.Validators;
 
 namespace FileCabinetApp.CommandHandlers
 {
@@ -27,6 +26,9 @@ namespace FileCabinetApp.CommandHandlers
         {
         }
 
+        /// <summary>
+        ///     Handles insert command.
+        /// </summary>
         /// <inheritdoc cref="ICommandHandler.Handle(AppCommandRequest)"/>
         public override void Handle(AppCommandRequest commandRequest)
         {

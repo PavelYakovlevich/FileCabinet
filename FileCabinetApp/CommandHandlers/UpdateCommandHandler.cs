@@ -4,17 +4,28 @@ using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.CommandHandlers
 {
+    /// <summary>
+    ///     Class for handling of 'update' command.
+    /// </summary>
     public class UpdateCommandHandler : ServiceCommandHandlerBase
     {
         private static readonly int FieldsNamesIndex = 0;
         private static readonly int FieldsValuesIndex = 1;
         private static readonly char[] SplitChars = new[] { '=', ' ' };
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="UpdateCommandHandler"/> class.
+        /// </summary>
+        /// <param name="service">Service for working with file cabinet records.</param>
         public UpdateCommandHandler(IFileCabinetService service)
             : base(service)
         {
         }
 
+        /// <summary>
+        ///     Handles update command.
+        /// </summary>
+        /// <inheritdoc cref="ICommandHandler.Handle(AppCommandRequest)"/>
         public override void Handle(AppCommandRequest commandRequest)
         {
             if (!commandRequest.Command.Equals("update", StringComparison.InvariantCultureIgnoreCase))
