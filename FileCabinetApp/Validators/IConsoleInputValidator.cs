@@ -8,6 +8,13 @@ namespace FileCabinetApp.Validators
     public interface IConsoleInputValidator
     {
         /// <summary>
+        ///     Validates <paramref name="id"/>.
+        /// </summary>
+        /// <param name="id">Id.</param>
+        /// <returns>(true,"") if <paramref name="id"/> is valid, overwise (false,<see cref="string"/> error message).</returns>
+        Tuple<bool, string> ValidateId(int id);
+
+        /// <summary>
         ///     Validates <paramref name="firstName"/>.
         /// </summary>
         /// <param name="firstName">Firstname.</param>

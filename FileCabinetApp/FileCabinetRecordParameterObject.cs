@@ -1,12 +1,21 @@
 ﻿using System;
 
+#pragma warning disable CS8618
+
 namespace FileCabinetApp
 {
     /// <summary>
     ///     Class for the creation and editing input parameters.
     /// </summary>
-    public class FileCabinetRecordParameterObject
+    public class FileCabinetRecordParameterObject : ICloneable
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="FileCabinetRecordParameterObject"/> class.
+        /// </summary>
+        public FileCabinetRecordParameterObject()
+        {
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="FileCabinetRecordParameterObject"/> class.
         /// </summary>
@@ -35,45 +44,54 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        ///     Gets id value of the user.
+        ///     Gets or sets id value of the user.
         /// </summary>
         /// <value>Id of the user.</value>
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         /// <summary>
-        ///     Gets first name value of the user.
+        ///     Gets or sets first name value of the user.
         /// </summary>
         /// <value>First name of the user.</value>
-        public string FirstName { get; private set; }
+        public string FirstName { get; set; }
 
         /// <summary>
-        ///     Gets last name value of the user.
+        ///     Gets or sets last name value of the user.
         /// </summary>
         /// <value>Last name of the user.</value>
-        public string LastName { get; private set; }
+        public string LastName { get; set; }
 
         /// <summary>
-        ///     Gets date of birth value of the user.
+        ///     Gets or sets date of birth value of the user.
         /// </summary>
         /// <value>Date of birth of the user.</value>
-        public DateTime DateOfBirth { get; private set; }
+        public DateTime DateOfBirth { get; set; }
 
         /// <summary>
-        ///     Gets stature value of the user.
+        ///     Gets or sets  stature value of the user.
         /// </summary>
         /// <value>Stature of the user.</value>
-        public short Stature { get; private set; }
+        public short Stature { get; set; }
 
         /// <summary>
-        ///     Gets gender value of the user.
+        ///     Gets or sets  gender value of the user.
         /// </summary>
         /// <value>Gender of the user.</value>
-        public char Gender { get; private set; }
+        public char Gender { get; set; }
 
         /// <summary>
-        ///     Gets weight value of the user.
+        ///     Gets or sets  weight value of the user.
         /// </summary>
         /// <value>Weight of the user.</value>
-        public decimal Weight { get; private set; }
+        public decimal Weight { get; set; }
+
+        /// <summary>
+        ///     Copies this instance.
+        /// </summary>
+        /// <returns>Cloned object.</returns>
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

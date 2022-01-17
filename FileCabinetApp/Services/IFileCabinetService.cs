@@ -42,6 +42,13 @@ namespace FileCabinetApp.Services
         ReadOnlyCollection<FileCabinetRecord> GetRecords();
 
         /// <summary>
+        ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that satisfy conditions in <paramref name="searchInfo"/>.
+        /// </summary>
+        /// <param name="searchInfo"><see cref="SearchInfo{FileCabinetRecord}"/> object with all search info.</param>
+        /// <returns>All <see cref="FileCabinetRecord"/> records, which satisfy <paramref name="searchInfo"/>.</returns>
+        public IEnumerable<FileCabinetRecord> Find(SearchInfo<FileCabinetRecord> searchInfo);
+
+        /// <summary>
         ///     Perfoms search of all existing <see cref="FileCabinetRecord"/> that have first name's value equal to the specified <paramref name="firstName"/>.
         /// </summary>
         /// <param name="firstName">First name search value.</param>

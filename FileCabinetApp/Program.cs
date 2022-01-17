@@ -165,6 +165,8 @@ namespace FileCabinetApp
                 loggerFileStream = new FileStream(LogFilePath, FileMode.OpenOrCreate);
                 fileCabinetService = new ServiceLogger(loggerFileStream, fileCabinetService);
             }
+
+            RecordsUtils.Initialize(consoleInputValidator!);
         }
 
         private static ValidationConfig ReadValidationRules(string validationRuleName)
@@ -210,28 +212,30 @@ namespace FileCabinetApp
 
             var helpHandler = new HelpCommandHandler();
             var createHandler = new CreateCommandHandler(fileCabinetService, consoleInputValidator!);
-            var editHandler = new EditCommandHandler(fileCabinetService, consoleInputValidator!);
             var exitHandler = new ExitCommandHandler((value) => isRunning = value);
             var exportHandler = new ExportCommandHandler(fileCabinetService);
             var findHandler = new FindCommandHandler(fileCabinetService, recordsPrinter);
             var importHandler = new ImportCommandHandler(fileCabinetService);
             var listHandler = new ListCommandHandler(fileCabinetService, recordsPrinter);
             var purgeHandler = new PurgeCommandHandler(fileCabinetService);
-            var removeHandler = new RemoveCommandHandler(fileCabinetService);
             var statHandler = new StatCommandHandler(fileCabinetService);
+            var insertHandler = new InsertCommandHandler(fileCabinetService);
+            var deleteHandler = new DeleteCommandHandler(fileCabinetService);
+            var updateHandler = new UpdateCommandHandler(fileCabinetService);
             var missedHandler = new MissedCommandHandler();
 
             helpHandler.SetNext(createHandler);
-            createHandler.SetNext(editHandler);
-            editHandler.SetNext(removeHandler);
-            removeHandler.SetNext(findHandler);
+            createHandler.SetNext(findHandler);
             findHandler.SetNext(statHandler);
             statHandler.SetNext(purgeHandler);
             purgeHandler.SetNext(listHandler);
             listHandler.SetNext(importHandler);
             importHandler.SetNext(exportHandler);
-            exportHandler.SetNext(exitHandler);
-            exitHandler.SetNext(missedHandler);
+            exportHandler.SetNext(insertHandler);
+            insertHandler.SetNext(deleteHandler);
+            deleteHandler.SetNext(updateHandler);
+            updateHandler.SetNext(missedHandler);
+            missedHandler.SetNext(exitHandler);
 
             return helpHandler;
         }

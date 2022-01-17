@@ -84,6 +84,17 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(false, $"Gender must be equal to {validGenders.ToString().Substring(0, validGenders.Length - 1)}");
         }
 
+        /// <inheritdoc cref="IConsoleInputValidator.ValidateId(int)"/>
+        public Tuple<bool, string> ValidateId(int id)
+        {
+            if (id > 0)
+            {
+                return new Tuple<bool, string>(true, string.Empty);
+            }
+
+            return new Tuple<bool, string>(false, $"Id must be greater than 0");
+        }
+
         /// <inheritdoc cref="IConsoleInputValidator.ValidateLastName(string)"/>
         public Tuple<bool, string> ValidateLastName(string lastName)
         {
