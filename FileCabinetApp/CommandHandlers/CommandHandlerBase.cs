@@ -17,7 +17,7 @@ namespace FileCabinetApp.CommandHandlers
 
         /// <inheritdoc cref="ICommandHandler.SetNext(ICommandHandler)"/>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="handler"/> is null.</exception>
-        public void SetNext(ICommandHandler handler)
+        public ICommandHandler SetNext(ICommandHandler handler)
         {
             if (handler is null)
             {
@@ -25,6 +25,8 @@ namespace FileCabinetApp.CommandHandlers
             }
 
             this.nextHandler = handler;
+
+            return handler;
         }
     }
 }

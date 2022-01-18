@@ -9,7 +9,8 @@
         ///     Sets next command handler, which will be called if current handler can't handle a program command request.
         /// </summary>
         /// <param name="handler">Next handler, which will be called if current handler can't handle a program command request.</param>
-        void SetNext(ICommandHandler handler);
+        /// <returns><paramref name="handler"/> object.</returns>
+        ICommandHandler SetNext(ICommandHandler handler);
 
         /// <summary>
         ///     Handles command request.

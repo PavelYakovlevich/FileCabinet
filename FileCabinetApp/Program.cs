@@ -221,17 +221,17 @@ namespace FileCabinetApp
             var selectHandler = new SelectCommandHandler(fileCabinetService, new TablePrinter<FileCabinetRecord>());
             var missedHandler = new MissedCommandHandler();
 
-            helpHandler.SetNext(createHandler);
-            createHandler.SetNext(statHandler);
-            statHandler.SetNext(purgeHandler);
-            purgeHandler.SetNext(importHandler);
-            importHandler.SetNext(exportHandler);
-            exportHandler.SetNext(insertHandler);
-            insertHandler.SetNext(deleteHandler);
-            deleteHandler.SetNext(updateHandler);
-            updateHandler.SetNext(selectHandler);
-            selectHandler.SetNext(missedHandler);
-            missedHandler.SetNext(exitHandler);
+            helpHandler.SetNext(createHandler)
+            .SetNext(statHandler)
+            .SetNext(purgeHandler)
+            .SetNext(importHandler)
+            .SetNext(exportHandler)
+            .SetNext(insertHandler)
+            .SetNext(deleteHandler)
+            .SetNext(updateHandler)
+            .SetNext(selectHandler)
+            .SetNext(missedHandler)
+            .SetNext(exitHandler);
 
             return helpHandler;
         }
