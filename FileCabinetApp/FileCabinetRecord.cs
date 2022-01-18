@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Serialization;
+
 using FileCabinetApp.Serialization;
 
 namespace FileCabinetApp
@@ -112,15 +113,6 @@ namespace FileCabinetApp
             {
                 this.Gender = value[0];
             }
-        }
-
-        /// <summary>
-        ///     Transform object into the string representation.
-        /// </summary>
-        /// <returns>String representation of the object<see cref="string"/>.</returns>
-        public override string ToString()
-        {
-            return $"{this.Id}, {this.FirstName}, {this.LastName}, {this.DateOfBirth.ToString("yyyy-MMM-dd")}, {this.Gender}, {this.Stature}, {this.Weight}";
         }
 
         /// <summary>
