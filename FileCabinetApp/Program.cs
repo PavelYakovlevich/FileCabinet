@@ -21,9 +21,6 @@ namespace FileCabinetApp
     {
         private const string DeveloperName = "Pavel Yakovlevich";
         private const string HintMessage = "Enter your command, or enter 'help' to get help.";
-        private const int CommandHelpIndex = 0;
-        private const int DescriptionHelpIndex = 1;
-        private const int ExplanationHelpIndex = 2;
 
         private static readonly string ValidationRulesFileName = @"validation-rules.json";
         private static readonly string ValidationRulesFilePath = @$"{Directory.GetCurrentDirectory()}\Properties\{ValidationRulesFileName}";
