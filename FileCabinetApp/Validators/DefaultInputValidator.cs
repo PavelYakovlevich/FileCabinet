@@ -11,7 +11,7 @@ namespace FileCabinetApp.Validators
     /// </summary>
     public class DefaultInputValidator : IInputValidator
     {
-        private ValidationConfig validationConfig;
+        private readonly ValidationConfig validationConfig;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="DefaultInputValidator"/> class.

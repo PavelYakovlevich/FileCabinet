@@ -7,7 +7,7 @@ namespace FileCabinetApp.Writers
     /// </summary>
     internal class FileCabinetRecordCsvWriter : IFileCabinetRecordWriter
     {
-        private TextWriter writer;
+        private readonly TextWriter writer;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FileCabinetRecordCsvWriter"/> class.

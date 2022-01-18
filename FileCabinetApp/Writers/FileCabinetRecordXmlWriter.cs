@@ -7,7 +7,7 @@ namespace FileCabinetApp.Writers
     /// </summary>
     public class FileCabinetRecordXmlWriter : IFileCabinetRecordWriter
     {
-        private XmlWriter xmlWriter;
+        private readonly XmlWriter xmlWriter;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.

@@ -18,7 +18,7 @@ namespace FileCabinetApp.Validators
         public GenderValidator(char[] genderValues)
         {
             Guard.ArgumentIsNotNull(genderValues, nameof(genderValues));
-            Guard.ArgumentGreaterThan(genderValues.Length, 0);
+            Guard.ArgumentGreaterThan(genderValues.Length, 0, $"{nameof(genderValues)} is empty.");
 
             this.genderValues = genderValues;
         }

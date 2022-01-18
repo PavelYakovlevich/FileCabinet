@@ -7,8 +7,8 @@ namespace FileCabinetApp.Validators
     /// </summary>
     public class WeightValidator : FileRecordValidatorBase
     {
-        private decimal minValue;
-        private decimal maxValue;
+        private readonly decimal minValue;
+        private readonly decimal maxValue;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="WeightValidator"/> class.
