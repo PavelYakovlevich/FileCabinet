@@ -16,7 +16,7 @@ namespace FileCabinetApp
             Guard.ArgumentIsNotNull(conditionCreators, nameof(conditionCreators));
 
             this.conditionCreators = conditionCreators;
-            this.SearchCriterias = new Dictionary<string, IList<string>>();
+            this.SearchCriterias = new Dictionary<string, List<string>>();
             this.SearchPredicate = (record) => true;
         }
 
@@ -31,7 +31,7 @@ namespace FileCabinetApp
         ///     Gets dictionary with all search criterias.
         /// </summary>
         /// <value>Dictionary with all search criterias.</value>
-        public Dictionary<string, IList<string>> SearchCriterias { get; private set; }
+        public Dictionary<string, List<string>> SearchCriterias { get; private set; }
 
         /// <summary>
         ///     Gets search condition.

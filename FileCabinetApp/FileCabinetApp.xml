@@ -109,24 +109,6 @@
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.FindCommandHandler">
-            <summary>
-                Class for handling of 'find' command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Printers.IRecordPrinter)">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.FindCommandHandler"/> class.
-            </summary>
-            <param name="service">Service for working with file cabinet records.</param>
-            <param name="printer">Object, which will be responsible for printing records.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.FindCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
-            <summary>
-                Handles 'find' command.
-            </summary>
-            <param name="commandRequest">Input data for a requested command.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.HelpCommandHandler">
             <summary>
                 Class for handling of 'help' command.
@@ -189,24 +171,6 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)"/>
         </member>
-        <member name="T:FileCabinetApp.CommandHandlers.ListCommandHandler">
-            <summary>
-                Class for handling of 'list' command.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Printers.IRecordPrinter)">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.ListCommandHandler"/> class.
-            </summary>
-            <param name="service">Service for working with file cabinet records.</param>
-            <param name="printer">Object, which will be responsible for printing records.</param>
-        </member>
-        <member name="M:FileCabinetApp.CommandHandlers.ListCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
-            <summary>
-                Handles 'list' command.
-            </summary>
-            <param name="commandRequest">Input data for a requested command.</param>
-        </member>
         <member name="T:FileCabinetApp.CommandHandlers.MissedCommandHandler">
             <summary>
                 Class for handling unknown command.
@@ -234,6 +198,22 @@
                 Handles 'purge' command.
             </summary>
             <param name="commandRequest">Input data for a requested command.</param>
+        </member>
+        <member name="T:FileCabinetApp.CommandHandlers.SelectCommandHandler">
+            <summary>
+                Class for handling of 'select' command.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Printers.IPrinter{FileCabinetApp.FileCabinetRecord})">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler"/> class.
+            </summary>
+            <inheritdoc cref="F:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.service"/>
+            <param name="printer"><see cref="T:FileCabinetApp.Printers.IPrinter`1"/> object, which perfoms printing of objects.</param>
+            <exception cref="T:System.ArgumentNullException">Trown when <paramref name="printer"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
+            <inheritdoc cref="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)"/>
         </member>
         <member name="T:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase">
             <summary>
@@ -690,33 +670,66 @@
             <returns>Value, that was read from the console and converted to the proper type <typeparamref name="T"/>.</returns>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="converter"/> or <paramref name="validator"/> is null.</exception>
         </member>
-        <member name="T:FileCabinetApp.Printers.DefaultRecordPrinter">
-            <summary>
-                Default record printer.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
-            <inheritdoc cref="M:FileCabinetApp.Printers.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})"/>
-        </member>
-        <member name="M:FileCabinetApp.Printers.DefaultRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)">
-            <inheritdoc cref="M:FileCabinetApp.Printers.IRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)"/>
-        </member>
-        <member name="T:FileCabinetApp.Printers.IRecordPrinter">
+        <member name="T:FileCabinetApp.Printers.IPrinter`1">
             <summary>
                 Interface for printers of <see cref="N:FileCabinetApp"/> objects.
             </summary>
+            <typeparam name="T">Type of printable object.</typeparam>
         </member>
-        <member name="M:FileCabinetApp.Printers.IRecordPrinter.Print(System.Collections.Generic.IEnumerable{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(`0)">
             <summary>
-                Prints all <paramref name="records"/>.
+                Prints object's data.
             </summary>
-            <param name="records">Records to print.</param>
+            <param name="obj">Object to print.</param>
         </member>
-        <member name="M:FileCabinetApp.Printers.IRecordPrinter.Print(FileCabinetApp.FileCabinetRecord)">
+        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
             <summary>
-                Prints <see cref="T:FileCabinetApp.FileCabinetRecord"/> object's data.
+                Prints all <paramref name="objects"/>.
             </summary>
-            <param name="record"><see cref="T:FileCabinetApp.FileCabinetRecord"/> object to print.</param>
+            <param name="objects">Objects to print.</param>
+        </member>
+        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printers.ValuePadding}})">
+            <summary>
+                Prints all <paramref name="objects"/>.
+            </summary>
+            <param name="objects">Objects to print.</param>
+            <param name="selectors">Selectors of the object's values.</param>
+        </member>
+        <member name="T:FileCabinetApp.Printers.TablePrinter`1">
+            <summary>
+                Class for printing an objects in a table form.
+            </summary>
+            <typeparam name="T">Type of printable objects.</typeparam>
+        </member>
+        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc cref="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})"/>
+        </member>
+        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(`0)">
+            <inheritdoc cref="M:FileCabinetApp.Printers.IPrinter`1.Print(`0)"/>
+        </member>
+        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printers.ValuePadding}})">
+            <summary>
+                Prints all <paramref name="objects"/>.
+            </summary>
+            <param name="objects">Objects to print.</param>
+            <param name="selectors">Selectors of the object's values.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="objects"/> or <paramref name="selectors"/> is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="selectors"/> is empty.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Printers.ValuePadding">
+            <summary>
+                Enum for representing padding direction in <see cref="T:FileCabinetApp.Printers.IPrinter`1"/> objects.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Printers.ValuePadding.Left">
+            <summary>
+                Padding left.
+            </summary>
+        </member>
+        <member name="F:FileCabinetApp.Printers.ValuePadding.Right">
+            <summary>
+                Padding right.
+            </summary>
         </member>
         <member name="T:FileCabinetApp.Program">
             <summary>
@@ -1149,6 +1162,31 @@
             <param name="dec"><see cref="T:System.Decimal"/>, which will be converted bytes array.</param>
             <returns><see cref="T:System.Array"/> of bytes with the converted <paramref name="dec"/>.</returns>
         </member>
+        <member name="T:FileCabinetApp.Utils.Memoizer`2">
+            <summary>
+                Class for saving results of functions.
+            </summary>
+            <typeparam name="TParam">Type of saving key.</typeparam>
+            <typeparam name="TValue">Type of the return values.</typeparam>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Memoizer`2.#ctor(System.Collections.Generic.IEqualityComparer{`0})">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Utils.Memoizer`2"/> class.
+            </summary>
+            <param name="equalityComparer"><see cref="T:System.Collections.Generic.IEqualityComparer`1"/> object, which perfoms comparing of key objects.</param>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Memoizer`2.Memoize(System.Func{`0,`1})">
+            <summary>
+                Perfoms memoryzation of <paramref name="func"/> execution result.
+            </summary>
+            <param name="func">Function, which result must be memorized.</param>
+            <returns>Function, which will return memorized value, if it was saved in cache or will execure <paramref name="func"/> and save it's result to the internal objects cache.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.Memoizer`2.ClearCache">
+            <summary>
+                Clears the internal objects cache.
+            </summary>
+        </member>
         <member name="T:FileCabinetApp.Utils.RecordsUtils">
             <summary>
                 Static class for common data for the finsert, delete, update commands.
@@ -1166,11 +1204,38 @@
             </summary>
             <value>Fields setters dictionary.</value>
         </member>
+        <member name="P:FileCabinetApp.Utils.RecordsUtils.FieldsSelectors">
+            <summary>
+                Gets fields selectors dictionary.
+            </summary>
+            <value>Fields selectors dictionary.</value>
+        </member>
         <member name="M:FileCabinetApp.Utils.RecordsUtils.Initialize(FileCabinetApp.Validators.IConsoleInputValidator)">
             <summary>
                 Initializes class data.
             </summary>
             <param name="inputValidator">Validator, which will validates input for the proper fields.</param>
+        </member>
+        <member name="T:FileCabinetApp.Utils.SearchInfoComparer`1">
+            <summary>
+                Class for comparing <typeparamref name="T"/> objects.
+            </summary>
+            <typeparam name="T">Type of comparable objects.</typeparam>
+        </member>
+        <member name="M:FileCabinetApp.Utils.SearchInfoComparer`1.Equals(FileCabinetApp.SearchInfo{`0},FileCabinetApp.SearchInfo{`0})">
+            <summary>
+                Compares <paramref name="obj1"/> and <paramref name="obj2"/>.
+            </summary>
+            <param name="obj1">First object, which will be compared with <paramref name="obj2"/>.</param>
+            <param name="obj2">Second object, which will be compared with <paramref name="obj1"/>.</param>
+            <returns>True of <paramref name="obj2"/> and <paramref name="obj2"/> are equal.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Utils.SearchInfoComparer`1.GetHashCode(FileCabinetApp.SearchInfo{`0})">
+            <summary>
+                Computes hashcode of the <paramref name="obj"/> object.
+            </summary>
+            <param name="obj">Object, for which hashcode will be computed.</param>
+            <returns>Hashcode of the <paramref name="obj"/> object.</returns>
         </member>
         <member name="T:FileCabinetApp.Utils.ServiceLogger">
             <summary>

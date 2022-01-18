@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using FileCabinetApp.Utils;
 
 namespace FileCabinetApp.Services
 {
@@ -15,6 +16,7 @@ namespace FileCabinetApp.Services
         private readonly Dictionary<DateTime, List<FileCabinetRecord>> dateOfBirthSearchDictionary = new Dictionary<DateTime, List<FileCabinetRecord>>();
 
         private readonly IRecordValidator recordValidator;
+        private readonly Memoizer<SearchInfo<FileCabinetRecord>, IEnumerable<FileCabinetRecord>> memoizer;
 
         /// <summary>
             /// Initializes a new instance of the <see cref="FileCabinetMemoryService"/> class.
@@ -23,6 +25,7 @@ namespace FileCabinetApp.Services
         public FileCabinetMemoryService(IRecordValidator recordValidator)
         {
             this.recordValidator = recordValidator;
+            this.memoizer = new Memoizer<SearchInfo<FileCabinetRecord>, IEnumerable<FileCabinetRecord>>(new SearchInfoComparer<FileCabinetRecord>());
         }
 
         /// <inheritdoc cref="IFileCabinetService.CreateRecord(FileCabinetRecordParameterObject)"/>
@@ -62,6 +65,8 @@ namespace FileCabinetApp.Services
 
             this.AddEntryToSearchDictionaries(newRecord);
 
+            this.memoizer.ClearCache();
+
             return newRecord.Id;
         }
 
@@ -99,6 +104,8 @@ namespace FileCabinetApp.Services
             editableRecord!.Stature = parameterObject.Stature;
 
             this.UpdateSearchDictionaries(editableRecord);
+
+            this.memoizer.ClearCache();
         }
 
         /// <inheritdoc cref="IFileCabinetService.RecordExists(int)"/>
@@ -122,23 +129,9 @@ namespace FileCabinetApp.Services
         {
             Guard.ArgumentIsNotNull(searchInfo, nameof(searchInfo));
 
-            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
-            {
-                return this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
-            }
+            var memoizedFunc = this.memoizer.Memoize(this.FindBySearchInfo);
 
-            if (searchInfo.SearchCriterias.ContainsKey("lastname"))
-            {
-                return this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
-            }
-
-            if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
-            {
-                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
-                return this.FindByDateOfBirth(dateOfBirth);
-            }
-
-            return this.existingRecords.FindAll(searchInfo.SearchPredicate);
+            return memoizedFunc(searchInfo);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByFirstName"/>
@@ -257,6 +250,7 @@ namespace FileCabinetApp.Services
 
             this.existingRecords.Remove(targetRecord);
             this.DeleteEntryFromSearchDictionaries(targetRecord);
+            this.memoizer.ClearCache();
         }
 
         /// <summary>
@@ -331,6 +325,27 @@ namespace FileCabinetApp.Services
                     referenceList.Remove(record);
                 }
             }
+        }
+
+        private IEnumerable<FileCabinetRecord> FindBySearchInfo(SearchInfo<FileCabinetRecord> searchInfo)
+        {
+            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
+            {
+                return this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
+            }
+
+            if (searchInfo.SearchCriterias.ContainsKey("lastname"))
+            {
+                return this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
+            }
+
+            if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
+            {
+                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
+                return this.FindByDateOfBirth(dateOfBirth);
+            }
+
+            return this.existingRecords.FindAll(searchInfo.SearchPredicate);
         }
     }
 }
