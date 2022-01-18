@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using FileCabinetApp.Printers;
 using FileCabinetApp.Validators;
 
 #pragma warning disable CS8618
@@ -37,6 +37,17 @@ namespace FileCabinetApp.Utils
                 { "weight", SetWeight },
                 { "gender", SetGender },
             };
+
+            FieldsSelectors = new Dictionary<string, (Func<FileCabinetRecord, string> selector, ValuePadding padding)>()
+            {
+                { "id", (record => record.Id.ToString(), ValuePadding.Left) },
+                { "firstname", (record => record.FirstName, ValuePadding.Right) },
+                { "lastname", (record => record.LastName, ValuePadding.Right) },
+                { "dateofbirth", (record => record.DateOfBirth.ToString("MM/dd/yyyy"), ValuePadding.Left) },
+                { "stature", (record => record.Stature.ToString(), ValuePadding.Left) },
+                { "weight", (record => record.Weight.ToString(), ValuePadding.Left) },
+                { "gender", (record => record.Gender.ToString(), ValuePadding.Left) },
+            };
         }
 
         /// <summary>
@@ -50,6 +61,12 @@ namespace FileCabinetApp.Utils
         /// </summary>
         /// <value>Fields setters dictionary.</value>
         public static Dictionary<string, Func<FileCabinetRecordParameterObject, string, Tuple<bool, string>>> FieldsSetters { get; }
+
+        /// <summary>
+        ///     Gets fields selectors dictionary.
+        /// </summary>
+        /// <value>Fields selectors dictionary.</value>
+        public static Dictionary<string, (Func<FileCabinetRecord, string> selector, ValuePadding padding)> FieldsSelectors { get; }
 
         /// <summary>
         ///     Initializes class data.

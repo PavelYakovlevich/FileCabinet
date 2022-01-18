@@ -14,14 +14,13 @@ namespace FileCabinetApp.CommandHandlers
             "exit",
             "stat",
             "create",
-            "list",
-            "find",
             "export",
             "import",
             "purge",
             "insert",
             "delete",
             "update",
+            "select",
         };
 
         /// <summary>
