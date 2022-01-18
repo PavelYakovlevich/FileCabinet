@@ -7,25 +7,25 @@ using FileCabinetApp.Configuration;
 namespace FileCabinetApp.Validators
 {
     /// <summary>
-    ///     Console input validator.
+    ///     Default input validator.
     /// </summary>
-    public class ConsoleInputValidator : IConsoleInputValidator
+    public class DefaultInputValidator : IInputValidator
     {
         private ValidationConfig validationConfig;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ConsoleInputValidator"/> class.
+        ///     Initializes a new instance of the <see cref="DefaultInputValidator"/> class.
         /// </summary>
         /// <param name="validationConfig"><see cref="ValidationConfig"/> object, which have all validation constraints.</param>
         /// <exception cref="ArgumentNullException">Thrown when <paramref name="validationConfig"/> is null.</exception>
-        public ConsoleInputValidator(ValidationConfig validationConfig)
+        public DefaultInputValidator(ValidationConfig validationConfig)
         {
             Guard.ArgumentIsNotNull(validationConfig, nameof(validationConfig));
 
             this.validationConfig = validationConfig;
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateBirthDay(DateTime)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateBirthDay(DateTime)"/>
         public Tuple<bool, string> ValidateBirthDay(DateTime dateOfBirth)
         {
             const string dateTimeFormat = "MM-dd-yyyy";
@@ -41,7 +41,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(true, string.Empty);
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateFirstName(string)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateFirstName(string)"/>
         public Tuple<bool, string> ValidateFirstName(string firstName)
         {
             if (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName))
@@ -66,7 +66,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(true, string.Empty);
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateGender(char)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateGender(char)"/>
         public Tuple<bool, string> ValidateGender(char gender)
         {
             var genders = this.validationConfig.Gender;
@@ -84,7 +84,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(false, $"Gender must be equal to {validGenders.ToString().Substring(0, validGenders.Length - 1)}");
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateId(int)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateId(int)"/>
         public Tuple<bool, string> ValidateId(int id)
         {
             if (id > 0)
@@ -95,7 +95,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(false, $"Id must be greater than 0");
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateLastName(string)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateLastName(string)"/>
         public Tuple<bool, string> ValidateLastName(string lastName)
         {
             if (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName))
@@ -120,7 +120,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(true, string.Empty);
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateStature(short)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateStature(short)"/>
         public Tuple<bool, string> ValidateStature(short stature)
         {
             var minValue = this.validationConfig.Stature.MinValue;
@@ -134,7 +134,7 @@ namespace FileCabinetApp.Validators
             return new Tuple<bool, string>(true, string.Empty);
         }
 
-        /// <inheritdoc cref="IConsoleInputValidator.ValidateWeight(decimal)"/>
+        /// <inheritdoc cref="IInputValidator.ValidateWeight(decimal)"/>
         public Tuple<bool, string> ValidateWeight(decimal weight)
         {
             var minValue = this.validationConfig.Weight.MinValue;

@@ -12,7 +12,7 @@ namespace FileCabinetApp.Utils
     /// </summary>
     public static class RecordsUtils
     {
-        private static IConsoleInputValidator validator;
+        private static IInputValidator validator;
 
         static RecordsUtils()
         {
@@ -72,7 +72,7 @@ namespace FileCabinetApp.Utils
         ///     Initializes class data.
         /// </summary>
         /// <param name="inputValidator">Validator, which will validates input for the proper fields.</param>
-        public static void Initialize(IConsoleInputValidator inputValidator)
+        public static void Initialize(IInputValidator inputValidator)
         {
             Guard.ArgumentIsNotNull(inputValidator, nameof(inputValidator));
 

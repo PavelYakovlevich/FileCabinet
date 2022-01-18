@@ -10,14 +10,14 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class CreateCommandHandler : ServiceCommandHandlerBase
     {
-        private readonly IConsoleInputValidator inputValidator;
+        private readonly IInputValidator inputValidator;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="CreateCommandHandler"/> class.
         /// </summary>
         /// <param name="service">Service for working with file cabinet records.</param>
         /// <param name="validator">Validator for console input.</param>
-        public CreateCommandHandler(IFileCabinetService service, IConsoleInputValidator validator)
+        public CreateCommandHandler(IFileCabinetService service, IInputValidator validator)
             : base(service)
         {
             this.inputValidator = validator;

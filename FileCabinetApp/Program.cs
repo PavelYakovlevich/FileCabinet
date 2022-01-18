@@ -45,7 +45,7 @@ namespace FileCabinetApp
         private static FileStream? databaseFileStream;
         private static FileStream? loggerFileStream;
 
-        private static IConsoleInputValidator? consoleInputValidator;
+        private static IInputValidator? consoleInputValidator;
         private static IFileCabinetService fileCabinetService = new FileCabinetMemoryService(new ValidatorBuilder().CreateDefault(ValidationRulesFilePath));
 
         private static bool isRunning = true;
@@ -115,12 +115,12 @@ namespace FileCabinetApp
                 if (argumentValue.Equals("custom"))
                 {
                     recordValidator = new ValidatorBuilder().CreateCustom(ValidationRulesFilePath);
-                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
+                    consoleInputValidator = new DefaultInputValidator(ReadValidationRules(argumentValue));
                 }
                 else
                 {
                     recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
-                    consoleInputValidator = new ConsoleInputValidator(ReadValidationRules(argumentValue));
+                    consoleInputValidator = new DefaultInputValidator(ReadValidationRules(argumentValue));
                 }
 
                 Console.WriteLine($"Using {argumentValue} validation rules.");
@@ -128,7 +128,7 @@ namespace FileCabinetApp
             else
             {
                 recordValidator = new ValidatorBuilder().CreateDefault(ValidationRulesFilePath);
-                consoleInputValidator = new ConsoleInputValidator(ReadValidationRules("default"));
+                consoleInputValidator = new DefaultInputValidator(ReadValidationRules("default"));
 
                 Console.WriteLine($"Using default validation rules.");
             }
