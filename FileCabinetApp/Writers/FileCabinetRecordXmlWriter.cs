@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 
 namespace FileCabinetApp.Writers
 {
@@ -7,7 +8,7 @@ namespace FileCabinetApp.Writers
     /// </summary>
     public class FileCabinetRecordXmlWriter : IFileCabinetRecordWriter
     {
-        private XmlWriter xmlWriter;
+        private readonly XmlWriter xmlWriter;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="FileCabinetRecordXmlWriter"/> class.
@@ -15,12 +16,16 @@ namespace FileCabinetApp.Writers
         /// <param name="writer"><see cref="xmlWriter"/> object.</param>
         public FileCabinetRecordXmlWriter(XmlWriter writer)
         {
+            Guard.ArgumentIsNotNull(writer, nameof(writer));
+
             this.xmlWriter = writer;
         }
 
         /// <inheritdoc cref="IFileCabinetRecordWriter.Write(FileCabinetRecord)"/>
         public void Write(FileCabinetRecord record)
         {
+            Guard.ArgumentIsNotNull(record, nameof(record));
+
             this.xmlWriter.WriteStartElement("record");
 
             this.xmlWriter.WriteAttributeString("id", record.Id.ToString());
@@ -30,7 +35,7 @@ namespace FileCabinetApp.Writers
             this.xmlWriter.WriteAttributeString("last", record.LastName);
             this.xmlWriter.WriteEndElement();
 
-            this.xmlWriter.WriteElementString("dateOfBirth", record.DateOfBirth.ToString("MM/dd/yyyy"));
+            this.xmlWriter.WriteElementString("dateOfBirth", record.DateOfBirth.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss", CultureInfo.InvariantCulture));
 
             this.xmlWriter.WriteElementString("stature", record.Stature.ToString());
             this.xmlWriter.WriteElementString("weight", record.Weight.ToString());

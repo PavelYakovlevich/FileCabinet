@@ -5,7 +5,7 @@ namespace FileCabinetApp.Validators
     /// <summary>
     ///     Interface for the console input validators.
     /// </summary>
-    public interface IConsoleInputValidator
+    public interface IInputValidator
     {
         /// <summary>
         ///     Validates <paramref name="id"/>.

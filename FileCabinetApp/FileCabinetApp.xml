@@ -45,7 +45,7 @@
                 Class for handling of 'create' command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.IConsoleInputValidator)">
+        <member name="M:FileCabinetApp.CommandHandlers.CreateCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Validators.IInputValidator)">
             <summary>
                 Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.CreateCommandHandler"/> class.
             </summary>
@@ -130,6 +130,7 @@
                 Sets next command handler, which will be called if current handler can't handle a program command request.
             </summary>
             <param name="handler">Next handler, which will be called if current handler can't handle a program command request.</param>
+            <returns><paramref name="handler"/> object.</returns>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.ICommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
             <summary>
@@ -204,12 +205,12 @@
                 Class for handling of 'select' command.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Printers.IPrinter{FileCabinetApp.FileCabinetRecord})">
+        <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.#ctor(FileCabinetApp.Services.IFileCabinetService,FileCabinetApp.Printing.IPrinter{FileCabinetApp.FileCabinetRecord})">
             <summary>
                 Initializes a new instance of the <see cref="T:FileCabinetApp.CommandHandlers.SelectCommandHandler"/> class.
             </summary>
             <inheritdoc cref="F:FileCabinetApp.CommandHandlers.ServiceCommandHandlerBase.service"/>
-            <param name="printer"><see cref="T:FileCabinetApp.Printers.IPrinter`1"/> object, which perfoms printing of objects.</param>
+            <param name="printer"><see cref="T:FileCabinetApp.Printing.IPrinter`1"/> object, which perfoms printing of objects.</param>
             <exception cref="T:System.ArgumentNullException">Trown when <paramref name="printer"/> is null.</exception>
         </member>
         <member name="M:FileCabinetApp.CommandHandlers.SelectCommandHandler.Handle(FileCabinetApp.CommandHandlers.AppCommandRequest)">
@@ -417,19 +418,6 @@
             </summary>
             <value>Gender string of the user.</value>
         </member>
-        <member name="M:FileCabinetApp.FileCabinetRecord.ToString">
-            <summary>
-                Transform object into the string representation.
-            </summary>
-            <returns>String representation of the object<see cref="T:System.String"/>.</returns>
-        </member>
-        <member name="M:FileCabinetApp.FileCabinetRecord.ToCsvString(System.String)">
-            <summary>
-                Transform object into the csv string.
-            </summary>
-            <param name="dateFormat">Format of date of birth.</param>
-            <returns>Csv string with all object's properties.</returns>
-        </member>
         <member name="T:FileCabinetApp.FileCabinetRecord.Name">
             <summary>
                 Class for holding first and last names of <see cref="T:FileCabinetApp.FileCabinetRecord"/> object.
@@ -566,148 +554,44 @@
             </summary>
             <param name="reader">><see cref="T:System.IO.StreamReader"/> object to read from a stream.</param>
         </member>
-        <member name="T:FileCabinetApp.Guard">
-            <summary>
-                Class for the checking of the input parameters.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentIsNotNull``1(``0,System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> is not null.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="nameOfArgument">Argument's name.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when argument is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentIsNotEmptyOrWhiteSpace(System.String,System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> is not empty or whitespace.
-            </summary>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="nameOfArgument">Argument's name.</param>
-            <exception cref="T:System.ArgumentException">if string is null or empty or whitespace.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentMatchRegex(System.String,System.String,System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> matchs regular expression <paramref name="regexString"/>.
-            </summary>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="nameOfArgument">Argument's name.</param>
-            <param name="regexString">Regular expression, which must be applied to the <paramref name="argument"/>.</param>
-            <exception cref="T:System.ArgumentException">if <paramref name="regexString"/> is not a valid regex or <paramref name="argument"/> doesn't match the regular expression.</exception>
-            <exception cref="T:System.ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentLessThan``1(``0,``0)">
-            <summary>
-                Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0)">
-            <summary>
-                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0,System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
-            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[])">
-            <summary>
-                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[],System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
-            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Guard.ArgumentSatisfies``1(``0,System.Predicate{``0},System.String)">
-            <summary>
-                Checks if <paramref name="argument"/> satisfies specified <paramref name="condition"/>'.
-            </summary>
-            <typeparam name="T">Type of the argument's value.</typeparam>
-            <param name="argument">Value, which must be checked.</param>
-            <param name="condition">Function of type <see cref="T:System.Predicate`1"/> which checks <paramref name="argument"/> for satysfing specified condition.</param>
-            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
-        </member>
-        <member name="T:FileCabinetApp.ConsoleParameterReader">
-            <summary>
-                Class for the reading of input parameter's values.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.ConsoleParameterReader.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
-            <summary>
-                Reads input from the console, convert it to the <typeparamref name="T"/> and validates it.
-            </summary>
-            <typeparam name="T">Type of value, that must be read from the console.</typeparam>
-            <param name="converter">Converter function.</param>
-            <param name="validator">Validation function.</param>
-            <returns>Value, that was read from the console and converted to the proper type <typeparamref name="T"/>.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="converter"/> or <paramref name="validator"/> is null.</exception>
-        </member>
-        <member name="T:FileCabinetApp.Printers.IPrinter`1">
+        <member name="T:FileCabinetApp.Printing.IPrinter`1">
             <summary>
                 Interface for printers of <see cref="N:FileCabinetApp"/> objects.
             </summary>
             <typeparam name="T">Type of printable object.</typeparam>
         </member>
-        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(`0)">
+        <member name="M:FileCabinetApp.Printing.IPrinter`1.Print(`0)">
             <summary>
                 Prints object's data.
             </summary>
             <param name="obj">Object to print.</param>
         </member>
-        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
+        <member name="M:FileCabinetApp.Printing.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
             <summary>
                 Prints all <paramref name="objects"/>.
             </summary>
             <param name="objects">Objects to print.</param>
         </member>
-        <member name="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printers.ValuePadding}})">
+        <member name="M:FileCabinetApp.Printing.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printing.ValuePadding}})">
             <summary>
                 Prints all <paramref name="objects"/>.
             </summary>
             <param name="objects">Objects to print.</param>
             <param name="selectors">Selectors of the object's values.</param>
         </member>
-        <member name="T:FileCabinetApp.Printers.TablePrinter`1">
+        <member name="T:FileCabinetApp.Printing.TablePrinter`1">
             <summary>
                 Class for printing an objects in a table form.
             </summary>
             <typeparam name="T">Type of printable objects.</typeparam>
         </member>
-        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
-            <inheritdoc cref="M:FileCabinetApp.Printers.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})"/>
+        <member name="M:FileCabinetApp.Printing.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0})">
+            <inheritdoc cref="M:FileCabinetApp.Printing.IPrinter`1.Print(System.Collections.Generic.IEnumerable{`0})"/>
         </member>
-        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(`0)">
-            <inheritdoc cref="M:FileCabinetApp.Printers.IPrinter`1.Print(`0)"/>
+        <member name="M:FileCabinetApp.Printing.TablePrinter`1.Print(`0)">
+            <inheritdoc cref="M:FileCabinetApp.Printing.IPrinter`1.Print(`0)"/>
         </member>
-        <member name="M:FileCabinetApp.Printers.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printers.ValuePadding}})">
+        <member name="M:FileCabinetApp.Printing.TablePrinter`1.Print(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IDictionary{System.String,System.ValueTuple{System.Func{`0,System.String},FileCabinetApp.Printing.ValuePadding}})">
             <summary>
                 Prints all <paramref name="objects"/>.
             </summary>
@@ -716,17 +600,17 @@
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="objects"/> or <paramref name="selectors"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="selectors"/> is empty.</exception>
         </member>
-        <member name="T:FileCabinetApp.Printers.ValuePadding">
+        <member name="T:FileCabinetApp.Printing.ValuePadding">
             <summary>
-                Enum for representing padding direction in <see cref="T:FileCabinetApp.Printers.IPrinter`1"/> objects.
+                Enum for representing padding direction in <see cref="T:FileCabinetApp.Printing.IPrinter`1"/> objects.
             </summary>
         </member>
-        <member name="F:FileCabinetApp.Printers.ValuePadding.Left">
+        <member name="F:FileCabinetApp.Printing.ValuePadding.Left">
             <summary>
                 Padding left.
             </summary>
         </member>
-        <member name="F:FileCabinetApp.Printers.ValuePadding.Right">
+        <member name="F:FileCabinetApp.Printing.ValuePadding.Right">
             <summary>
                 Padding right.
             </summary>
@@ -809,63 +693,6 @@
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="conditionCreators"/> or <paramref name="searchCriteriasPairs"/> is null.</exception>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="conditionCreators"/> is empty.</exception>
         </member>
-        <member name="T:FileCabinetApp.Serialization.DumpHelper">
-            <summary>
-                Class for working with objects, which are saved in memory.
-            </summary>
-            <summary>
-                Class for working with objects, which are saved in memory.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.#ctor(System.Type)">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpHelper"/> class.
-            </summary>
-            <param name="objectType"><see cref="T:System.Type"/> object, which represents type of manipulated objects.</param>
-        </member>
-        <member name="P:FileCabinetApp.Serialization.DumpHelper.SliceSize">
-            <summary>
-            Gets the size of a manipulated object in memory.
-            </summary>
-            <value>Size of memory including extra memory areas.</value>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.Update(System.IO.Stream,System.Object)">
-            <summary>
-                Updates object without updating an extra memory areas.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
-            <param name="obj">Object, which must be replaced with the old one.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.Read(System.IO.Stream)">
-            <summary>
-                Reads an object from the current stream's position.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
-            <returns>Object, that was read from the stream.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetOffset(System.String)">
-            <summary>
-                Gets an offset in bytes of memory area.
-            </summary>
-            <param name="areaName">Memory area name.</param>
-            <returns>Offset in bytes of memory area.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetSize(System.String)">
-            <summary>
-                Gets an size in bytes of memory area.
-            </summary>
-            <param name="areaName">Memory area name.</param>
-            <returns>Size in bytes of memory area.</returns>
-        </member>
-        <member name="M:FileCabinetApp.Serialization.DumpHelper.Create(System.IO.Stream,System.Object)">
-            <summary>
-                Insert a dump of an object into a stream.
-            </summary>
-            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
-            <param name="obj">Object, which must be placed.</param>
-            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
-        </member>
         <member name="T:FileCabinetApp.Serialization.DumpSliceAttribute">
             <summary>
                 Specifies extra memory areas, which can be placed before an serialized object.
@@ -926,6 +753,63 @@
             </summary>
             <value>Order of field on memory.</value>
         </member>
+        <member name="T:FileCabinetApp.Serialization.DumpHelper">
+            <summary>
+                Class for working with objects, which are saved in memory.
+            </summary>
+            <summary>
+                Class for working with objects, which are saved in memory.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.#ctor(System.Type)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Serialization.DumpHelper"/> class.
+            </summary>
+            <param name="objectType"><see cref="T:System.Type"/> object, which represents type of manipulated objects.</param>
+        </member>
+        <member name="P:FileCabinetApp.Serialization.DumpHelper.SliceSize">
+            <summary>
+            Gets the size of a manipulated object in memory.
+            </summary>
+            <value>Size of memory including extra memory areas.</value>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Update(System.IO.Stream,System.Object)">
+            <summary>
+                Updates object without updating an extra memory areas.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <param name="obj">Object, which must be replaced with the old one.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Read(System.IO.Stream)">
+            <summary>
+                Reads an object from the current stream's position.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <returns>Object, that was read from the stream.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetOffset(System.String)">
+            <summary>
+                Gets an offset in bytes of memory area.
+            </summary>
+            <param name="areaName">Memory area name.</param>
+            <returns>Offset in bytes of memory area.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.GetSize(System.String)">
+            <summary>
+                Gets an size in bytes of memory area.
+            </summary>
+            <param name="areaName">Memory area name.</param>
+            <returns>Size in bytes of memory area.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Serialization.DumpHelper.Create(System.IO.Stream,System.Object)">
+            <summary>
+                Insert a dump of an object into a stream.
+            </summary>
+            <param name="stream"><see cref="T:System.IO.Stream"/> object for working with file.</param>
+            <param name="obj">Object, which must be placed.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="obj"/> is not of type, which was passed to the constructor.</exception>
+        </member>
         <member name="T:FileCabinetApp.Services.FileCabinetFilesystemService">
             <summary>
                 Service class for the work with a file system.
@@ -965,6 +849,9 @@
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RecordExists(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.MakeSnapshot">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
@@ -1040,10 +927,7 @@
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
-            <summary>
-                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
-            </summary>
-            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
@@ -1120,6 +1004,12 @@
             </summary>
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
+            <summary>
+                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <summary>
@@ -1210,7 +1100,7 @@
             </summary>
             <value>Fields selectors dictionary.</value>
         </member>
-        <member name="M:FileCabinetApp.Utils.RecordsUtils.Initialize(FileCabinetApp.Validators.IConsoleInputValidator)">
+        <member name="M:FileCabinetApp.Utils.RecordsUtils.Initialize(FileCabinetApp.Validators.IInputValidator)">
             <summary>
                 Initializes class data.
             </summary>
@@ -1297,6 +1187,12 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.MakeSnapshot">
+            <summary>
+                Writes a log with service information about MakeSnapshot command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceLogger.Purge">
             <summary>
                 Writes a log with service information about Purge command.
@@ -1380,6 +1276,12 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.MakeSnapshot">
+            <summary>
+                Measures and prints MakeSnapshot's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceMeter.Purge">
             <summary>
                 Measures and prints Purge's command execution time.
@@ -1454,6 +1356,9 @@
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.RemoveRecord(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.MakeSnapshot">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
         </member>
@@ -1462,6 +1367,110 @@
                 Gets initial wrapped object.
             </summary>
             <returns>Initial wrapped object.</returns>
+        </member>
+        <member name="T:FileCabinetApp.ConsoleParameterReader">
+            <summary>
+                Class for the reading of input parameter's values.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.ConsoleParameterReader.ReadInput``1(System.Func{System.String,System.Tuple{System.Boolean,System.String,``0}},System.Func{``0,System.Tuple{System.Boolean,System.String}})">
+            <summary>
+                Reads input from the console, convert it to the <typeparamref name="T"/> and validates it.
+            </summary>
+            <typeparam name="T">Type of value, that must be read from the console.</typeparam>
+            <param name="converter">Converter function.</param>
+            <param name="validator">Validation function.</param>
+            <returns>Value, that was read from the console and converted to the proper type <typeparamref name="T"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="converter"/> or <paramref name="validator"/> is null.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Guard">
+            <summary>
+                Class for the checking of the input parameters.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotNull``1(``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is not null.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when argument is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsNotEmptyOrWhiteSpace(System.String,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> is not empty or whitespace.
+            </summary>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <exception cref="T:System.ArgumentException">if string is null or empty or whitespace.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentMatchRegex(System.String,System.String,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> of type <see cref="T:System.String"/> matchs regular expression <paramref name="regexString"/>.
+            </summary>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="nameOfArgument">Argument's name.</param>
+            <param name="regexString">Regular expression, which must be applied to the <paramref name="argument"/>.</param>
+            <exception cref="T:System.ArgumentException">if <paramref name="regexString"/> is not a valid regex or <paramref name="argument"/> doesn't match the regular expression.</exception>
+            <exception cref="T:System.ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentLessThan``1(``0,``0)">
+            <summary>
+                Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is less than <paramref name="secondValue"/>.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[])">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentIsInRange``1(``0,``0[],System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is equal to one of the <paramref name="validValues"/>'s value.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="validValues"><see cref="T:System.Array"/> of valid values.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="argument"/> is not equal to any <paramref name="validValues"/> value.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentSatisfies``1(``0,System.Predicate{``0},System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> satisfies specified <paramref name="condition"/>'.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="condition">Function of type <see cref="T:System.Predicate`1"/> which checks <paramref name="argument"/> for satysfing specified condition.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> doesn't satisfy <paramref name="condition"/>.</exception>
         </member>
         <member name="T:FileCabinetApp.InputUtils">
             <summary>
@@ -1643,39 +1652,6 @@
             <param name="record">Object, which must be validated.</param>
             <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="record"/> is null.</exception>
         </member>
-        <member name="T:FileCabinetApp.Validators.ConsoleInputValidator">
-            <summary>
-                Console input validator.
-            </summary>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.#ctor(FileCabinetApp.Configuration.ValidationConfig)">
-            <summary>
-                Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.ConsoleInputValidator"/> class.
-            </summary>
-            <param name="validationConfig"><see cref="T:FileCabinetApp.Configuration.ValidationConfig"/> object, which have all validation constraints.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="validationConfig"/> is null.</exception>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateBirthDay(System.DateTime)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateFirstName(System.String)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateGender(System.Char)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateId(System.Int32)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateId(System.Int32)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateLastName(System.String)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateStature(System.Int16)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)"/>
-        </member>
-        <member name="M:FileCabinetApp.Validators.ConsoleInputValidator.ValidateWeight(System.Decimal)">
-            <inheritdoc cref="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)"/>
-        </member>
         <member name="T:FileCabinetApp.Validators.DateOfBirthValidator">
             <summary>
                 Date of birth parametrized validator.
@@ -1694,6 +1670,39 @@
             </summary>
             <param name="record">Object to validate.</param>
             <exception cref="T:System.ArgumentException">Thrown when date of birth is less than minimal date or greater than maximum date.</exception>
+        </member>
+        <member name="T:FileCabinetApp.Validators.DefaultInputValidator">
+            <summary>
+                Default input validator.
+            </summary>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.#ctor(FileCabinetApp.Configuration.ValidationConfig)">
+            <summary>
+                Initializes a new instance of the <see cref="T:FileCabinetApp.Validators.DefaultInputValidator"/> class.
+            </summary>
+            <param name="validationConfig"><see cref="T:FileCabinetApp.Configuration.ValidationConfig"/> object, which have all validation constraints.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when <paramref name="validationConfig"/> is null.</exception>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateBirthDay(System.DateTime)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateBirthDay(System.DateTime)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateFirstName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateFirstName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateGender(System.Char)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateGender(System.Char)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateId(System.Int32)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateId(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateLastName(System.String)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateLastName(System.String)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateStature(System.Int16)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateStature(System.Int16)"/>
+        </member>
+        <member name="M:FileCabinetApp.Validators.DefaultInputValidator.ValidateWeight(System.Decimal)">
+            <inheritdoc cref="M:FileCabinetApp.Validators.IInputValidator.ValidateWeight(System.Decimal)"/>
         </member>
         <member name="T:FileCabinetApp.Validators.FileRecordValidatorBase">
             <summary>
@@ -1746,54 +1755,54 @@
             <param name="record">Object to validate.</param>
             <exception cref="T:System.ArgumentException">Thrown when gender is in values list.</exception>
         </member>
-        <member name="T:FileCabinetApp.Validators.IConsoleInputValidator">
+        <member name="T:FileCabinetApp.Validators.IInputValidator">
             <summary>
                 Interface for the console input validators.
             </summary>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateId(System.Int32)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateId(System.Int32)">
             <summary>
                 Validates <paramref name="id"/>.
             </summary>
             <param name="id">Id.</param>
             <returns>(true,"") if <paramref name="id"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateFirstName(System.String)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateFirstName(System.String)">
             <summary>
                 Validates <paramref name="firstName"/>.
             </summary>
             <param name="firstName">Firstname.</param>
             <returns>(true,"") if <paramref name="firstName"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateLastName(System.String)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateLastName(System.String)">
             <summary>
                 Validates <paramref name="lastName"/>.
             </summary>
             <param name="lastName">Lastname.</param>
             <returns>(true,"") if <paramref name="lastName"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateBirthDay(System.DateTime)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateBirthDay(System.DateTime)">
             <summary>
                 Validates <paramref name="dateOfBirth"/>.
             </summary>
             <param name="dateOfBirth">Date of birth.</param>
             <returns>(true,"") if <paramref name="dateOfBirth"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateStature(System.Int16)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateStature(System.Int16)">
             <summary>
                 Validates <paramref name="stature"/>.
             </summary>
             <param name="stature">Stature.</param>
             <returns>(true,"") if <paramref name="stature"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateGender(System.Char)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateGender(System.Char)">
             <summary>
                 Validates <paramref name="gender"/>.
             </summary>
             <param name="gender">Gender.</param>
             <returns>(true,"") if <paramref name="gender"/> is valid, overwise (false,<see cref="T:System.String"/> error message).</returns>
         </member>
-        <member name="M:FileCabinetApp.Validators.IConsoleInputValidator.ValidateWeight(System.Decimal)">
+        <member name="M:FileCabinetApp.Validators.IInputValidator.ValidateWeight(System.Decimal)">
             <summary>
                 Validates <paramref name="weight"/>.
             </summary>

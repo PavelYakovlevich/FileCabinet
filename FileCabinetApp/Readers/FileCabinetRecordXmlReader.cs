@@ -9,7 +9,7 @@ namespace FileCabinetApp.Readers
     /// </summary>
     public class FileCabinetRecordXmlReader : IFileCabinetRecordReader
     {
-        private StreamReader reader;
+        private readonly StreamReader reader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCabinetRecordXmlReader"/> class.

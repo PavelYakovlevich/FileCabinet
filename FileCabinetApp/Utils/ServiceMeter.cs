@@ -174,6 +174,25 @@ namespace FileCabinetApp.Utils
         }
 
         /// <summary>
+        ///     Measures and prints MakeSnapshot's command execution time.
+        /// </summary>
+        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        public override FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+
+            var result = this.Service.MakeSnapshot();
+
+            stopwatch.Stop();
+
+            this.PrintMeasurementResult(stopwatch.ElapsedTicks);
+
+            return result;
+        }
+
+        /// <summary>
         ///     Measures and prints Purge's command execution time.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.Purge"/>

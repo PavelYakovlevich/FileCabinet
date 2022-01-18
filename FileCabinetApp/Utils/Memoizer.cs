@@ -13,7 +13,6 @@ namespace FileCabinetApp.Utils
     public class Memoizer<TParam, TValue>
         where TParam : notnull
     {
-        private readonly IEqualityComparer<TParam> equalityComparer;
         private readonly Dictionary<TParam, TValue> cache;
 
         /// <summary>
@@ -24,7 +23,6 @@ namespace FileCabinetApp.Utils
         {
             Guard.ArgumentIsNotNull(equalityComparer, nameof(equalityComparer));
 
-            this.equalityComparer = equalityComparer;
             this.cache = new Dictionary<TParam, TValue>(equalityComparer);
         }
 

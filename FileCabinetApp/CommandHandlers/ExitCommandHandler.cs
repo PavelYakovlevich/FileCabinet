@@ -7,7 +7,7 @@ namespace FileCabinetApp.CommandHandlers
     /// </summary>
     public class ExitCommandHandler : CommandHandlerBase
     {
-        private Action<bool> onExitAction;
+        private readonly Action<bool> onExitAction;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExitCommandHandler"/> class.

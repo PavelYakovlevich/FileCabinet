@@ -41,6 +41,14 @@ namespace FileCabinetApp.CommandHandlers
                     return;
                 }
             }
+            else
+            {
+                if (this.service is not FileCabinetFilesystemService)
+                {
+                    Console.WriteLine("Usage of this command is allowed only for the FilesystemService");
+                    return;
+                }
+            }
 
             var recordsAmount = this.service.GetStat().total;
 

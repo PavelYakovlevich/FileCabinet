@@ -1,5 +1,4 @@
-﻿using System.IO;
-using FileCabinetApp.Configuration;
+﻿using FileCabinetApp.Configuration;
 using Microsoft.Extensions.Configuration;
 
 namespace FileCabinetApp.Validators
