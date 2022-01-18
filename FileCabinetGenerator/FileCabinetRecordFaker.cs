@@ -19,7 +19,7 @@ namespace FileCabinetGenerator
         {
             "Baker",
             "Johnson",
-            "Green ",
+            "Green",
             "Smith",
             "Jones",
             "Wilson",
