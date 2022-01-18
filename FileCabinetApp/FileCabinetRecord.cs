@@ -124,16 +124,6 @@ namespace FileCabinetApp
         }
 
         /// <summary>
-        ///     Transform object into the csv string.
-        /// </summary>
-        /// <param name="dateFormat">Format of date of birth.</param>
-        /// <returns>Csv string with all object's properties.</returns>
-        public string ToCsvString(string dateFormat = "MM/dd/yyyy")
-        {
-            return $"{this.Id},{this.FirstName},{this.LastName},{this.DateOfBirth.ToString(dateFormat)},{this.Gender},{this.Stature},{this.Weight}";
-        }
-
-        /// <summary>
         ///     Class for holding first and last names of <see cref="FileCabinetRecord"/> object.
         /// </summary>
         public class Name

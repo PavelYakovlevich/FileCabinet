@@ -23,7 +23,7 @@ namespace FileCabinetApp.Writers
         /// <inheritdoc cref="IFileCabinetRecordWriter.Write(FileCabinetRecord)"/>
         public void Write(FileCabinetRecord record)
         {
-            var csvString = record.ToCsvString();
+            var csvString = $"{record.Id},{record.FirstName},{record.LastName},{record.DateOfBirth.ToString("yyyy-MMM-dd")},{record.Gender},{record.Stature},{record.Weight}";
 
             this.writer.WriteLine(csvString);
         }
