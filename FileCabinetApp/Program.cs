@@ -5,7 +5,7 @@ using System.Text;
 
 using FileCabinetApp.CommandHandlers;
 using FileCabinetApp.Configuration;
-using FileCabinetApp.Printers;
+using FileCabinetApp.Printing;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utils;
 using FileCabinetApp.Validators;

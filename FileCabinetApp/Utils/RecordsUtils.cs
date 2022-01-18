@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using FileCabinetApp.Printers;
+using FileCabinetApp.Printing;
 using FileCabinetApp.Validators;
 
 #pragma warning disable CS8618

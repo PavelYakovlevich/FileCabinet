@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileCabinetApp.Printers
+namespace FileCabinetApp.Printing
 {
     /// <summary>
     ///     Interface for printers of <see cref="FileCabinetApp"/> objects.

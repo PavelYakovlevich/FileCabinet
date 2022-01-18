@@ -1,4 +1,4 @@
-﻿namespace FileCabinetApp.Printers
+﻿namespace FileCabinetApp.Printing
 {
     /// <summary>
     ///     Enum for representing padding direction in <see cref="IPrinter{T}"/> objects.

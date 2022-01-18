@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FileCabinetApp.Printers
+namespace FileCabinetApp.Printing
 {
     /// <summary>
     ///     Class for printing an objects in a table form.

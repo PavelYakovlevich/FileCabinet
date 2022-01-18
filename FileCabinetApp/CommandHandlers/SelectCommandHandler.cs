@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using FileCabinetApp.Printers;
+using FileCabinetApp.Printing;
 using FileCabinetApp.Services;
 using FileCabinetApp.Utils;
 
