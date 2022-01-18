@@ -850,6 +850,9 @@
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.RecordExists(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RecordExists(System.Int32)"/>
         </member>
+        <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.MakeSnapshot">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Services.FileCabinetFilesystemService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
         </member>
@@ -924,10 +927,7 @@
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.FindByDateOfBirth(System.DateTime)"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.MakeSnapshot">
-            <summary>
-                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
-            </summary>
-            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
         </member>
         <member name="M:FileCabinetApp.Services.FileCabinetMemoryService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>
@@ -1004,6 +1004,12 @@
             </summary>
             <param name="dateOfBirth">Date of birth search value.</param>
             <returns>All <see cref="T:FileCabinetApp.FileCabinetRecord"/> records, which have the same birthday value as <paramref name="dateOfBirth"/>.</returns>
+        </member>
+        <member name="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot">
+            <summary>
+                Makes snapshot of a <see cref="T:FileCabinetApp.Services.IFileCabinetService"/>.
+            </summary>
+            <returns>Snapshot with saved state of <see cref="T:FileCabinetApp.Services.IFileCabinetService"/> object.</returns>
         </member>
         <member name="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <summary>
@@ -1181,6 +1187,12 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceLogger.MakeSnapshot">
+            <summary>
+                Writes a log with service information about MakeSnapshot command.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceLogger.Purge">
             <summary>
                 Writes a log with service information about Purge command.
@@ -1264,6 +1276,12 @@
             </summary>
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.GetStat"/>
         </member>
+        <member name="M:FileCabinetApp.Utils.ServiceMeter.MakeSnapshot">
+            <summary>
+                Measures and prints MakeSnapshot's command execution time.
+            </summary>
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
+        </member>
         <member name="M:FileCabinetApp.Utils.ServiceMeter.Purge">
             <summary>
                 Measures and prints Purge's command execution time.
@@ -1337,6 +1355,9 @@
         </member>
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.RemoveRecord(System.Int32)">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.RemoveRecord(System.Int32)"/>
+        </member>
+        <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.MakeSnapshot">
+            <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.MakeSnapshot"/>
         </member>
         <member name="M:FileCabinetApp.Utils.ServiceWrapperBase.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})">
             <inheritdoc cref="M:FileCabinetApp.Services.IFileCabinetService.Restore(FileCabinetApp.FileCabinetServiceSnapshot,System.Action{FileCabinetApp.FileCabinetRecord,System.String})"/>

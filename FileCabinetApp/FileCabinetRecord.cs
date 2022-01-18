@@ -70,7 +70,7 @@ namespace FileCabinetApp
         /// </summary>
         /// <value>Date of birth of the user.</value>
         [DumpSliceMember("DateOfBirth", sizeof(int) * 3)]
-        [XmlElement("dateOfBirth", DataType = "date")]
+        [XmlElement("dateOfBirth")]
         public DateTime DateOfBirth { get; set; }
 
         /// <summary>
