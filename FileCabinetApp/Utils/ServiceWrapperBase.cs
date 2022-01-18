@@ -62,6 +62,9 @@ namespace FileCabinetApp.Utils
         /// <inheritdoc cref="IFileCabinetService.RemoveRecord(int)"/>
         public abstract void RemoveRecord(int recordId);
 
+        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        public abstract FileCabinetServiceSnapshot MakeSnapshot();
+
         /// <inheritdoc cref="IFileCabinetService.Restore(FileCabinetServiceSnapshot, Action{FileCabinetRecord, string})"/>
         public abstract int Restore(FileCabinetServiceSnapshot snapshot, Action<FileCabinetRecord, string> onInvalidRecordImported);
 
@@ -78,5 +81,6 @@ namespace FileCabinetApp.Utils
 
             return this.service;
         }
+
     }
 }

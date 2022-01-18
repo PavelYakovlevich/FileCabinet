@@ -70,6 +70,12 @@ namespace FileCabinetApp.Services
         public IEnumerable<FileCabinetRecord> FindByDateOfBirth(DateTime dateOfBirth);
 
         /// <summary>
+        ///     Makes snapshot of a <see cref="IFileCabinetService"/>.
+        /// </summary>
+        /// <returns>Snapshot with saved state of <see cref="IFileCabinetService"/> object.</returns>
+        public FileCabinetServiceSnapshot MakeSnapshot();
+
+        /// <summary>
         ///     Restores state of service from a snapshot.
         /// </summary>
         /// <param name="snapshot"><see cref="FileCabinetServiceSnapshot"/> object, which holds a state of the service.</param>

@@ -179,6 +179,24 @@ namespace FileCabinetApp.Utils
         }
 
         /// <summary>
+        ///     Writes a log with service information about MakeSnapshot command.
+        /// </summary>
+        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
+        public override FileCabinetServiceSnapshot MakeSnapshot()
+        {
+            this.stream.Seek(0, SeekOrigin.End);
+
+            using (var streamWriter = new StreamWriter(this.stream, Encoding.Default, -1, true))
+            {
+                var result = this.Service.MakeSnapshot();
+
+                streamWriter.WriteLine($"{DateTime.Now.ToString(DateStringFormat)} Calling MakeSnapshot()");
+
+                return result;
+            }
+        }
+
+        /// <summary>
         ///     Writes a log with service information about Purge command.
         /// </summary>
         /// <inheritdoc cref="IFileCabinetService.Purge"/>

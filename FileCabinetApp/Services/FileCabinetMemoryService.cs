@@ -185,10 +185,8 @@ namespace FileCabinetApp.Services
             }
         }
 
-        /// <summary>
-        ///     Makes snapshot of a <see cref="IFileCabinetService"/>.
-        /// </summary>
-        /// <returns>Snapshot with saved state of <see cref="IFileCabinetService"/> object.</returns>
+
+        /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {
             return new FileCabinetServiceSnapshot(this.existingRecords.ToArray());

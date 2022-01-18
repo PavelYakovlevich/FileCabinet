@@ -32,11 +32,23 @@ namespace FileCabinetApp.CommandHandlers
                 return;
             }
 
-            var wrappedObject = (this.service as ServiceWrapperBase)?.GetWrappedObject();
-            if (wrappedObject is not FileCabinetMemoryService)
+            if (this.service is ServiceWrapperBase)
             {
-                Console.WriteLine("Usage of this command is allowed only for the FileCabinetMemoryService");
-                return;
+                var wrappedObject = ((ServiceWrapperBase)this.service).GetWrappedObject();
+
+                if (wrappedObject is not FileCabinetMemoryService)
+                {
+                    Console.WriteLine("Usage of this command is allowed only for the FileCabinetMemoryService");
+                    return;
+                }
+            }
+            else
+            {
+                if (this.service is not FileCabinetMemoryService)
+                {
+                    Console.WriteLine("Usage of this command is allowed only for the FileCabinetMemoryService");
+                    return;
+                }
             }
 
             var parametersValues = commandRequest.Parameters.Split(' ');
@@ -72,7 +84,7 @@ namespace FileCabinetApp.CommandHandlers
             {
                 using (var writer = new StreamWriter(snapshotFilePath))
                 {
-                    var snapshot = ((FileCabinetMemoryService)this.service).MakeSnapshot();
+                    var snapshot = this.service.MakeSnapshot();
 
                     if (exportMethod.Equals("csv", StringComparison.InvariantCultureIgnoreCase))
                     {
