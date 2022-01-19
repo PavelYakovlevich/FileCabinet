@@ -63,16 +63,16 @@ namespace FileCabinetApp.CommandHandlers
             }
         }
 
-        private static bool AreSimilarCommands(string definedCommand, string command)
+        private static bool AreSimilarCommands(string definedCommand, string input)
         {
-            if (definedCommand.StartsWith(command) || command.StartsWith(definedCommand))
+            if (definedCommand.StartsWith(input) || input.StartsWith(definedCommand))
             {
                 return true;
             }
 
-            for (int i = command.Length - 1; i > 0; i--)
+            for (int i = input.Length - 1; i > 1; i--)
             {
-                if (definedCommand.StartsWith(command.Substring(0, i)))
+                if (definedCommand.StartsWith(input.Substring(0, i)))
                 {
                     return true;
                 }

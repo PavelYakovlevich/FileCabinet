@@ -112,33 +112,7 @@ namespace FileCabinetApp.Services
         {
             Guard.ArgumentIsNotNull(searchInfo, nameof(searchInfo));
 
-            IEnumerable<FileCabinetRecord> records;
-
-            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
-            {
-                records = this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
-            }
-            else if (searchInfo.SearchCriterias.ContainsKey("lastname"))
-            {
-                records = this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
-            }
-            else if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
-            {
-                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
-                records = this.FindByDateOfBirth(dateOfBirth);
-            }
-            else
-            {
-                records = this.FindAll();
-            }
-
-            foreach (var record in records)
-            {
-                if (searchInfo.SearchPredicate(record))
-                {
-                    yield return record;
-                }
-            }
+            return this.FindAll(searchInfo.SearchPredicate);
         }
 
         /// <inheritdoc cref="IFileCabinetService.FindByDateOfBirth(DateTime)"/>

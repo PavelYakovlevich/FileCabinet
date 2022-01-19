@@ -327,23 +327,19 @@ namespace FileCabinetApp.Services
 
         private IEnumerable<FileCabinetRecord> FindBySearchInfo(SearchInfo<FileCabinetRecord> searchInfo)
         {
-            if (searchInfo.SearchCriterias.ContainsKey("firstname"))
+            Guard.ArgumentIsNotNull(searchInfo, nameof(searchInfo));
+
+            var records = new List<FileCabinetRecord>();
+
+            foreach (var record in this.existingRecords)
             {
-                return this.FindByFirstName(searchInfo.SearchCriterias["firstname"][0]);
+                if (searchInfo.SearchPredicate(record))
+                {
+                    records.Add(record);
+                }
             }
 
-            if (searchInfo.SearchCriterias.ContainsKey("lastname"))
-            {
-                return this.FindByLastName(searchInfo.SearchCriterias["lastname"][0]);
-            }
-
-            if (searchInfo.SearchCriterias.ContainsKey("dateofbirth"))
-            {
-                var dateOfBirth = DateTime.Parse(searchInfo.SearchCriterias["dateofbirth"][0]);
-                return this.FindByDateOfBirth(dateOfBirth);
-            }
-
-            return this.existingRecords.FindAll(searchInfo.SearchPredicate);
+            return records;
         }
     }
 }
