@@ -30,6 +30,7 @@ namespace FileCabinetApp.Validators
         /// <exception cref="ArgumentException">Thrown when gender is in values list.</exception>
         public override void Validate(FileCabinetRecord record)
         {
+            Guard.ArgumentIsNotNull(record, nameof(record));
             Guard.ArgumentIsInRange(record.Gender, this.genderValues);
         }
     }

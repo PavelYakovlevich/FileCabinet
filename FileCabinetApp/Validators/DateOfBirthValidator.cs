@@ -28,6 +28,8 @@ namespace FileCabinetApp.Validators
         /// <exception cref="ArgumentException">Thrown when date of birth is less than minimal date or greater than maximum date.</exception>
         public override void Validate(FileCabinetRecord record)
         {
+            Guard.ArgumentIsNotNull(record, nameof(record));
+
             Guard.ArgumentSatisfies(
                 record.DateOfBirth,
                 (dateOfBirth) => dateOfBirth.CompareTo(this.from) >= 0 && dateOfBirth.CompareTo(this.to) <= 0,
