@@ -185,7 +185,6 @@ namespace FileCabinetApp.Services
             }
         }
 
-
         /// <inheritdoc cref="IFileCabinetService.MakeSnapshot"/>
         public FileCabinetServiceSnapshot MakeSnapshot()
         {

@@ -1424,6 +1424,16 @@
             <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
             <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
         </member>
+        <member name="M:FileCabinetApp.Guard.ArgumentLessThan``1(``0,``0,System.String)">
+            <summary>
+                Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+            </summary>
+            <typeparam name="T">Type of the argument's value.</typeparam>
+            <param name="argument">Value, which must be checked.</param>
+            <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+            <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+            <exception cref="T:System.ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        </member>
         <member name="M:FileCabinetApp.Guard.ArgumentGreaterThan``1(``0,``0)">
             <summary>
                 Checks if <paramref name="argument"/> is greater than <paramref name="secondValue"/>.
