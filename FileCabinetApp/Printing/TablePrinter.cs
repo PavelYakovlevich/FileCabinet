@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace FileCabinetApp.Printing
@@ -42,6 +43,12 @@ namespace FileCabinetApp.Printing
 
             Guard.ArgumentIsNotNull(selectors, nameof(selectors));
             Guard.ArgumentGreaterThan(selectors.Count, 0, $"{nameof(selectors)} is empty.");
+
+            if (Enumerable.Count(objects) == 0)
+            {
+                Console.WriteLine("There is no records to display.");
+                return;
+            }
 
             var columnsLengthes = this.GetColumnsLengthes(objects, selectors);
 

@@ -227,8 +227,8 @@ namespace FileCabinetApp
             .SetNext(deleteHandler)
             .SetNext(updateHandler)
             .SetNext(selectHandler)
-            .SetNext(missedHandler)
-            .SetNext(exitHandler);
+            .SetNext(exitHandler)
+            .SetNext(missedHandler);
 
             return helpHandler;
         }
