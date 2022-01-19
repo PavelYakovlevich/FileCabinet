@@ -38,8 +38,8 @@ namespace FileCabinetApp.Validators
         /// <exception cref="ArgumentException">Thrown when weight is less than minimal value or greater than max value.</exception>
         public override void Validate(FileCabinetRecord record)
         {
-            Guard.ArgumentGreaterThan(record.Weight, this.minValue);
-            Guard.ArgumentLessThan(record.Weight, this.maxValue);
+            Guard.ArgumentGreaterThan(record.Weight, this.minValue, $"Weight must be greater than {this.minValue}");
+            Guard.ArgumentLessThan(record.Weight, this.maxValue, $"Weight must be less than {this.maxValue}");
         }
     }
 }

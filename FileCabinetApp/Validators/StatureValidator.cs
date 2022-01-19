@@ -38,8 +38,8 @@ namespace FileCabinetApp.Validators
         /// <exception cref="ArgumentException">Thrown when stature is less than minimal value or greater than maximum value.</exception>
         public override void Validate(FileCabinetRecord record)
         {
-            Guard.ArgumentGreaterThan(record.Stature, this.minValue);
-            Guard.ArgumentLessThan(record.Stature, this.maxValue);
+            Guard.ArgumentGreaterThan(record.Stature, this.minValue, $"Stature must be greater than {this.minValue}");
+            Guard.ArgumentLessThan(record.Stature, this.maxValue, $"Stature must be less than {this.maxValue}");
         }
     }
 }

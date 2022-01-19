@@ -48,6 +48,10 @@ namespace FileCabinetApp
         /// <exception cref="ArgumentNullException">if <paramref name="regexString"/> is null.</exception>
         public static void ArgumentMatchRegex(string argument, string nameOfArgument, string regexString)
         {
+            ArgumentIsNotNull(argument, nameof(argument));
+            ArgumentIsNotNull(nameOfArgument, nameof(nameOfArgument));
+            ArgumentIsNotEmptyOrWhiteSpace(regexString, nameof(regexString));
+
             var regex = new Regex(regexString);
 
             if (!regex.IsMatch(argument))
@@ -66,9 +70,23 @@ namespace FileCabinetApp
         public static void ArgumentLessThan<T>(T argument, T secondValue)
            where T : IComparable<T>
         {
+            ArgumentLessThan(argument, secondValue, $"{nameof(argument)} is greater than ${secondValue}.");
+        }
+
+        /// <summary>
+        ///     Checks if <paramref name="argument"/> is less than <paramref name="secondValue"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of the argument's value.</typeparam>
+        /// <param name="argument">Value, which must be checked.</param>
+        /// <param name="secondValue">Value, which is compared with <paramref name="argument"/>'s value.</param>
+        /// <param name="exceptionMessage">Message, which will be passed to the exception constructor.</param>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="argument"/> is greater than <paramref name="secondValue"/>.</exception>
+        public static void ArgumentLessThan<T>(T argument, T secondValue, string exceptionMessage)
+           where T : IComparable<T>
+        {
             if (argument.CompareTo(secondValue) >= 0)
             {
-                throw new ArgumentException($"{nameof(argument)} is greater than ${secondValue}.");
+                throw new ArgumentException(exceptionMessage);
             }
         }
 
